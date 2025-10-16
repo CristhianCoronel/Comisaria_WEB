@@ -1,0 +1,179 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f9f8;
+    color: #2c3e50;
+}
+
+.content-right {
+  display: flex;
+  flex-direction: column;
+  flex: 1;           /* ocupa todo el ancho disponible */
+  height: 100vh;
+}
+
+/* Contenedor general */
+body {
+  display: flex;
+  height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Barra lateral (aside) */
+aside {
+    width: 220px;
+    background: #e6f0ea; /* Verde muy claro */
+    border-right: 2px solid #a1c4b8;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+aside nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+aside nav ul li a {
+    text-decoration: none;
+    color: #2a7a48; /* Verde oscuro */
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+aside nav ul li a:hover {
+    background-color: #a1c4b8; /* Verde medio */
+    color: #1b4d2e;
+}
+
+/* Header */
+header {
+    height: 60px;
+    background: #d0e6f7;
+    border-bottom: 2px solid #a3c4f3;
+    display: flex;
+    justify-content: flex-end; /* todo alineado a la derecha */
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    width: 100%;  
+    border-bottom: 2px solid #a3c4f3;
+}
+
+/* Contenedor de info usuario */
+.user-info {
+    display: flex;
+    justify-content: flex-end; /* todo a la derecha */
+    align-items: center;
+    width: 100%;
+    gap: 20px; /* opcional, para separar los elementos */
+}
+
+
+/* Texto usuario */
+.user-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: #145374; /* Azul oscuro */
+}
+
+.username {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.user-rank {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #4a7a9d;
+}
+
+/* Contenedor imagen y menú */
+.user-menu {
+    display: flex;
+    align-items: center;
+    position: relative;
+    gap: 10px;
+}
+
+/* Avatar usuario */
+.user-avatar {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border: 2px solid #145374;
+}
+
+/* Botón para desplegar menú */
+#menu-toggle {
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #145374;
+    user-select: none;
+    padding: 4px;
+}
+
+/* Menú desplegable */
+.dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: white;
+    border: 1px solid #a3c4f3;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    list-style: none;
+    min-width: 140px;
+    z-index: 100;
+}
+
+.dropdown li {
+    padding: 10px 15px;
+}
+
+.dropdown li a {
+    text-decoration: none;
+    color: #145374;
+    font-weight: 600;
+    display: block;
+}
+
+.dropdown li a:hover {
+    background-color: #d0e6f7;
+    color: #0e3951;
+}
+
+/* Ocultar menú */
+.hidden {
+    display: none;
+}
+
+/* Main */
+main {
+    flex: 1;
+    padding: 20px;
+    background-color: #f5f9f8;
+    overflow-y: auto;
+    width: 100%;            /* igual importante */
+    box-sizing: border-box;
+}
+
+

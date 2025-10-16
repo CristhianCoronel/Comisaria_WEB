@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"> -->
+    <link rel="stylesheet" href="/static/css/base.css">
+    <title>Panel de Administración</title>
+</head>
+<body>
+    <aside>
+        <nav>
+            <ul>
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Entradas</a></li>
+                <li><a href="#">Denuncias</a></li>
+                <li><a href="#">Personal</a></li>
+                <li><a href="#">Áreas</a></li>
+                <li><a href="#">Roles</a></li>
+            </ul>
+        </nav>
+    </aside>
+    <div class="content-right">
+        <header>
+            <div class="user-info">
+                <div class="user-text">
+                    <p class="username">Nombre Usuario</p>
+                    <p class="user-rank">Oficiales</p>
+                </div>
+                <div class="user-menu">
+                    <img src="https://via.placeholder.com/40" alt="Avatar Usuario" class="user-avatar" />
+                    <button id="menu-toggle" aria-label="Menú de usuario">&#x25BC;</button>
+                    <ul id="dropdown-menu" class="dropdown hidden">
+                        <li><a href="#">Cerrar sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            {% block content %}
+            {% endblock content %}
+        </main>   
+    </div>
+    
+    <!-- <script src="{{ url_for('static', filename='js/script.js') }}"></script> -->
+    <script src="/static/js/base.js"></script>
+</body>
+</html>
