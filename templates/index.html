@@ -5,17 +5,41 @@
 {% endblock %}
 
 {% block content %}
-<h3>Departamentos</h3>
+<h2>Panel de Control</h2>
+<h3>Conteo semanal</h3>
+<div class="container">
+    <div class="counter-box" id="total-usuarios">
+        <h3>Total Usuarios</h3>
+        <p class="count" id="count-usuarios">100</p>
+    </div>
+    <div class="counter-box" id="registros-totales">
+        <h3>Registros Totales</h3>
+        <p class="count" id="count-registros">200</p>
+    </div>
+    <div class="counter-box" id="operaciones-culminadas">
+        <h3>Operaciones Culminadas</h3>
+        <p class="count" id="count-culminadas">150</p>
+    </div>
+    <div class="counter-box" id="operaciones-canceladas">
+        <h3>Operaciones Canceladas</h3>
+        <p class="count" id="count-canceladas">50</p>
+    </div>
+</div>
+<h3>Entradas recientes</h3>
 <table class="departamentos-table">
     <thead>
         <tr>
             <th>Id</th>
-            <th>Nombre</th>
+            <th>Nombre Completo</th>
+            <th>DNI</th>
+            <th>Hora ingreso</th>
         </tr>
     </thead>
     <tbody>
         {% for departamento in departamentos %}
         <tr>
+            <td>{{ departamento.id_departamento }}</td>
+            <td>{{ departamento.nombre }}</td>
             <td>{{ departamento.id_departamento }}</td>
             <td>{{ departamento.nombre }}</td>
         </tr>

@@ -36,6 +36,7 @@ aside {
     border-right: 2px solid #a1c4b8;
     padding: 20px 10px;
     display: flex;
+    align-items: center;
     flex-direction: column;
 }
 
@@ -43,7 +44,9 @@ aside nav ul {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 50px;
+    align-content: center;
+    align-items: center;
 }
 
 aside nav ul li a {
@@ -53,11 +56,13 @@ aside nav ul li a {
     padding: 8px 12px;
     border-radius: 6px;
     transition: background-color 0.3s ease;
+    font-size: 25px;
 }
 
 aside nav ul li a:hover {
     background-color: #a1c4b8; /* Verde medio */
     color: #1b4d2e;
+    margin-top: 100px;
 }
 
 /* Header */

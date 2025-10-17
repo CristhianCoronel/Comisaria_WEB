@@ -19,7 +19,7 @@ def base():
 @app.route('/index')
 def index():
     departamentos = list()
-    departamentos = controlador_departamento.obtener_departamentos()
+    # departamentos = controlador_departamento.obtener_departamentos()
     return render_template('index.html', departamentos = departamentos)
 
 
