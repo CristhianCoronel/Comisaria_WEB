@@ -3,4 +3,4 @@ bcrypt==4.0.1
 PyMySQL==1.1.0
 supabase==0.2.0
 python-dotenv==0.19.2
-httpx==0.24.0
+httpx==0.21.1
