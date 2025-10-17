@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="/static/css/index.css">
+{% endblock %}
+
+{% block content %}
+<h3>Departamentos</h3>
+<table class="departamentos-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for departamento in departamentos %}
+        <tr>
+            <td>{{ departamento.id_departamento }}</td>
+            <td>{{ departamento.nombre }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

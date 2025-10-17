@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify,Response 
 from controllers import controlador_evidencia
-from models import Evidencia
+from controllers import controlador_departamento
+from models import Ubigeo
 
 import os, json
 
@@ -8,13 +9,18 @@ app = Flask(__name__)
 
 #---RUTAS FIJAS---#
 
-@app.route('/')
-@app.route('/index')
-def index():
+
+@app.route('/base')
+def base():
     return render_template('base.html')
 
 
-
+@app.route('/')
+@app.route('/index')
+def index():
+    departamentos = list()
+    departamentos = controlador_departamento.obtener_departamentos()
+    return render_template('index.html', departamentos = departamentos)
 
 
 

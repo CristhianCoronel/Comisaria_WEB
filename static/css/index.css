@@ -1,0 +1,66 @@
+/* Estilos generales para la página */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fc;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 24px;
+    color: #444;
+}
+
+/* Estilos de la tabla */
+.departamentos-table {
+    width: 80%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Cabecera de la tabla */
+.departamentos-table thead {
+    background-color: #3faffa;
+    color: white;
+    text-align: left;
+}
+
+.departamentos-table th {
+    padding: 15px 20px;
+    font-size: 16px;
+}
+
+/* Filas de la tabla */
+.departamentos-table tbody tr {
+    background-color: white;
+    transition: background-color 0.3s ease;
+}
+
+.departamentos-table tbody tr:hover {
+    background-color: #f0f8ff;
+}
+
+.departamentos-table td {
+    padding: 12px 20px;
+    font-size: 14px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Estilo para la última fila (sin borde inferior) */
+.departamentos-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Estilos de la tabla cuando está vacía */
+.departamentos-table tbody tr.empty-row td {
+    text-align: center;
+    font-style: italic;
+    color: #aaa;
+}

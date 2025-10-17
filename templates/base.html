@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"> -->
     <link rel="stylesheet" href="/static/css/base.css">
+    {% block style %}
+    {% endblock %}
     <title>Panel de Administración</title>
 </head>
 <body>
@@ -39,11 +41,13 @@
 
         <main>
             {% block content %}
-            {% endblock content %}
+            {% endblock %}
         </main>   
     </div>
     
     <!-- <script src="{{ url_for('static', filename='js/script.js') }}"></script> -->
     <script src="/static/js/base.js"></script>
+    {% block javascript %}
+    {% endblock %}
 </body>
 </html>
