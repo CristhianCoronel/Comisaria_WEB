@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"> -->
     <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
     {% block style %}
     {% endblock %}
     <title>Panel de Administración</title>
@@ -15,6 +16,7 @@
             <ul>
                 <li><a href="#">Inicio</a></li>
                 <li><a href="#">Entradas</a></li>
+                <li><a href="{{ url_for('persona') }}">Ciudadania</a></li>
                 <li><a href="{{ url_for('denuncia') }}">Denuncias</a></li>
                 <li><a href="#">Personal</a></li>
                 <li><a href="#">Áreas</a></li>

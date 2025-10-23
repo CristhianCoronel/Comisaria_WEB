@@ -1,150 +1,138 @@
-<!doctype html>
-<html lang="es">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Sistema de Registro de Denuncias - Mockup</title>
+{% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/denuncia.css') }}">
+{% endblock %}
 
-</head>
+{% block content %}
 
-<body>
-
-    <header class="topbar">
-        <div class="brand">
-            <!-- simple shield svg icon -->
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z" fill="white"
-                    opacity="0.95" />
+<!-- LEFT: Form card -->
+<section>
+    <div  class="card">
+        <div class="form-title">
+            <!-- icon -->
+            <svg width="20" height="20" viewBox="0 0 24 24" style="opacity:0.9">
+                <path d="M9 2h6v2H9zM5 6h14v14H5z" fill="#2b4a86" />
             </svg>
-            <div>
-                <div>Sistema de Registro de Denuncias</div>
-                <div class="subtitle">Policía Nacional</div>
-            </div>
+            <div>Registrar Nueva Denuncia</div>
         </div>
+        <div class="form-sub">Complete todos los campos del formulario con la información del denunciante</div>
 
-        <div class="spacer"></div>
+        <form>
 
-        <div class="user-pill">
-            <div style="font-size:13px;"><strong>Oficial:</strong> policia123</div>
-            <div style="font-size:12px; opacity:0.8;">ID: ASD</div>
-            <button class="btn-logout">Cerrar Sesión</button>
-        </div>
-    </header>
+            <div class="section">
+                <h4>Datos del Denunciante</h4>
 
-    <main class="main">
+                <div class="field">
+                    <label>Documento de Identidad *</label>
+                    <input class="input" type="text" placeholder="Ej: 12345678" />
+                </div>
 
-        <!-- LEFT: Form card -->
-        <section class="card">
-            <div class="form-title">
-                <!-- icon -->
-                <svg width="20" height="20" viewBox="0 0 24 24" style="opacity:0.9">
-                    <path d="M9 2h6v2H9zM5 6h14v14H5z" fill="#2b4a86" />
-                </svg>
-                <div>Registrar Nueva Denuncia</div>
-            </div>
-            <div class="form-sub">Complete todos los campos del formulario con la información del denunciante</div>
-
-            <form>
-
-                <div class="section">
-                    <h4>Datos del Denunciante</h4>
-
+                <div class="row">
                     <div class="field">
                         <label>Nombre Completo *</label>
                         <input class="input" type="text" placeholder="Ej: Juan Pérez García" />
                     </div>
-
-                    <div class="row">
-                        <div class="field">
-                            <label>Documento de Identidad *</label>
-                            <input class="input" type="text" placeholder="Ej: 12345678" />
-                        </div>
-                        <div class="field">
-                            <label>Teléfono *</label>
-                            <input class="input" type="tel" placeholder="Ej: 3001234567" />
-                        </div>
-                    </div>
-
                     <div class="field">
-                        <label>Correo Electrónico *</label>
-                        <input class="input" type="email" placeholder="Ej: correo@ejemplo.com" />
-                    </div>
-
-                    <div class="field">
-                        <label>Dirección *</label>
-                        <input class="input" type="text" placeholder="Ej: Calle 123 #45-67, Barrio Centro" />
+                        <label>Teléfono *</label>
+                        <input class="input" type="tel" placeholder="Ej: 3001234567" />
                     </div>
                 </div>
 
-                <div class="section">
-                    <h4>Datos del Incidente</h4>
-
-                    <div class="field">
-                        <label>Tipo de Incidente *</label>
-                        <select class="input">
-                            <option>Seleccione el tipo de incidente</option>
-                            <option>Robo</option>
-                            <option>Agresión</option>
-                            <option>Vandalismo</option>
-                        </select>
-                    </div>
-
-                    <div class="row">
-                        <div class="field">
-                            <label>Fecha del Incidente *</label>
-                            <input class="input" type="date" />
-                        </div>
-                        <div class="field">
-                            <label>Hora del Incidente *</label>
-                            <input class="input" type="time" />
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label>Ubicación del Incidente *</label>
-                        <input class="input" type="text"
-                            placeholder="Ej: Avenida Principal con Calle 5, frente al banco" />
-                    </div>
+                <div class="field">
+                    <label>Correo Electrónico *</label>
+                    <input class="input" type="email" placeholder="Ej: correo@ejemplo.com" />
                 </div>
 
-                <!-- Botón submit (estilizado) -->
-                <div style="margin-top:10px; display:flex; gap:12px;">
-                    <button type="button"
-                        style="padding:10px 16px; border-radius:10px; border:0; background:#1f68c7; color:white; cursor:pointer;">Registrar</button>
-                    <button type="reset"
-                        style="padding:10px 16px; border-radius:10px; border:1px solid #d6dbe0; background:white; color:#334; cursor:pointer;">Limpiar</button>
+                <div class="field">
+                    <label>Dirección *</label>
+                    <input class="input" type="text" placeholder="Ej: Calle 123 #45-67, Barrio Centro" />
                 </div>
-
-            </form>
-        </section>
-
-        <!-- RIGHT: Empty state card -->
-        <aside class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <div>
-                    <div style="font-weight:700; color:#233c6b">Denuncias Registradas</div>
-                    <div style="font-size:13px; color:var(--muted)">Total: 0 denuncias</div>
-                </div>
-                <!-- (Opcional) un botón para filtro o añadir -->
-                <div style="opacity:0.6; font-size:12px;">&nbsp;</div>
             </div>
 
-            <div class="empty-state">
-                <!-- file icon -->
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14 2H6c-1.1 0-2 .9-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#b9c5d3"
-                        stroke-width="1.2" fill="none" />
-                    <path d="M14 2v6h6" stroke="#b9c5d3" stroke-width="1.2" fill="none" />
-                </svg>
-                <div>No hay denuncias registradas</div>
+            <div class="section">
+                <h4>Datos del Incidente</h4>
+
+                <div class="field">
+                    <label>Tipo de Incidente *</label>
+                    <select class="input">
+                        <option>Seleccione el tipo de incidente</option>
+                        <option>Robo</option>
+                        <option>Agresión</option>
+                        <option>Vandalismo</option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="field">
+                        <label>Fecha del Incidente *</label>
+                        <input class="input" type="date" />
+                    </div>
+                    <div class="field">
+                        <label>Hora del Incidente *</label>
+                        <input class="input" type="time" />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Ubicación del Incidente *</label>
+                    <input class="input" type="text"
+                        placeholder="Ej: Avenida Principal con Calle 5, frente al banco" />
+                </div>
             </div>
 
-        </aside>
+            <!-- Botón submit (estilizado) -->
+            <div style="margin-top:10px; display:flex; gap:12px;">
+                <button type="button"
+                    style="padding:10px 16px; border-radius:10px; border:0; background:#1f68c7; color:white; cursor:pointer;">Registrar</button>
+                <button type="reset"
+                    style="padding:10px 16px; border-radius:10px; border:1px solid #d6dbe0; background:white; color:#334; cursor:pointer;">Limpiar</button>
+            </div>
 
-    </main>
+        </form>
+    </div>
+    <br>
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div>
+                <div style="font-weight:700; color:#233c6b">Denuncias Registradas</div>
+                <div style="font-size:13px; color:var(--muted)">Total: 0 denuncias</div>
+            </div>
+            <!-- (Opcional) un botón para filtro o añadir -->
+            <div style="opacity:0.6; font-size:12px;">&nbsp;</div>
+        </div>  
 
-</body>
+        <div class="empty-state">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 2H6c-1.1 0-2 .9-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#b9c5d3"
+                    stroke-width="1.2" fill="none" />
+                <path d="M14 2v6h6" stroke="#b9c5d3" stroke-width="1.2" fill="none" />
+            </svg>
+            <div>No hay denuncias registradas</div>
+        </div>
+    </div>
+</section>
+{% endblock %}
 
-</html>
+<!-- RIGHT: Empty state card -->
+<!-- <aside class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div>
+            <div style="font-weight:700; color:#233c6b">Denuncias Registradas</div>
+            <div style="font-size:13px; color:var(--muted)">Total: 0 denuncias</div>
+        </div> -->
+        <!-- (Opcional) un botón para filtro o añadir -->
+        <!-- <div style="opacity:0.6; font-size:12px;">&nbsp;</div>
+    </div>  -->
+
+    <!-- <div class="empty-state">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 2H6c-1.1 0-2 .9-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#b9c5d3"
+                stroke-width="1.2" fill="none" />
+            <path d="M14 2v6h6" stroke="#b9c5d3" stroke-width="1.2" fill="none" />
+        </svg>
+        <div>No hay denuncias registradas</div>
+    </div>
+
+</aside> -->
+
