@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sistema de Denuncias - Iniciar Sesión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+
+<body>
+    <div class="login-card">
+
+        <div class="icon">
+            <!-- Escudo simple -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                    d="M12 2 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm0 18.93C8.06 19.44 5 15.29 5 11V6.3l7-2.33 7 2.33V11c0 4.29-3.06 8.44-7 9.93z" />
+                <path d="M11 14h2v2h-2zm0-8h2v6h-2z" />
+            </svg>
+        </div>
+
+        <h2>Sistema de Denuncias</h2>
+        <p>Ingrese sus credenciales de oficial de policía</p>
+
+        <!-- Formulario Flask -->
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="input-field">
+                <label>Nombre de Usuario</label>
+                <input type="text" name="usuario" placeholder="Ingrese su nombre" required>
+            </div>
+
+            <div class="input-field">
+                <label>ID de Oficial</label>
+                <input type="text" name="id_oficial" placeholder="Ej: OF-12345" required>
+            </div>
+
+            <div class="input-field">
+                <label>Contraseña</label>
+                <input type="password" name="contrasena" placeholder="Ingrese su contraseña" required>
+            </div>
+
+            <button type="submit" class="btn-login">Iniciar Sesión</button>
+        </form>
+
+        <!-- Caja Demo -->
+        <div class="demo-box">
+            <strong>Demo:</strong>
+            Use cualquier usuario y contraseña <code>policia123</code>
+        </div>
+
+        <!-- Mostrar mensaje de error si hay -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div style="color:red; margin-top:10px; font-size:13px;">
+            {% for msg in messages %}
+            {{ msg }}
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+    </div>
+</body>
+
+</html>
