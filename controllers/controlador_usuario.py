@@ -53,3 +53,6 @@ def eliminar_usuario(id_usuario):
         bd.session.commit()
         return True
     return False
+
+def validar_usuario_activo(dni_usuario):
+    return Usuario.query.filter_by(dni=dni_usuario, estado='A').first()

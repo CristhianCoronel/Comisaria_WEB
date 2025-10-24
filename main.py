@@ -85,21 +85,30 @@ def login():
     return render_template('login.html')
 
 
+@app.route('/logout')
+def logout():
+    session.pop('token', None)
+    flash("Has cerrado sesión.", "success")
+    return redirect(url_for('login'))
+
 ###########################################
 
 
 ############### PERSONA #################
 
 @app.route('/ciudadanos')
+@login_required
 def persona():
     personas = controlador_persona.obtener_personas()
     return render_template('persona.html', personas = personas)
 
 @app.route('/agregar_ciudadano')
+@login_required
 def formulario_agregar_persona():
     return render_template('agregar_persona.html')
 
 @app.route('/guardar_ciudadano')
+@login_required
 def guardar_persona():
     dni = request.form["dni"]
     nombres = request.form["nombres"]
@@ -112,12 +121,14 @@ def guardar_persona():
     return redirect("/personas")
     
 @app.route("/editar_ciudadano/<int:id>")
+@login_required
 def formulario_editar_persona(id):
     persona = controlador_persona.obtener_persona_por_id(id)
     return render_template("editar_persona.html", persona=persona)
 
 
 @app.route("/actualizar_persona", methods=["POST"])
+@login_required
 def actualizar_persona():
     id_persona = request.form["id_persona"]
     dni = request.form["dni"]
@@ -131,10 +142,12 @@ def actualizar_persona():
     return redirect("/personas")
 
 @app.route("/listar_persona")
+@login_required
 def listar_persona():
     return redirect('ciudadanos')
 
 @app.route("/historial")
+@login_required
 def ver_historial():
     return redirect('ciudadanos')
 
@@ -145,6 +158,7 @@ def ver_historial():
 ############# DENUNCIA ####################
 
 @app.route('/denuncia')
+@login_required
 def denuncia():
     return render_template('denuncia.html')
 

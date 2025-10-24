@@ -8,7 +8,7 @@ class Usuario(bd.Model):
     nombres = bd.Column(bd.String(100), nullable=False)
     ape_paterno = bd.Column(bd.String(100), nullable=False)
     ape_materno = bd.Column(bd.String(100), nullable=False)
-    codigo_usuario = bd.Column(bd.String(50))
+    codigo_usuario = bd.Column(bd.String(100))
     estado = bd.Column(bd.String(1), default='A')
     id_comisaria = bd.Column(bd.Integer, bd.ForeignKey('comisaria.id_comisaria'))
     id_rango = bd.Column(bd.Integer, bd.ForeignKey('rango.id_rango'))
