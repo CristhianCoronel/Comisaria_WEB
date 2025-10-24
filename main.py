@@ -77,6 +77,7 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    departamentos = controlador_departamento.obtener_departamentos()
     if request.method == 'POST':
         dni = request.form['usuario']
         contrasena = request.form['contrasena']
@@ -94,7 +95,8 @@ def login():
             flash("Credenciales incorrectas o usuario inactivo.", "danger")
             return redirect(url_for('login'))
 
-    return render_template('login.html')
+    
+    return render_template('login.html', departamentos=departamentos)
 
 
 @app.route('/logout')

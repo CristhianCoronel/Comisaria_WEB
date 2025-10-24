@@ -48,6 +48,11 @@
             <strong>Demo:</strong>
             Use cualquier usuario y contraseña <code>policia123</code>
         </div>
+        <div>
+            {% for departamento in departamentos %}
+                <p>{{ departamento.id_departamento }}</p>
+            {% endfor %}
+        </div>
 
         <!-- Mostrar mensaje de error si hay -->
         {% with messages = get_flashed_messages() %}
