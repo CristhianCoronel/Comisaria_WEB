@@ -6,10 +6,22 @@ from functools import wraps
 from controllers import controlador_evidencia
 from controllers import controlador_departamento
 from controllers import controlador_persona
-from models import Area, Comisaria, Denuncia, Evidencia, Persona, Rango, Rol, Usuario
-from models.Bienes import Categoria_Bienes, Detalle_Bienes
-from models.Tipo_Denuncia import Tipo_Denuncia, D_Asalto, D_Hurto, D_Violencia_Familiar
+
 from models.Ubigeo import Departamento, Provincia, Distrito, Ubigeo
+from models.Comisaria import Comisaria
+from models.Area import Area
+from models.Rango import Rango
+from models.Rol import Rol
+from models.Persona import Persona
+from models.Usuario import Usuario
+from models.Bienes import Categoria_Bienes
+from models.Tipo_Denuncia import Tipo_Denuncia
+from models.Denuncia import Denuncia
+from models.Tipo_Denuncia import D_Hurto
+from models.Tipo_Denuncia import D_Asalto
+from models.Tipo_Denuncia import D_Violencia_Familiar
+from models.Bienes import Detalle_Bienes
+from models.Evidencia import Evidencia
 
 import os, json
 
@@ -29,8 +41,8 @@ jwt = JWTManager(app)
 
 
 # Crear tablas si no existen
-# with app.app_context():
-#     bd.create_all()
+with app.app_context():
+    bd.create_all()
 
 def login_required(f):
     @wraps(f)
