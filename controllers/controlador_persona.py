@@ -1,91 +1,43 @@
-from bd import obtener_conexion
-
-
-def insertar_persona(dni, nombres, apellidos, fecha_nacimiento, telefono, direccion):
-    conexion = obtener_conexion()
-    with conexion.cursor() as cursor:
-        cursor.execute("""
-            INSERT INTO persona (dni, nombres, apellidos, fecha_nacimiento, telefono, direccion)
-            VALUES (%s, %s, %s, %s, %s, %s)
-        """, (dni, nombres, apellidos, fecha_nacimiento, telefono, direccion))
-    conexion.commit()
-    conexion.close()
-
+from models.Persona import Persona
+from bd import bd
 
 def obtener_personas():
-    conexion = obtener_conexion()
-    personas = []
-    with conexion.cursor() as cursor:
-        cursor.execute("""
-            SELECT id_persona, dni, nombres, apellidos, fecha_nacimiento, telefono, direccion
-            FROM persona
-            ORDER BY id_persona
-        """)
-        personas = cursor.fetchall()
-    conexion.close()
-    return personas
-
-
-def eliminar_persona(id_persona):
-    conexion = obtener_conexion()
-    with conexion.cursor() as cursor:
-        cursor.execute("DELETE FROM persona WHERE id_persona = %s", (id_persona,))
-    conexion.commit()
-    conexion.close()
-
+    return Persona.query.order_by(Persona.id_persona).all()
 
 def obtener_persona_por_id(id_persona):
-    conexion = obtener_conexion()
-    persona = None
-    with conexion.cursor() as cursor:
-        cursor.execute("""
-            SELECT id_persona, dni, nombres, apellidos, fecha_nacimiento, telefono, direccion
-            FROM persona
-            WHERE id_persona = %s
-        """, (id_persona,))
-        persona = cursor.fetchone()
-    conexion.close()
-    return persona
+    return Persona.query.get(id_persona)
 
+def insertar_persona(dni, nombres, apellidos, fecha_nacimiento=None, telefono=None, direccion=None):
+    nueva = Persona(dni=dni, nombres=nombres, apellidos=apellidos,
+                    fecha_nacimiento=fecha_nacimiento, telefono=telefono, direccion=direccion)
+    bd.session.add(nueva)
+    bd.session.commit()
 
-def actualizar_persona(dni, nombres, apellidos, fecha_nacimiento, telefono, direccion, id_persona):
-    conexion = obtener_conexion()
-    with conexion.cursor() as cursor:
-        cursor.execute("""
-            UPDATE persona
-            SET dni = %s,
-                nombres = %s,
-                apellidos = %s,
-                fecha_nacimiento = %s,
-                telefono = %s,
-                direccion = %s
-            WHERE id_persona = %s
-        """, (dni, nombres, apellidos, fecha_nacimiento, telefono, direccion, id_persona))
-    conexion.commit()
-    conexion.close()
+def actualizar_persona(id_persona, dni, nombres, apellidos, fecha_nacimiento=None, telefono=None, direccion=None):
+    persona = Persona.query.get(id_persona)
+    if persona:
+        persona.dni = dni
+        persona.nombres = nombres
+        persona.apellidos = apellidos
+        persona.fecha_nacimiento = fecha_nacimiento
+        persona.telefono = telefono
+        persona.direccion = direccion
+        bd.session.commit()
+        return True
+    return False
 
-def obtener_persona_nombre_dni(nombre, dni):
-    conexion = obtener_conexion()
-    personas = []
-    query = """
-        SELECT id_persona, dni, nombres, apellidos, fecha_nacimiento, telefono, direccion
-        FROM persona
-        WHERE 1=1
-    """
-    parametros = []
+def eliminar_persona(id_persona):
+    persona = Persona.query.get(id_persona)
+    if persona:
+        bd.session.delete(persona)
+        bd.session.commit()
+        return True
+    return False
 
-    if nombre:  # si no está vacío, se agrega a la consulta
-        query += " AND nombres ILIKE %s"
-        parametros.append(f"%{nombre}%")
-    if dni:  # si no está vacío, también se agrega
-        query += " AND dni ILIKE %s"
-        parametros.append(f"%{dni}%")
-
-    query += " ORDER BY id_persona"
-
-    with conexion.cursor() as cursor:
-        cursor.execute(query, tuple(parametros))
-        personas = cursor.fetchall()
-
-    conexion.close()
-    return personas
+def obtener_persona_nombre_dni(nombre=None, dni=None):
+    query = Persona.query
+    if nombre:
+        query = query.filter(Persona.nombres.ilike(f"%{nombre}%"))
+    if dni:
+        query = query.filter(Persona.dni.ilike(f"%{dni}%"))
+    return query.order_by(Persona.id_persona).all()

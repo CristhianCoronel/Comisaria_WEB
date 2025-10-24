@@ -1,33 +1,65 @@
 {% extends "base.html" %}
 
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/denuncia.css') }}">
+{% endblock %}
+
 {% block content %}
 <section class="section">
-    <div class="columns">
-        <div class="column is-one-third">
-            <h3 class="is-size-3">Agregar persona</h3>
-            <form action="{{ url_for('guardar_persona') }}" method="post">
-                <label for="dni">DNI:</label>
-                <input required type="text" class="input" placeholder="DNI" name="dni" id="dni">
-
-                <label for="nombres">Nombres:</label>
-                <input required type="text" class="input" placeholder="Nombres" name="nombres" id="nombres">
-
-                <label for="apellidos">Apellidos:</label>
-                <input required type="text" class="input" placeholder="Apellidos" name="apellidos" id="apellidos">
-
-                <label for="fecha_nacimiento">Fecha de nacimiento:</label>
-                <input type="date" class="input" name="fecha_nacimiento" id="fecha_nacimiento">
-
-                <label for="telefono">Teléfono:</label>
-                <input type="text" class="input" placeholder="Teléfono" name="telefono" id="telefono">
-
-                <label for="direccion">Dirección:</label>
-                <input type="text" class="input" placeholder="Dirección" name="direccion" id="direccion">
-
-                <button type="submit" class="button is-success mt-2">Guardar</button>
-                <a href="{{ url_for('persona') }}" class="button is-primary mt-2">Volver</a>
-            </form>
-        </div>
+    <div class="card">
+    <div class="form-title">
+        <!-- icon -->
+        <svg width="20" height="20" viewBox="0 0 24 24" style="opacity:0.9">
+            <path d="M9 2h6v2H9zM5 6h14v14H5z" fill="#2b4a86" />
+        </svg>
+        <div>Registrar Nueva Persona</div>
     </div>
+    <div class="form-sub">Complete todos los campos del formulario con la información de la persona</div>
+
+    <form action="{{ url_for('guardar_persona') }}" method="post">
+
+        <div class="section">
+            <h4>Datos Personales</h4>
+
+            <div class="field">
+                <label>DNI *</label>
+                <input required class="input" type="text" name="dni" placeholder="Ej: 12345678">
+            </div>
+
+            <div class="row">
+                <div class="field">
+                    <label>Nombres *</label>
+                    <input required class="input" type="text" name="nombres" placeholder="Ej: Juan">
+                </div>
+                <div class="field">
+                    <label>Apellidos *</label>
+                    <input required class="input" type="text" name="apellidos" placeholder="Ej: Pérez">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="field">
+                    <label>Fecha de nacimiento</label>
+                    <input class="input" type="date" name="fecha_nacimiento">
+                </div>
+                <div class="field">
+                    <label>Teléfono</label>
+                    <input class="input" type="text" name="telefono" placeholder="Ej: 3001234567">
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Dirección</label>
+                <input class="input" type="text" name="direccion" placeholder="Ej: Calle 123 #45-67">
+            </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:12px;">
+            <button type="submit" class="button is-success">Guardar</button>
+            <a href="{{ url_for('persona') }}" class="button is-primary">Volver</a>
+        </div>
+    </form>
+</div>
+
 </section>
 {% endblock %}

@@ -4,6 +4,13 @@
     padding: 0;
     box-sizing: border-box;
 }
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(35, 47, 60, 0.06);
+    border: 1px solid rgba(30, 40, 50, 0.03);
+}
 
 body, html {
     margin: 0;

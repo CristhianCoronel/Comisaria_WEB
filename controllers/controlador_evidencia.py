@@ -1,55 +1,43 @@
-# # controladores/controlador_evidencia.py
+# controllers/controlador_evidencia.py
+from models.Evidencia import Evidencia
+from bd import bd
 
-# from bd import obtener_conexion
-# from models.Evidencia import Evidencia  # Importar la clase Evidencia
+def obtener_evidencias():
+    """Devuelve todas las evidencias registradas."""
+    return Evidencia.query.all()
 
-# def insertar_evidencia(evidencia: Evidencia):
-#     conexion = obtener_conexion()
-#     try:
-#         with conexion.cursor() as cursor:
-#             cursor.callproc('pa_insert_evidencia', (
-#                 evidencia.titulo,
-#                 evidencia.url_adjunto,
-#                 evidencia.descripcion,
-#                 evidencia.id_denuncia
-#             ))
-#         conexion.commit()
-#     finally:
-#         conexion.close()
+def obtener_evidencia_por_id(id_evidencia):
+    """Devuelve una evidencia específica por su ID."""
+    return Evidencia.query.get(id_evidencia)
 
-# def modificar_evidencia(evidencia: Evidencia):
-#     conexion = obtener_conexion()
-#     try:
-#         with conexion.cursor() as cursor:
-#             cursor.callproc('pa_update_evidencia', (
-#                 evidencia.id_evidencia,
-#                 evidencia.titulo,
-#                 evidencia.url_adjunto,
-#                 evidencia.descripcion,
-#                 evidencia.id_denuncia
-#             ))
-#         conexion.commit()
-#     finally:
-#         conexion.close()
+def insertar_evidencia(titulo, url_adjunto, descripcion, id_denuncia):
+    """Inserta una nueva evidencia en la base de datos."""
+    nueva = Evidencia(
+        titulo=titulo,
+        url_adjunto=url_adjunto,
+        descripcion=descripcion,
+        id_denuncia=id_denuncia
+    )
+    bd.session.add(nueva)
+    bd.session.commit()
 
-# def eliminar_evidencia(id_evidencia: int):
-#     conexion = obtener_conexion()
-#     try:
-#         with conexion.cursor() as cursor:
-#             cursor.callproc('pa_delete_evidencia', (id_evidencia,))
-#         conexion.commit()
-#     finally:
-#         conexion.close()
+def modificar_evidencia(id_evidencia, titulo, url_adjunto, descripcion, id_denuncia):
+    """Actualiza una evidencia existente."""
+    evidencia = Evidencia.query.get(id_evidencia)
+    if evidencia:
+        evidencia.titulo = titulo
+        evidencia.url_adjunto = url_adjunto
+        evidencia.descripcion = descripcion
+        evidencia.id_denuncia = id_denuncia
+        bd.session.commit()
+        return True
+    return False
 
-# def obtener_evidencia(id_evidencia: int) -> Evidencia | None:
-#     conexion = obtener_conexion()
-#     evidencia = None
-#     try:
-#         with conexion.cursor() as cursor:
-#             cursor.execute("SELECT id_evidencia, titulo, url_adjunto, descripcion, id_denuncia FROM evidencia WHERE id_evidencia = %s", (id_evidencia,))
-#             fila = cursor.fetchone()
-#             if fila:
-#                 evidencia = Evidencia(*fila)
-#     finally:
-#         conexion.close()
-#     return evidencia
+def eliminar_evidencia(id_evidencia):
+    """Elimina una evidencia de la base de datos."""
+    evidencia = Evidencia.query.get(id_evidencia)
+    if evidencia:
+        bd.session.delete(evidencia)
+        bd.session.commit()
+        return True
+    return False

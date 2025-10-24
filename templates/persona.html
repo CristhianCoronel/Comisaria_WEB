@@ -2,13 +2,15 @@
 
 {% block content %}
 <section class="section">
-  <div class="columns">
+  <div class="columns card">
+    <h3 class="is-size-3">Pesonas registradas</h3>
+    
+    <a href="{{ url_for('formulario_agregar_persona') }}" class="button is-success">Agregar</a>
+  </div>
+
+  <div class="columns card">
     <div class="column">
-      <h3 class="is-size-3">Pesonas registradas</h3>
 
-      <a href="{{ url_for('formulario_agregar_persona') }}" class="button is-success">Agregar</a>
-
-      <!-- 🔍 FORMULARIO DE BÚSQUEDA -->
       <form action="{{ url_for('listar_persona') }}" method="GET" class="field has-addons mt-4">
         <div class="control">
           <input class="input" type="text" name="nombre" placeholder="Buscar por nombre" value="{{ request.args.get('nombre', '') }}">
@@ -39,15 +41,15 @@
         <tbody>
           {% for persona in personas %}
           <tr>
-            <td>{{ persona[0] }}</td>
-            <td>{{ persona[1] }}</td>
-            <td>{{ persona[2] }}</td>
-            <td>{{ persona[3] }}</td>
-            <td>{{ persona[4] }}</td>
-            <td>{{ persona[5] }}</td>
-            <td>{{ persona[6] }}</td>
+            <td>{{ persona.id_persona }}</td>
+            <td>{{ persona.dni }}</td>
+            <td>{{ persona.nombres }}</td>
+            <td>{{ persona.apellidos }}</td>
+            <td>{{ persona.fecha_nacimiento }}</td>
+            <td>{{ persona.telefono }}</td>
+            <td>{{ persona.direccion }}</td>
             <td>
-              <a href="{{ url_for('formulario_editar_persona', id=persona[0]) }}" class="button is-info">Editar</a>
+                <a href="{{ url_for('formulario_editar_persona', id=persona.id_persona) }}" class="button is-info">Editar</a>
             </td>
             <td>
               <form action="{{ url_for('ver_historial') }}" method="POST">

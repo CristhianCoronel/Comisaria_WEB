@@ -1,24 +1,37 @@
-class Departamento:
-    def __init__(self,id_departamento,nombre):
-        self.id_departamento = id_departamento
-        self.nombre = nombre
+from bd import bd
+
+class Departamento(bd.Model):
+    __tablename__ = 'departamento'
+
+    id_departamento = bd.Column(bd.Integer, primary_key=True)
+    nombre = bd.Column(bd.String(100), nullable=False)
 
 
-######################
-class Provincia:
-    def __init__(self,id_provincia,nombre,id_departamento):
-        self.id_provincia = id_provincia
-        self.nombre = nombre
-        self.id_departamento = id_departamento
+class Provincia(bd.Model):
+    __tablename__ = 'provincia'
+
+    id_provincia = bd.Column(bd.Integer, primary_key=True)
+    nombre = bd.Column(bd.String(100), nullable=False)
+    id_departamento = bd.Column(bd.Integer, bd.ForeignKey('departamento.id_departamento'), nullable=False)
+
+    departamento = bd.relationship('Departamento', backref='provincias')
 
 
-######################
-class Distrito:
-    def __init__(self,id_distrito,nombre,id_provincia):
-        self.id_distrito = id_distrito
-        self.nombre = nombre
-        self.id_provncia = id_provincia
+class Distrito(bd.Model):
+    __tablename__ = 'distrito'
+
+    id_distrito = bd.Column(bd.Integer, primary_key=True)
+    nombre = bd.Column(bd.String(100), nullable=False)
+    id_provincia = bd.Column(bd.Integer, bd.ForeignKey('provincia.id_provincia'), nullable=False)
+
+    provincia = bd.relationship('Provincia', backref='distritos')
 
 
+class Ubigeo(bd.Model):
+    __tablename__ = 'ubigeo'
 
+    id_ubigeo = bd.Column(bd.Integer, primary_key=True)
+    codigo = bd.Column(bd.String(5), unique=True, nullable=False)
+    id_distrito = bd.Column(bd.Integer, bd.ForeignKey('distrito.id_distrito'), nullable=False)
 
+    distrito = bd.relationship('Distrito', backref='ubigeos')

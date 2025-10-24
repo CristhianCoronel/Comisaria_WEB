@@ -1,19 +1,13 @@
-class Evidencia:
-    def __init__(self, id_evidencia, titulo, url_adjunto, descripcion, id_denuncia):
-        self.id_evidencia = id_evidencia            # entero
-        self.titulo = titulo                        # string
-        self.url_adjunto = url_adjunto              # string
-        self.descripcion = descripcion              # string
-        self.id_denuncia = id_denuncia              # entero
+# models/Evidencia.py
+from bd import bd
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+class Evidencia(bd.Model):
+    __tablename__ = 'evidencia'
+
+    id_evidencia = bd.Column(bd.Integer, primary_key=True)
+    id_denuncia = bd.Column(bd.Integer, bd.ForeignKey('denuncia.id_denuncia'), nullable=False)
+    tipo = bd.Column(bd.String(50))
+    url_archivo = bd.Column(bd.String(200))
+    descripcion = bd.Column(bd.Text)
+
+    denuncia = bd.relationship('Denuncia', backref='evidencias')
