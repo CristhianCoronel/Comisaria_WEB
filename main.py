@@ -28,7 +28,7 @@ import os, json
 app = Flask(__name__)
 
 ##  postgresql, usuario, contraseña, host, puerto, nombre_db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:usat_2025@localhost:5432/bd_comisaria'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:12345@localhost:5432/bd_comisaria'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.secret_key = 'clave_para_flash'

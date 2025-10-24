@@ -93,7 +93,7 @@ CREATE TABLE usuario (
     nombres varchar(100) NOT NULL,
     ape_paterno varchar(100) NOT NULL,
     ape_materno varchar(100) NOT NULL,
-    codigo_usuario varchar(50),
+    codigo_usuario varchar(100),
     estado char(1) DEFAULT 'A',
     id_comisaria int,
     id_rango int,
