@@ -29,8 +29,8 @@ jwt = JWTManager(app)
 
 
 # Crear tablas si no existen
-with app.app_context():
-    bd.create_all()
+# with app.app_context():
+#     bd.create_all()
 
 def login_required(f):
     @wraps(f)
