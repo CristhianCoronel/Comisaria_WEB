@@ -18,5 +18,5 @@ class Denuncia(bd.Model):
     denunciante = bd.relationship('Persona', foreign_keys=[id_denunciante], backref='denuncias_hechas')
     denunciado = bd.relationship('Persona', foreign_keys=[id_denunciado], backref='denuncias_recibidas')
     usuario = bd.relationship('Usuario', backref='denuncias')
-    tipo_denuncia = bd.relationship('TipoDenuncia', backref='denuncias')
+    tipo_denuncia = bd.relationship('Tipo_Denuncia', backref='denuncias')
     ubigeo_rel = bd.relationship('Ubigeo', backref='denuncias')

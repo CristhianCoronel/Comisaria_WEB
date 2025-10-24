@@ -19,4 +19,4 @@ class Detalle_Bienes(bd.Model):
     tipo_bien = bd.Column(bd.String(50))
 
     denuncia = bd.relationship('Denuncia', backref='detalles_bienes')
-    categoria = bd.relationship('CategoriaBienes', backref='detalles_bienes')
+    categoria = bd.relationship('Categoria_Bienes', backref='detalles_bienes')
