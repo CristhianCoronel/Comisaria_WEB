@@ -6,3 +6,4 @@ flask-jwt-extended
 bleach
 # supabase==0.2.0
 # python-dotenv==0.19.2
+gunicorn
