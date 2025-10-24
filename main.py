@@ -1,29 +1,46 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, Response
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, Response, session, flash
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from bd import bd
+from functools import wraps
 from controllers import controlador_evidencia
 from controllers import controlador_departamento
 from controllers import controlador_persona
-from models import Ubigeo, Persona, Evidencia
+from models import Area, Comisaria, Denuncia, Evidencia, Persona, Rango, Rol, Usuario
+from models.Bienes import Categoria_Bienes, Detalle_Bienes
+from models.Tipo_Denuncia import Tipo_Denuncia, D_Asalto, D_Hurto, D_Violencia_Familiar
+from models.Ubigeo import Departamento, Provincia, Distrito, Ubigeo
 
 import os, json
 
 app = Flask(__name__)
-bcrypt = Bcrypt(app)
 
 ##  postgresql, usuario, contraseña, host, puerto, nombre_db
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:usat_2025@localhost:5432/bd_comisaria'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+app.secret_key = 'clave_para_flash'
+app.config['JWT_SECRET_KEY'] = 'clave_super_secreta_para_jwt'
+
 # Inicializar la base de datos
 bd.init_app(app)
+bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
+
 
 # Crear tablas si no existen
 with app.app_context():
     bd.create_all()
 
-
-
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        token = session.get('token')  # Busca el token JWT en sesión
+        if not token:
+            flash("Debes iniciar sesión primero.", "warning")
+            return redirect(url_for('login'))  # Redirige al login si no hay token
+        return f(*args, **kwargs)
+    return decorated_function
 
 # --- RUTAS FIJAS --- #
 
@@ -49,18 +66,24 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        usuario = request.form['usuario']
-        id_oficial = request.form['id_oficial']
+        dni = request.form['usuario']
         contrasena = request.form['contrasena']
 
-        # Validación temporal (demo)
-        if contrasena == "policia123":
-            return redirect(url_for('index'))
+        usuario = Usuario.query.filter_by(dni=dni, estado='A').first()
+
+        if usuario and bcrypt.check_password_hash(usuario.codigo_usuario, contrasena):
+            token = create_access_token(identity=usuario.dni)
+            
+            session['token'] = token
+            
+            flash("Inicio de sesión exitoso", "success")
+            return redirect(url_for('index')) 
         else:
-            flash("Credenciales incorrectas. Intente nuevamente.")
+            flash("Credenciales incorrectas o usuario inactivo.", "danger")
             return redirect(url_for('login'))
 
     return render_template('login.html')
+
 
 ###########################################
 

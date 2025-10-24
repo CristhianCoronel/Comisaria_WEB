@@ -1,6 +1,6 @@
 from bd import bd
 
-class TipoDenuncia(bd.Model):
+class Tipo_Denuncia(bd.Model):
     __tablename__ = 'tipo_denuncia'
 
     id_tipo = bd.Column(bd.Integer, primary_key=True)
@@ -11,7 +11,7 @@ class TipoDenuncia(bd.Model):
     area = bd.relationship('Area', backref='tipos_denuncia')
 
 
-class DAsalto(bd.Model):
+class D_Asalto(bd.Model):
     __tablename__ = 'd_asalto'
 
     id_denuncia = bd.Column(bd.Integer, bd.ForeignKey('denuncia.id_denuncia'), primary_key=True)
@@ -20,7 +20,7 @@ class DAsalto(bd.Model):
     denuncia = bd.relationship('Denuncia', backref='asalto')
 
 
-class DHurto(bd.Model):
+class D_Hurto(bd.Model):
     __tablename__ = 'd_hurto'
 
     id_denuncia = bd.Column(bd.Integer, bd.ForeignKey('denuncia.id_denuncia'), primary_key=True)
@@ -29,7 +29,7 @@ class DHurto(bd.Model):
     denuncia = bd.relationship('Denuncia', backref='hurto')
 
 
-class DViolenciaFamiliar(bd.Model):
+class D_Violencia_Familiar(bd.Model):
     __tablename__ = 'd_violencia_familiar'
 
     id_denuncia = bd.Column(bd.Integer, bd.ForeignKey('denuncia.id_denuncia'), primary_key=True)

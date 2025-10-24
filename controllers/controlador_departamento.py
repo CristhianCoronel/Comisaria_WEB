@@ -1,29 +1,35 @@
-# # app/controlador.py
+# controllers/controlador_departamento.py
+from models.Ubigeo import Departamento
+from bd import bd
 
-# from bd_supabase import supabase_e
-# import os
-# from dotenv import load_dotenv
-# from models.Ubigeo import Departamento  # Importamos la clase Departamento
+def obtener_departamentos():
+    """Devuelve todos los departamentos registrados."""
+    return Departamento.query.all()
 
+def obtener_departamento_por_id(id_departamento):
+    """Devuelve un departamento específico por su ID."""
+    return Departamento.query.get(id_departamento)
 
-# def obtener_departamentos() -> list[Departamento]:
-#     """Obtiene todos los departamentos desde la base de datos de Supabase."""
-#     try:
-#         # Realizamos la consulta para obtener todos los departamentos
-#         response = supabase_e.table('departamento').select('id_departamento, nombre').execute()
+def insertar_departamento(nombre):
+    """Inserta un nuevo departamento en la base de datos."""
+    nuevo = Departamento(nombre=nombre)
+    bd.session.add(nuevo)
+    bd.session.commit()
 
-#         departamentos = []
-#         if response.data:
-#             # Iteramos sobre los resultados y creamos objetos Departamento
-#             for departamento_data in response.data:
-#                 departamento = Departamento(
-#                     id_departamento=departamento_data['id_departamento'],
-#                     nombre=departamento_data['nombre']
-#                 )
-#                 departamentos.append(departamento)
-        
-#         return departamentos
+def modificar_departamento(id_departamento, nombre):
+    """Actualiza un departamento existente."""
+    departamento = Departamento.query.get(id_departamento)
+    if departamento:
+        departamento.nombre = nombre
+        bd.session.commit()
+        return True
+    return False
 
-#     except Exception as e:
-#         print(f"Error al obtener los departamentos: {e}")
-#         return []  # En caso de error, retornamos una lista vacía
+def eliminar_departamento(id_departamento):
+    """Elimina un departamento de la base de datos."""
+    departamento = Departamento.query.get(id_departamento)
+    if departamento:
+        bd.session.delete(departamento)
+        bd.session.commit()
+        return True
+    return False

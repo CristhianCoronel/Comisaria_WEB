@@ -2,6 +2,7 @@ Flask==3.0.0
 flask-sqlalchemy
 psycopg2-binary
 flask-bcrypt
+flask-jwt-extended
 bleach
 # supabase==0.2.0
 # python-dotenv==0.19.2
