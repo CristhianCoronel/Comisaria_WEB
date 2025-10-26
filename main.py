@@ -3,9 +3,25 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from bd import bd
 from functools import wraps
-from controllers import controlador_evidencia
+
 from controllers import controlador_departamento
+from controllers import controlador_provincia
+from controllers import controlador_distrito
+from controllers import controlador_ubigeo
+from controllers import controlador_comisaria
+from controllers import controlador_area
+from controllers import controlador_rango
+from controllers import controlador_rol
 from controllers import controlador_persona
+from controllers import controlador_usuario
+from controllers import controlador_categoria_bienes
+from controllers import controlador_tipo_denuncia
+from controllers import controlador_denuncia
+from controllers import controlador_d_hurto
+from controllers import controlador_d_asalto
+from controllers import controlador_d_violencia_familiar
+from controllers import controlador_detalles_bienes
+from controllers import controlador_evidencia
 
 from models.Ubigeo import Departamento, Provincia, Distrito, Ubigeo
 from models.Comisaria import Comisaria
@@ -118,7 +134,8 @@ def logout():
 @login_required
 def persona():
     personas = controlador_persona.obtener_personas()
-    return render_template('persona.html', personas = personas)
+    ubigeos = controlador_ubigeo.obtener_ubigeos()
+    return render_template('persona.html', personas=personas, ubigeos=ubigeos)
 
 @app.route('/agregar_ciudadano')
 @login_required
@@ -134,6 +151,7 @@ def guardar_persona():
     fecha_nacimiento = request.form.get("fecha_nacimiento") or None  # puede venir vacío
     telefono = request.form.get("telefono") or None
     direccion = request.form.get("direccion") or None
+    ubigeo = request.form.get("ubigeo") or None
 
     controlador_persona.insertar_persona(dni, nombres, apellidos, fecha_nacimiento, telefono, direccion)
     return redirect("/personas")

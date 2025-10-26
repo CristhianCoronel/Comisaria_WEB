@@ -1,14 +1,70 @@
 {% extends "base.html" %}
 
-{% block content %}
-<section class="section">
-  <div class="columns card">
-    <h3 class="is-size-3">Pesonas registradas</h3>
-    <br>
-    <a href="{{ url_for('formulario_agregar_persona') }}" class="button is-success">Agregar</a>
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/denuncia.css') }}">
+{% endblock %}
 
+{% block content %}
+<section>
+  <div class="card">
     
+    
+    <div class="form-title"><h3 class="is-size-3">Ciudadanos</h3></div>
+    <form action="{{ url_for('guardar_persona') }}" method="post">
+
+      <div class="section">
+          <h4>Datos Personales</h4>
+
+          <div class="field">
+              <label>DNI *</label>
+              <input required class="input" type="text" name="dni" placeholder="Ej: 12345678">
+          </div>
+
+          <div class="row">
+              <div class="field">
+                  <label>Nombres *</label>
+                  <input required class="input" type="text" name="nombres" placeholder="Ej: Juan">
+              </div>
+              <div class="field">
+                  <label>Apellidos *</label>
+                  <input required class="input" type="text" name="apellidos" placeholder="Ej: Pérez">
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="field">
+                  <label>Fecha de nacimiento</label>
+                  <input class="input" type="date" name="fecha_nacimiento">
+              </div>
+              <div class="field">
+                  <label>Teléfono</label>
+                  <input class="input" type="text" name="telefono" placeholder="Ej: 3001234567">
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="field">
+                <label>Ubigeo</label>
+                <input class="input" type="text" name="ubigeo" placeholder="Ej: 01002">
+              </div>
+              <div class="field">
+                <label>Dirección</label>
+                <input class="input" type="text" name="direccion" placeholder="Ej: Calle 123 #45-67">
+              </div>
+          </div>
+
+          
+      </div>
+
+      <div style="margin-top:10px; display:flex; gap:12px;">
+          <button type="submit" class="button is-success">Nuevo</button>
+          <a href="{{ url_for('formulario_agregar_persona') }}" class="button is-primary">Agregar</a>
+          <a href="{{ url_for('persona') }}" class="button is-primary">Editar</a>
+      </div>
+    </form>
+
   </div>
+  <br>
 
   <div class="columns card">
     <div class="column">

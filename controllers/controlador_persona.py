@@ -7,13 +7,13 @@ def obtener_personas():
 def obtener_persona_por_id(id_persona):
     return Persona.query.get(id_persona)
 
-def insertar_persona(dni, nombres, apellidos, fecha_nacimiento=None, telefono=None, direccion=None):
+def insertar_persona(dni, nombres, apellidos, fecha_nacimiento=None, telefono=None, direccion=None, ubigeo=None):
     nueva = Persona(dni=dni, nombres=nombres, apellidos=apellidos,
-                    fecha_nacimiento=fecha_nacimiento, telefono=telefono, direccion=direccion)
+                    fecha_nacimiento=fecha_nacimiento, telefono=telefono, direccion=direccion, ubigeo=ubigeo)
     bd.session.add(nueva)
     bd.session.commit()
 
-def actualizar_persona(id_persona, dni, nombres, apellidos, fecha_nacimiento=None, telefono=None, direccion=None):
+def actualizar_persona(id_persona, dni, nombres, apellidos, fecha_nacimiento=None, telefono=None, direccion=None, ubigeo=None):
     persona = Persona.query.get(id_persona)
     if persona:
         persona.dni = dni
@@ -22,6 +22,7 @@ def actualizar_persona(id_persona, dni, nombres, apellidos, fecha_nacimiento=Non
         persona.fecha_nacimiento = fecha_nacimiento
         persona.telefono = telefono
         persona.direccion = direccion
+        persona.ubigeo = ubigeo
         bd.session.commit()
         return True
     return False
