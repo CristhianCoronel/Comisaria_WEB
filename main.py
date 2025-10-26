@@ -28,11 +28,15 @@ import os, json
 app = Flask(__name__)
 
 ##  postgresql, usuario, contraseña, host, puerto, nombre_db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://bd_comisaria_user:HmGlVBo5J21P0ojPxCrO24tMZ2gxxc68@dpg-d3tu8n6uk2gs73df7b50-a.oregon-postgres.render.com:5432/bd_comisaria'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://bd_comisaria_user:HmGlVBo5J21P0ojPxCrO24tMZ2gxxc68@dpg-d3tu8n6uk2gs73df7b50-a.oregon-postgres.render.com:5432/bd_comisaria'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:WgtzsruCmjT7dmlB8Hjxim4xqv8uXpnG@dpg-d3v50s3e5dus73a4ogu0-a.oregon-postgres.render.com/bd_comisaria_008i'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app.secret_key = os.environ.get('FLASK_SECRET_KEY')
-app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
+# app.secret_key = os.environ.get('FLASK_SECRET_KEY')
+# app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
+app.secret_key = "clave_local_flask"
+app.config['JWT_SECRET_KEY'] = "clave_local_jwt"
 
 # Inicializar la base de datos
 bd.init_app(app)
