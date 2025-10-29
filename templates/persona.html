@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block style %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/denuncia.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/formato_formulario.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@
     
     
     <div class="form-title"><h3 class="is-size-3">Ciudadanos</h3></div>
-    <form action="{{ url_for('guardar_persona') }}" method="post">
+    <form action="{{ url_for('formulario_agregar_persona') }}" method="post">
 
       <div class="section">
           <h4>Datos Personales</h4>
@@ -59,22 +59,22 @@
       <div style="margin-top:10px; display:flex; gap:12px;">
           <button type="submit" class="button is-success">Nuevo</button>
           <a href="{{ url_for('formulario_agregar_persona') }}" class="button is-primary">Agregar</a>
-          <a href="{{ url_for('persona') }}" class="button is-primary">Editar</a>
+          <a href="{{ url_for('persona') }}" class="button is-secundary">Editar</a>
       </div>
     </form>
 
   </div>
   <br>
 
-  <div class="columns card">
+  <div class="card">
     <div class="column">
 
-      <form action="{{ url_for('listar_persona') }}" method="GET" class="field has-addons mt-4">
+      <form action="{{ url_for('buscar_persona') }}" method="GET" class="field has-addons mt-4">
         <div class="control">
-          <input class="input" type="text" name="nombre" placeholder="Buscar por nombre" value="{{ request.args.get('nombre', '') }}">
+          <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre" value="{{ request.args.get('nombre', '') }}">
         </div>
         <div class="control">
-          <input class="input" type="text" name="dni" placeholder="Buscar por dni" value="{{ request.args.get('dni', '') }}">
+          <input class="input" type="text" name="b_dni" placeholder="Buscar por dni" value="{{ request.args.get('dni', '') }}">
         </div>
         <div class="control">
           <button class="button is-link" type="submit">Buscar</button>

@@ -1,0 +1,97 @@
+/* Reset básico */
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Fondo centrado */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+    margin: 50PX; /* Eliminar margen global de body */
+    padding: 50px 0; /* Controlar el padding solo verticalmente */
+}
+
+.container{
+    margin-top: 50px;
+}
+
+/* Contenedor del formulario */
+.form-container {
+    background-color: #ffffff;
+    padding: 40px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 50px;
+}
+
+/* Logo centrado */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Asegura que la imagen se alinee verticalmente */
+    margin-bottom: 20px;
+    width: 100%;
+    height: auto; /* Asegura que no haya problemas con la altura del contenedor */
+    overflow: hidden; /* Asegura que no se muestre nada fuera de la caja */
+}
+
+.logo-container img {
+    max-width: 100%; /* Ajusta el tamaño de la imagen al 100% de su contenedor */
+    height: auto; /* Mantiene la proporción */
+}
+
+/* Título */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Inputs */
+form input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Botón */
+form button {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+
+/* Enlace de inicio de sesión */
+.login-link {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}

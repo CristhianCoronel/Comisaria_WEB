@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Cuenta</title>
+    <link rel="stylesheet" href="/static/css/iniciar_sesion.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="/static/img/escudo.png" alt="Logo" width="150">
+        </div>
+        <h2>Iniciar Sesión</h2>
+        <div class="form-container">        
+            <form action="{{url_for('validar_usuario')}}" method="POST">
+                <label name="correo">Usuario:</label>
+                <input type="email" name="correo" placeholder="user_01@example.com" required>
+                
+                <label name="clave">Contraseña:</label>
+                <input type="password" name="clave" placeholder="********" required>
+                <p><a href="{{url_for('recuperar_clave')}}">Olvide mi contraseña</a></p>
+
+                <button type="submit">Iniciar Sesión</button>
+
+            </form>
+        </div>
+    </div>
+    <script src="/static/js/iniciar_sesion.js"></script>
+</body>
+</html>

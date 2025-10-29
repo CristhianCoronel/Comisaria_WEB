@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section">
+    <div class="columns">
+        <div class="column is-one-third">
+            <h3 class="is-size-3">Editar Área</h3>
+
+            <form action="{{ url_for('actualizar_area') }}" method="post">
+                <!-- ID oculto -->
+                <input type="hidden" name="id_area" value="{{ area.id_area }}">
+
+                <label for="nombre">Nombre:</label>
+                <input 
+                    value="{{ area.nombre }}" 
+                    required 
+                    type="text" 
+                    class="input" 
+                    placeholder="Nombre del área" 
+                    name="nombre" 
+                    id="nombre"
+                >
+
+                <label for="descripcion">Descripción:</label>
+                <input 
+                    value="{{ area.descripcion }}" 
+                    type="text" 
+                    class="input" 
+                    placeholder="Descripción del área" 
+                    name="descripcion" 
+                    id="descripcion"
+                >
+
+                <button type="submit" class="button is-success mt-2">Guardar</button>
+                <a href="{{ url_for('area') }}" class="button is-primary mt-2">Volver</a>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

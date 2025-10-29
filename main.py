@@ -177,10 +177,38 @@ def actualizar_persona():
     controlador_persona.actualizar_persona(dni, nombres, apellidos, fecha_nacimiento, telefono, direccion, id_persona)
     return redirect("/personas")
 
-@app.route("/listar_persona")
+@app.route("/buscar_persona", methods=["POST"])
 @login_required
-def listar_persona():
-    return redirect('ciudadanos')
+def buscar_persona():
+    try:
+        nombre = request.form.get("b_nombre", "")
+        dni = request.form.get("b_dni", "")
+        lista = controlador_persona.obtener_persona_nombre_dni(nombre, dni)
+
+        personas_json = []
+        for p in lista:
+            personas_json.append({
+                "id_persona": p.id_persona,
+                "dni": p.dni,
+                "nombres": p.nombres,
+                "apellidos": p.apellidos,
+                "fecha_nacimiento": p.fecha_nacimiento.strftime("%Y-%m-%d") if p.fecha_nacimiento else None,
+                "telefono": p.telefono,
+                "direccion": p.direccion,
+                "ubigeo": p.ubigeo
+            })
+
+        return jsonify({
+            "status": 1,
+            "data": personas_json,
+            "message": "Todo bien"
+        })
+    except Exception as e:
+        return jsonify({
+            "status": -1,
+            "data": [],
+            "message": f"Error al listar personas: {str(e)}"
+        })
 
 @app.route("/historial")
 @login_required
@@ -190,6 +218,117 @@ def ver_historial():
 
 ############# FIN PERSONA ###############
 
+#############  AREA  ######################
+
+@app.route('/area', methods=['GET'])
+@login_required
+def area():
+    areas = controlador_area.obtener_areas()
+    return render_template('area.html', areas=areas)
+
+@app.route('/agregar_area')
+@login_required
+def formulario_agregar_area():
+    return render_template('denuncia.html')
+
+@app.route('/guardar_area', methods=['POST'])
+@login_required
+def guardar_area():
+    nombre = request.form['nombre']
+    descripcion = request.form.get('descripcion', '')
+    controlador_area.insertar_area(nombre,descripcion)
+    return redirect(url_for('area'))
+
+@app.route('/formulario_editar_area/<int:id_area>')
+@login_required
+def formulario_editar_area(id_area):
+    area = controlador_area.obtener_area_por_id(id_area)
+    return render_template('editar_area.html', area=area)
+
+@app.route('/actualizar_area', methods=['POST'])
+@login_required
+def actualizar_area():
+    id_area = request.form['id_area']
+    nombre = request.form['nombre']
+    descripcion = request.form['descripcion']
+    controlador_area.modificar_area(id_area, nombre, descripcion)
+    return redirect('area')
+
+@app.route('/eliminar_area')
+@login_required
+def eliminar_area():
+    id_area = request.form['id_area']
+    controlador_area.eliminar_area(id_area)
+
+@app.route('/buscar_area', methods=['POST'])
+@login_required
+def buscar_area():
+    return render_template('denuncia.html')
+
+######################################
+
+############# COMISARÍA ##############
+
+# Listar comisarías
+@app.route('/comisaria', methods=['GET'])
+@login_required
+def comisaria():
+    comisarias = controlador_comisaria.obtener_comisarias()
+    return render_template('comisaria.html', comisarias=comisarias, ubigeos=controlador_ubigeo.obtener_ubigeos())
+
+@app.route('/agregar_comisaria')
+@login_required
+def formulario_agregar_comisaria():
+    return render_template('comisaria.html', comisaria=None, ubigeos=controlador_ubigeo.obtener_ubigeos())
+
+@app.route('/guardar_comisaria', methods=['POST'])
+@login_required
+def guardar_comisaria():
+    nombre = request.form['nombre']
+    direccion = request.form['direccion']
+    telefono = request.form['telefono']
+    ubigeo = request.form['ubigeo']
+    controlador_comisaria.insertar_comisaria(nombre, direccion, ubigeo, telefono)
+    return redirect(url_for('comisaria'))
+
+@app.route('/formulario_editar_comisaria/<int:id_comisaria>')
+@login_required
+def formulario_editar_comisaria(id_comisaria):
+    comisaria = controlador_comisaria.obtener_comisaria_por_id(id_comisaria)
+    return render_template('comisaria.html', comisaria=comisaria, ubigeos=controlador_ubigeo.obtener_ubigeos())
+
+@app.route('/actualizar_comisaria', methods=['POST'])
+@login_required
+def actualizar_comisaria():
+    id_comisaria = request.form['id_comisaria']
+    nombre = request.form['nombre']
+    direccion = request.form.get('direccion', '')
+    telefono = request.form.get('telefono', '')
+    ubigeo = request.form.get('ubigeo', '')
+    controlador_comisaria.modificar_comisaria(id_comisaria, nombre, direccion, ubigeo, telefono)
+    return redirect(url_for('comisaria'))
+
+@app.route('/eliminar_comisaria', methods=['POST'])
+@login_required
+def eliminar_comisaria():
+    id_comisaria = request.form['id_comisaria']
+    controlador_comisaria.eliminar_comisaria(id_comisaria)
+    return redirect(url_for('comisaria'))
+
+@app.route('/buscar_comisaria', methods=['POST'])
+@login_required
+def buscar_comisaria():
+    nombre = request.form.get("b_nombre", "")
+    direccion = request.form.get("b_direccion", "")
+    lista = controlador_comisaria.obtener_comisaria_nombre_direccion(nombre, direccion)
+    return jsonify({
+        "status": 1,
+        "data": [{"id_comisaria": c.id_comisaria, "nombre": c.nombre, "direccion": c.direccion, "telefono": c.telefono, "ubigeo": c.ubigeo} for c in lista],
+        "message": "Comisarías encontradas"
+    })
+
+
+#######################################
 
 ############# DENUNCIA ####################
 

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/formato_formulario.css') }}">
+{% endblock %}
+
+{% block content %}
+<section>
+  <div class="card">
+    <div class="form-title"><h3 class="is-size-3">Comisarías</h3></div>
+
+    <form action="{{ url_for('guardar_comisaria') }}" method="post" id="frmComisaria">
+      <input type="hidden" name="id_comisaria" id="id_comisaria" value="{{ comisaria.id_comisaria if comisaria else '' }}">
+
+      <div class="section">
+        <h4>Datos de la Comisaría</h4>
+
+        <div class="field">
+          <label>Nombre *</label>
+          <input required class="input" type="text" name="nombre" placeholder="Ej: Comisaría Central">
+        </div>
+
+        <div class="field">
+          <label>Dirección</label>
+          <input class="input" type="text" name="direccion" placeholder="Ej: Av. Principal 123">
+        </div>
+
+        <div class="field">
+          <label>Teléfono</label>
+          <input class="input" type="text" name="telefono" placeholder="Ej: 054-123456">
+        </div>
+
+        <!-- ===================== UBIGEO ===================== -->
+        <div class="field">
+          <label>Ubigeo</label>
+          <div>
+            <label class="radio">
+              <input type="radio" name="rb_ubigeo" value="conocido" checked>
+              Seleccionar ubigeo existente
+            </label>
+            <label class="radio ml-3">
+              <input type="radio" name="rb_ubigeo" value="no_se">
+              No sé el ubigeo
+            </label>
+          </div>
+
+          <!-- Select normal de ubigeo -->
+          <div id="divUbigeoSelect" class="mt-2">
+            <div class="field">
+                <label>Ubigeo</label>
+                <input class="input" type="text" name="direccion" placeholder="Ej: Av. Principal 123">
+            </div>
+          </div>
+
+          <!-- Contenedor de los combos dependientes -->
+          <div id="divUbigeoDesconocido" class="mt-2" style="display:none;">
+            <label>Seleccione ubicación:</label>
+
+            <div class="select is-fullwidth mb-2">
+              <select id="cb_departamento">
+                <option value="">Seleccione departamento</option>
+              </select>
+            </div>
+
+            <div class="select is-fullwidth mb-2">
+              <select id="cb_provincia">
+                <option value="">Seleccione provincia</option>
+              </select>
+            </div>
+
+            <div class="select is-fullwidth mb-2">
+              <select id="cb_distrito">
+                <option value="">Seleccione distrito</option>
+              </select>
+            </div>
+
+            <label id="lbl_ubigeo" class="has-text-weight-semibold">Ubigeo: —</label>
+
+            <!-- Input oculto donde se guardará el ubigeo final -->
+            <input type="hidden" name="ubigeo" id="txt_ubigeo_final">
+          </div>
+        </div>
+        <!-- ================================================== -->
+      </div>
+
+      <div style="margin-top:10px; display:flex; gap:12px;">
+        <button type="submit" class="button is-success">Guardar</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}
+
+{% block js %}
+  <script src="{{ url_for('static', filename='js/comisaria.js') }}"></script>
+{% endblock %}
