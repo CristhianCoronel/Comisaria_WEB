@@ -134,13 +134,69 @@ def logout():
 @login_required
 def persona():
     personas = controlador_persona.obtener_personas()
-    ubigeos = controlador_ubigeo.obtener_ubigeos()
-    return render_template('persona.html', personas=personas, ubigeos=ubigeos)
+    return render_template('persona.html', personas=personas)
 
-@app.route('/agregar_ciudadano')
+@app.route('/api/personas', methods=['POST'])
 @login_required
-def formulario_agregar_persona():
-    return render_template('agregar_persona.html')
+def api_guardar_persona():
+    try:
+        data = request.get_json()
+
+        dni = data.get("dni")
+        nombres = data.get("nombres")
+        apellidos = data.get("apellidos")
+        fecha_nacimiento = data.get("fecha_nacimiento")
+        telefono = data.get("telefono")
+        direccion = data.get("direccion")
+        ubigeo = data.get("ubigeo")
+
+        # --- Validaciones ---
+        if not dni or not nombres or not apellidos:
+            return jsonify({
+                "status": 0,
+                "data": None,
+                "message": "Faltan campos obligatorios."
+            }), 400
+
+        # --- Insertar la nueva persona ---
+        controlador_persona.insertar_persona(
+            dni, nombres, apellidos, fecha_nacimiento, telefono, direccion, ubigeo
+        )
+
+        persona = controlador_persona.obtener_ultima_persona()
+
+        if not persona:
+            return jsonify({
+                "status": 0,
+                "data": None,
+                "message": "No se pudo obtener la persona recién registrada."
+            }), 404
+
+        persona_json = {
+            "id_persona": persona.id_persona,
+            "dni": persona.dni,
+            "nombres": persona.nombres,
+            "apellidos": persona.apellidos,
+            "fecha_nacimiento": persona.fecha_nacimiento.strftime("%Y-%m-%d") if persona.fecha_nacimiento else None,
+            "telefono": persona.telefono,
+            "direccion": persona.direccion,
+            "ubigeo": persona.ubigeo
+        }
+
+        return jsonify({
+            "status": 1,
+            "data": persona_json,
+            "message": "Persona registrada correctamente."
+        }), 201
+
+    except Exception as e:
+        print("Error en /api/personas:", e)
+        return jsonify({
+            "status": 0,
+            "data": None,
+            "message": f"Error interno del servidor: {str(e)}"
+        }), 500
+
 
 @app.route('/guardar_ciudadano')
 @login_required
@@ -177,17 +233,16 @@ def actualizar_persona():
     controlador_persona.actualizar_persona(dni, nombres, apellidos, fecha_nacimiento, telefono, direccion, id_persona)
     return redirect("/personas")
 
-@app.route("/buscar_persona", methods=["POST"])
+@app.route("/api/personas/buscar", methods=["POST"])
 @login_required
-def buscar_persona():
+def api_buscar_persona():
     try:
-        nombre = request.form.get("b_nombre", "")
-        dni = request.form.get("b_dni", "")
+        nombre = request.json.get("b_nombre", "")
+        dni = request.json.get("b_dni", "")
         lista = controlador_persona.obtener_persona_nombre_dni(nombre, dni)
 
-        personas_json = []
-        for p in lista:
-            personas_json.append({
+        personas_json = [
+            {
                 "id_persona": p.id_persona,
                 "dni": p.dni,
                 "nombres": p.nombres,
@@ -195,20 +250,24 @@ def buscar_persona():
                 "fecha_nacimiento": p.fecha_nacimiento.strftime("%Y-%m-%d") if p.fecha_nacimiento else None,
                 "telefono": p.telefono,
                 "direccion": p.direccion,
-                "ubigeo": p.ubigeo
-            })
+                "ubigeo": p.ubigeo,
+            }
+            for p in lista
+        ]
 
         return jsonify({
             "status": 1,
             "data": personas_json,
-            "message": "Todo bien"
+            "message": "Resultados obtenidos correctamente"
         })
     except Exception as e:
+        print("Error:", e)
         return jsonify({
             "status": -1,
             "data": [],
             "message": f"Error al listar personas: {str(e)}"
-        })
+        }), 500
+
 
 @app.route("/historial")
 @login_required
@@ -264,6 +323,26 @@ def eliminar_area():
 @login_required
 def buscar_area():
     return render_template('denuncia.html')
+
+@app.route('/area/<int:id_area>/json', methods=['GET'])
+@login_required
+def area_por_id_json(id_area):
+    """Devuelve los datos de un área en formato JSON dado su id."""
+    try:
+        area = controlador_area.obtener_area_por_id(id_area)
+        if not area:
+            return jsonify({"status": 0, "data": None, "message": "Área no encontrada"}), 404
+
+        return jsonify({
+            "status": 1,
+            "data": {
+                "id_area": area.id_area,
+                "nombre": area.nombre,
+                "descripcion": area.descripcion
+            }
+        })
+    except Exception as e:
+        return jsonify({"status": -1, "data": None, "message": str(e)}), 500
 
 ######################################
 

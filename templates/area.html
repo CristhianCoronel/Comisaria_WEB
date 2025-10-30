@@ -14,15 +14,20 @@
       <div class="section">
           <h4>Datos del Área</h4>
 
-          <div class="field">
-              <label>Nombre *</label>
-              <input required class="input" type="text" name="nombre" placeholder="Ej: Recursos Humanos">
-          </div>
+      <div class="field">
+        <label>ID</label>
+        <input required id="input-id_area" class="input" type="text" name="id_area" readonly>
+      </div>
 
-          <div class="field">
-              <label>Descripción</label>
-              <input class="input" type="text" name="descripcion" placeholder="Ej: Área encargada de la gestión del personal">
-          </div>
+      <div class="field">
+        <label>Nombre</label>
+        <input required id="input-nombre" class="input" type="text" name="nombre" placeholder="Ej: Recursos Humanos">
+      </div>
+
+      <div class="field">
+        <label>Descripción</label>
+        <input id="input-descripcion" class="input" type="text" name="descripcion" placeholder="Ej: Área encargada de la gestión del personal">
+      </div>
       </div>
 
       <div style="margin-top:10px; display:flex; gap:12px;">
@@ -59,7 +64,7 @@
         </thead>
         <tbody>
           {% for area in areas %}
-          <tr>
+          <tr class="clickable-row" data-id="{{ area.id_area }}">
             <td>{{ area.id_area }}</td>
             <td>{{ area.nombre }}</td>
             <td>{{ area.descripcion }}</td>
@@ -78,5 +83,6 @@
       </table>
     </div>
   </div>
+
 </section>
 {% endblock %}

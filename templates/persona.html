@@ -1,88 +1,84 @@
 {% extends "base.html" %}
 
 {% block style %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/formato_formulario.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/formato_formulario.css') }}">
 {% endblock %}
 
 {% block content %}
 <section>
   <div class="card">
-    
-    
     <div class="form-title"><h3 class="is-size-3">Ciudadanos</h3></div>
-    <form action="{{ url_for('formulario_agregar_persona') }}" method="post">
 
+    <form id="form-persona">
       <div class="section">
-          <h4>Datos Personales</h4>
+        <h4>Datos Personales</h4>
 
+        <div class="field">
+          <label>DNI *</label>
+          <input required class="input" type="text" name="dni" placeholder="Ej: 12345678">
+        </div>
+
+        <div class="row">
           <div class="field">
-              <label>DNI *</label>
-              <input required class="input" type="text" name="dni" placeholder="Ej: 12345678">
+            <label>Nombres *</label>
+            <input required class="input" type="text" name="nombres" placeholder="Ej: Juan">
           </div>
-
-          <div class="row">
-              <div class="field">
-                  <label>Nombres *</label>
-                  <input required class="input" type="text" name="nombres" placeholder="Ej: Juan">
-              </div>
-              <div class="field">
-                  <label>Apellidos *</label>
-                  <input required class="input" type="text" name="apellidos" placeholder="Ej: Pérez">
-              </div>
+          <div class="field">
+            <label>Apellidos *</label>
+            <input required class="input" type="text" name="apellidos" placeholder="Ej: Pérez">
           </div>
+        </div>
 
-          <div class="row">
-              <div class="field">
-                  <label>Fecha de nacimiento</label>
-                  <input class="input" type="date" name="fecha_nacimiento">
-              </div>
-              <div class="field">
-                  <label>Teléfono</label>
-                  <input class="input" type="text" name="telefono" placeholder="Ej: 3001234567">
-              </div>
+        <div class="row">
+          <div class="field">
+            <label>Fecha de nacimiento</label>
+            <input class="input" type="date" name="fecha_nacimiento">
           </div>
-
-          <div class="row">
-              <div class="field">
-                <label>Ubigeo</label>
-                <input class="input" type="text" name="ubigeo" placeholder="Ej: 01002">
-              </div>
-              <div class="field">
-                <label>Dirección</label>
-                <input class="input" type="text" name="direccion" placeholder="Ej: Calle 123 #45-67">
-              </div>
+          <div class="field">
+            <label>Teléfono</label>
+            <input class="input" type="text" name="telefono" placeholder="Ej: 3001234567">
           </div>
+        </div>
 
-          
+        <div class="row">
+          <div class="field">
+            <label>Ubigeo</label>
+            <input class="input" type="text" name="ubigeo" placeholder="Ej: 01002">
+          </div>
+          <div class="field">
+            <label>Dirección</label>
+            <input class="input" type="text" name="direccion" placeholder="Ej: Calle 123 #45-67">
+          </div>
+        </div>
+        <div id="mensaje" class="notification is-hidden"></div>
       </div>
 
       <div style="margin-top:10px; display:flex; gap:12px;">
-          <button type="submit" class="button is-success">Nuevo</button>
-          <a href="{{ url_for('formulario_agregar_persona') }}" class="button is-primary">Agregar</a>
-          <a href="{{ url_for('persona') }}" class="button is-secundary">Editar</a>
+        <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
+        <button type="button" class="button is-primary" id="btnAgregar">Agregar</button>
+        <button type="button" class="button is-success" id="btnEditar">Editar</button>
       </div>
     </form>
-
   </div>
+
   <br>
 
   <div class="card">
     <div class="column">
 
-      <form action="{{ url_for('buscar_persona') }}" method="GET" class="field has-addons mt-4">
+      <form id="form-buscar" class="field has-addons mt-4">
         <div class="control">
-          <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre" value="{{ request.args.get('nombre', '') }}">
+          <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
         </div>
         <div class="control">
-          <input class="input" type="text" name="b_dni" placeholder="Buscar por dni" value="{{ request.args.get('dni', '') }}">
+          <input class="input" type="text" name="b_dni" placeholder="Buscar por DNI">
         </div>
         <div class="control">
-          <button class="button is-link" type="submit">Buscar</button>
+          <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
         </div>
       </form>
 
-      <!-- TABLA -->
-      <table class="table is-striped is-hoverable mt-4">
+      <table class="table is-striped is-hoverable mt-4" id="tabla-personas">
         <thead>
           <tr>
             <th>ID</th>
@@ -92,8 +88,6 @@
             <th>Fecha de nacimiento</th>
             <th>Teléfono</th>
             <th>Dirección</th>
-            <th>Editar</th>
-            <th>Ver historial</th>
           </tr>
         </thead>
         <tbody>
@@ -106,20 +100,16 @@
             <td>{{ persona.fecha_nacimiento }}</td>
             <td>{{ persona.telefono }}</td>
             <td>{{ persona.direccion }}</td>
-            <td>
-                <a href="{{ url_for('formulario_editar_persona', id=persona.id_persona) }}" class="button is-info">Editar</a>
-            </td>
-            <td>
-              <form action="{{ url_for('ver_historial') }}" method="POST">
-                <input type="hidden" name="id" value="{{ persona[0] }}">
-                <button class="button is-danger">Eliminar</button>
-              </form>
-            </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
+
 </section>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/persona.js') }}"></script>
 {% endblock %}
