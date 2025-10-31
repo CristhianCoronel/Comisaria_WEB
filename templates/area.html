@@ -9,31 +9,32 @@
   <div class="card">
     <div class="form-title"><h3 class="is-size-3">Áreas</h3></div>
 
-    <form action="{{ url_for('guardar_area') }}" method="post">
-
+    <form id="form-area">
       <div class="section">
-          <h4>Datos del Área</h4>
+        <h4>Datos del Área</h4>
 
-      <div class="field">
-        <label>ID</label>
-        <input required id="input-id_area" class="input" type="text" name="id_area" readonly>
-      </div>
+        <div class="field">
+          <label>ID</label>
+          <input id="input-id_area" class="input" type="text" name="id_area" readonly>
+        </div>
 
-      <div class="field">
-        <label>Nombre</label>
-        <input required id="input-nombre" class="input" type="text" name="nombre" placeholder="Ej: Recursos Humanos">
-      </div>
+        <div class="field">
+          <label>Nombre *</label>
+          <input required id="input-nombre" class="input" type="text" name="nombre" placeholder="Ej: Recursos Humanos">
+        </div>
 
-      <div class="field">
-        <label>Descripción</label>
-        <input id="input-descripcion" class="input" type="text" name="descripcion" placeholder="Ej: Área encargada de la gestión del personal">
-      </div>
+        <div class="field">
+          <label>Descripción</label>
+          <input id="input-descripcion" class="input" type="text" name="descripcion" placeholder="Ej: Área encargada de la gestión del personal">
+        </div>
+
+        <div id="mensaje" class="notification is-hidden"></div>
       </div>
 
       <div style="margin-top:10px; display:flex; gap:12px;">
-          <button type="submit" class="button is-success">Nuevo</button>
-          <a href="{{ url_for('formulario_agregar_area') }}" class="button is-primary">Agregar</a>
-          <a href="{{ url_for('area') }}" class="button is-primary">Editar</a>
+        <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
+        <button type="button" class="button is-primary" id="btnAgregar">Agregar</button>
+        <button type="button" class="button is-success" id="btnEditar">Editar</button>
       </div>
     </form>
   </div>
@@ -42,24 +43,21 @@
 
   <div class="card">
     <div class="column">
-      <form action="{{ url_for('buscar_area') }}" method="GET" class="field has-addons mt-4">
+      <form id="form-buscar" class="field has-addons mt-4">
         <div class="control">
-          <input class="input" type="text" name="nombre" placeholder="Buscar por nombre" value="{{ request.args.get('nombre', '') }}">
+          <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
         </div>
         <div class="control">
-          <button class="button is-link" type="submit">Buscar</button>
+          <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
         </div>
       </form>
 
-      <!-- TABLA -->
-      <table class="table is-striped is-hoverable mt-4">
+      <table class="table is-striped is-hoverable mt-4" id="tabla-areas">
         <thead>
           <tr>
             <th>ID</th>
             <th>Nombre</th>
             <th>Descripción</th>
-            <th>Editar</th>
-            <th>Eliminar</th>
           </tr>
         </thead>
         <tbody>
@@ -68,21 +66,16 @@
             <td>{{ area.id_area }}</td>
             <td>{{ area.nombre }}</td>
             <td>{{ area.descripcion }}</td>
-            <td>
-              <a href="{{ url_for('formulario_editar_area', id_area=area.id_area) }}" class="button is-info">Editar</a>
-            </td>
-            <td>
-              <form action="{{ url_for('eliminar_area') }}" method="POST">
-                <input type="hidden" name="id_area" value="{{ area.id_area }}">
-                <button class="button is-danger" type="submit">Eliminar</button>
-              </form>
-            </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
-
 </section>
+{% endblock %}
+
+{% block js %}
+  <script src="{{ url_for('static', filename='js/area.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/query_row.js') }}"></script>
 {% endblock %}

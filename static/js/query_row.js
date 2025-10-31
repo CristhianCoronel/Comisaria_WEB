@@ -10,7 +10,7 @@
       }
 
       rows.forEach(row => {
-        row.addEventListener('click', function() {
+        row.addEventListener('click',  function() {
           const id = this.dataset.id;
           if (!id) return;
 

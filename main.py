@@ -268,6 +268,30 @@ def api_buscar_persona():
             "message": f"Error al listar personas: {str(e)}"
         }), 500
 
+@app.route('/persona/<int:id_persona>/json', methods=['GET'])
+@login_required
+def persona_por_id_json(id_persona):
+    """Devuelve los datos de una persona en formato JSON dado su id."""
+    try:
+        persona = controlador_persona.obtener_persona_por_id(id_persona)
+        if not persona:
+            return jsonify({"status": 0, "data": None, "message": "Persona no encontrada"}), 404
+
+        return jsonify({
+            "status": 1,
+            "data": {
+                "id_persona": persona.id_persona,
+                "dni": persona.dni,
+                "nombres": persona.nombres,
+                "apellidos": persona.apellidos,
+                "fecha_nacimiento": persona.fecha_nacimiento,
+                "telefono": persona.telefono,
+                "direccion": persona.direccion
+            }
+        })
+    except Exception as e:
+        return jsonify({"status": -1, "data": None, "message": str(e)}), 500
+
 
 @app.route("/historial")
 @login_required

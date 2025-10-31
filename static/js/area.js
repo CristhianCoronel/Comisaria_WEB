@@ -1,14 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("form-persona");
+  const form = document.getElementById("form-area");
   const inputs = form.querySelectorAll("input");
   const btnNuevo = document.getElementById("btnNuevo");
   const btnAgregar = document.getElementById("btnAgregar");
   const btnEditar = document.getElementById("btnEditar");
+  const tabla = document.getElementById("tabla-areas");
   const formBuscar = document.getElementById("form-buscar");
   const btnBuscar = document.getElementById("btnBuscar");
-  const tabla = document.getElementById("tabla-personas");
 
-  let personaSeleccionadaId = null;
+  let areaSeleccionadaId = null;
 
   // --- Estado inicial ---
   deshabilitarCampos();
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Funciones auxiliares ---
   function limpiarCampos() {
     form.reset();
-    personaSeleccionadaId = null;
+    areaSeleccionadaId = null;
   }
 
   function habilitarCampos() {
@@ -43,73 +43,59 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function agregarFilaTabla(persona) {
+  function agregarFilaTabla(area) {
     const tbody = tabla.querySelector("tbody");
     const tr = document.createElement("tr");
-    tr.dataset.id = persona.id_persona;
-    tr.innerHTML = `
-      <td>${persona.id_persona}</td>
-      <td>${persona.dni}</td>
-      <td>${persona.nombres}</td>
-      <td>${persona.apellidos}</td>
-      <td>${persona.fecha_nacimiento || ""}</td>
-      <td>${persona.telefono || ""}</td>
-      <td>${persona.direccion || ""}</td>
-    `;
+    tr.dataset.id = area.id_area;
     tr.classList.add("clickable-row");
+    tr.innerHTML = `
+      <td>${area.id_area}</td>
+      <td>${area.nombre}</td>
+      <td>${area.descripcion || ""}</td>
+    `;
     tbody.appendChild(tr);
-
-    // Activar selección al hacer click
     tr.addEventListener("click", () => seleccionarFila(tr));
   }
 
   function actualizarTabla(lista) {
     const tbody = tabla.querySelector("tbody");
     tbody.innerHTML = "";
-    lista.forEach(p => agregarFilaTabla(p));
+    lista.forEach(a => agregarFilaTabla(a));
   }
 
   async function seleccionarFila(tr) {
     const id = tr.dataset.id;
     if (!id) return;
 
-    // Limpiar selección previa
     tabla.querySelectorAll("tbody tr.selected").forEach(r => r.classList.remove("selected"));
     tr.classList.add("selected");
 
     try {
-      const res = await fetch(`/persona/${id}/json`, { method: "GET" }); // Ajusta la URL a tu endpoint real
+      const res = await fetch(`/api/areas/${id}`);
       const result = await res.json();
 
       if (result.status === 1 && result.data) {
-        const persona = result.data;
-        personaSeleccionadaId = persona.id_persona;
+        const area = result.data;
+        areaSeleccionadaId = area.id_area;
 
-        // Llenar inputs
-        form.querySelector("input[name='dni']").value = persona.dni || "";
-        form.querySelector("input[name='nombres']").value = persona.nombres || "";
-        form.querySelector("input[name='apellidos']").value = persona.apellidos || "";
-        form.querySelector("input[name='fecha_nacimiento']").value = persona.fecha_nacimiento || "";
-        form.querySelector("input[name='telefono']").value = persona.telefono || "";
-        form.querySelector("input[name='direccion']").value = persona.direccion || "";
-        form.querySelector("input[name='ubigeo']").value = persona.ubigeo || "";
+        form.querySelector("input[name='id_area']").value = area.id_area || "";
+        form.querySelector("input[name='nombre']").value = area.nombre || "";
+        form.querySelector("input[name='descripcion']").value = area.descripcion || "";
 
-        // Bloquear inputs y habilitar solo Editar
         deshabilitarCampos();
         btnAgregar.disabled = true;
         btnEditar.disabled = false;
-        btnNuevo.disabled = false;
       } else {
-        mostrarMensaje(result.message || "Persona no encontrada", "warning");
+        mostrarMensaje(result.message || "Área no encontrada", "warning");
         limpiarCampos();
       }
     } catch (err) {
-      console.error("Error al obtener persona:", err);
-      mostrarMensaje("Error al obtener datos de la persona", "error");
+      console.error("Error al obtener área:", err);
+      mostrarMensaje("Error al obtener datos del área", "error");
     }
   }
 
-  // --- Activar selección en filas existentes ---
+  // Activar selección en filas existentes
   tabla.querySelectorAll("tbody tr").forEach(tr => {
     tr.classList.add("clickable-row");
     tr.addEventListener("click", () => seleccionarFila(tr));
@@ -127,43 +113,37 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- BOTÓN AGREGAR / GUARDAR ---
   btnAgregar.addEventListener("click", async () => {
     const data = Object.fromEntries(new FormData(form).entries());
-
-    let url = "/api/personas";
-    let method = "POST";
-    if (!data.dni || !data.nombres || !data.apellidos) {
-      mostrarMensaje("Completa los campos obligatorios (*)", "warning");
+    if (!data.nombre) {
+      mostrarMensaje("El nombre del área es obligatorio", "warning");
       return;
     }
-    if (personaSeleccionadaId) {
-      // Si hay una persona seleccionada, usamos PUT para actualizar
-      url = `/api/personas/${personaSeleccionadaId}`;
+
+    let url = "/api/areas";
+    let method = "POST";
+
+    if (areaSeleccionadaId) {
+      url = `/api/areas/${areaSeleccionadaId}`;
       method = "PUT";
     }
 
     try {
       const res = await fetch(url, {
-        method: method,
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
       const result = await res.json();
 
       if (result.status === 1) {
-        // Recargar lista completa desde el servidor
-        const resLista = await fetch("/api/personas", { method: "GET" });
+        const resLista = await fetch("/api/areas");
         const lista = await resLista.json();
-
-        if (lista.status === 1) {
-          actualizarTabla(lista.data);
-        }
+        if (lista.status === 1) actualizarTabla(lista.data);
 
         mostrarMensaje(result.message, "success");
         limpiarCampos();
         deshabilitarCampos();
         btnAgregar.disabled = true;
         btnEditar.disabled = true;
-        personaSeleccionadaId = null;
       } else {
         mostrarMensaje(result.message, "warning");
       }
@@ -173,10 +153,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-
   // --- BOTÓN EDITAR ---
   btnEditar.addEventListener("click", () => {
-    if (!personaSeleccionadaId) return;
+    if (!areaSeleccionadaId) return;
     habilitarCampos();
     btnAgregar.disabled = false;
     btnEditar.disabled = true;
@@ -188,12 +167,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const data = Object.fromEntries(new FormData(formBuscar).entries());
 
     try {
-      const res = await fetch("/api/personas/buscar", {
+      const res = await fetch("/api/areas/buscar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
       const result = await res.json();
       if (result.status === 1) {
         actualizarTabla(result.data);
@@ -207,3 +185,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+    
