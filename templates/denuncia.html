@@ -23,61 +23,70 @@
             <div class="section">
                 <h4>Datos del Denunciante</h4>
 
-                <div class="field">
-                    <label>Documento de Identidad *</label>
-                    <input class="input" type="text" placeholder="Ej: 12345678" />
+                <div class="row">
+                    <div class="field">
+                        <label>Documento de Identidad *</label>
+                        <input class="input" name="dni" id="dni" type="text" placeholder="Ej: 12345678" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="field">
+                        <label>Apellido paterno *</label>
+                        <input class="input" name="ape_paterno" id="ape_paterno" type="text" placeholder="Ej: Juan Pérez García" />
+                    </div>
+                    <div class="field">
+                        <label>Apellido Materno *</label>
+                        <input class="input" name="ape_materno" id="ape_materno" type="text" placeholder="Ej: 3001234567" />
+                    </div>
                 </div>
 
                 <div class="row">
                     <div class="field">
                         <label>Nombre Completo *</label>
-                        <input class="input" type="text" placeholder="Ej: Juan Pérez García" />
+                        <input class="input" name="nombres" id="nombres" type="text" placeholder="Ej: Juan Pérez García" />
                     </div>
                     <div class="field">
                         <label>Teléfono *</label>
-                        <input class="input" type="tel" placeholder="Ej: 3001234567" />
+                        <input class="input" name="telefono" id="telefono" type="tel" placeholder="Ej: 3001234567" />
                     </div>
-                </div>
-
-                <div class="field">
-                    <label>Correo Electrónico *</label>
-                    <input class="input" type="email" placeholder="Ej: correo@ejemplo.com" />
                 </div>
 
                 <div class="field">
                     <label>Dirección *</label>
-                    <input class="input" type="text" placeholder="Ej: Calle 123 #45-67, Barrio Centro" />
+                    <input class="input" name="direccion" id="direccion" type="text" placeholder="Ej: Calle 123 #45-67, Barrio Centro" />
                 </div>
             </div>
 
             <div class="section">
                 <h4>Datos del Incidente</h4>
 
-                <div class="field">
-                    <label>Tipo de Incidente *</label>
-                    <select class="input">
-                        <option>Seleccione el tipo de incidente</option>
-                        <option>Robo</option>
-                        <option>Agresión</option>
-                        <option>Vandalismo</option>
-                    </select>
-                </div>
-
                 <div class="row">
                     <div class="field">
                         <label>Fecha del Incidente *</label>
-                        <input class="input" type="date" />
+                        <input class="input" type="date" name="fecha_incidente"/>
                     </div>
                     <div class="field">
                         <label>Hora del Incidente *</label>
-                        <input class="input" type="time" />
+                        <input class="input" type="time" name="hora_incidente"/>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label>Ubicación del Incidente *</label>
+                    <label>Dirección del Incidente *</label>
                     <input class="input" type="text"
                         placeholder="Ej: Avenida Principal con Calle 5, frente al banco" />
+                </div>
+                <div class="row">
+                    <div class="field">
+                        <label>Tipo de Incidente *</label>
+                        <select class="input" id="tipo_denuncia" name="tipo_denuncia" required>
+                            <option value="0">Seleccione el tipo de incidente</option>
+                            {% for tipo in tipos_denuncias %}
+                            <option value="{{ tipo.id_tipo }}">{{ tipo.tipo_denuncia}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -114,25 +123,7 @@
 </section>
 {% endblock %}
 
-<!-- RIGHT: Empty state card -->
-<!-- <aside class="card">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <div>
-            <div style="font-weight:700; color:#233c6b">Denuncias Registradas</div>
-            <div style="font-size:13px; color:var(--muted)">Total: 0 denuncias</div>
-        </div> -->
-        <!-- (Opcional) un botón para filtro o añadir -->
-        <!-- <div style="opacity:0.6; font-size:12px;">&nbsp;</div>
-    </div>  -->
-
-    <!-- <div class="empty-state">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M14 2H6c-1.1 0-2 .9-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#b9c5d3"
-                stroke-width="1.2" fill="none" />
-            <path d="M14 2v6h6" stroke="#b9c5d3" stroke-width="1.2" fill="none" />
-        </svg>
-        <div>No hay denuncias registradas</div>
-    </div>
-
-</aside> -->
+{% block js %}
+<script src="{{ url_for('static', filename='js/denuncia.js') }}"></script>
+{% endblock %}
 

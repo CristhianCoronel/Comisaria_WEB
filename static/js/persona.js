@@ -51,7 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
       <td>${persona.id_persona}</td>
       <td>${persona.dni}</td>
       <td>${persona.nombres}</td>
-      <td>${persona.apellidos}</td>
+      <td>${persona.ape_paterno}</td>
+      <td>${persona.ape_materno}</td>
       <td>${persona.fecha_nacimiento || ""}</td>
       <td>${persona.telefono || ""}</td>
       <td>${persona.direccion || ""}</td>
@@ -88,7 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Llenar inputs
         form.querySelector("input[name='dni']").value = persona.dni || "";
         form.querySelector("input[name='nombres']").value = persona.nombres || "";
-        form.querySelector("input[name='apellidos']").value = persona.apellidos || "";
+        form.querySelector("input[name='ape_paterno']").value = persona.ape_paterno || "";
+        form.querySelector("input[name='ape_materno']").value = persona.ape_materno || "";
         form.querySelector("input[name='fecha_nacimiento']").value = persona.fecha_nacimiento || "";
         form.querySelector("input[name='telefono']").value = persona.telefono || "";
         form.querySelector("input[name='direccion']").value = persona.direccion || "";
@@ -130,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let url = "/api/personas";
     let method = "POST";
-    if (!data.dni || !data.nombres || !data.apellidos) {
+    if (!data.dni || !data.nombres || !data.ape_paterno) {
       mostrarMensaje("Completa los campos obligatorios (*)", "warning");
       return;
     }

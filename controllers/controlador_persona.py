@@ -7,18 +7,22 @@ def obtener_personas():
 def obtener_persona_por_id(id_persona):
     return Persona.query.get(id_persona)
 
-def insertar_persona(dni, nombres, apellidos, fecha_nacimiento=None, telefono=None, direccion=None, ubigeo=None):
-    nueva = Persona(dni=dni, nombres=nombres, apellidos=apellidos,
+def obtener_persona_por_dni(dni_persona):
+    return Persona.query.filter_by(dni=dni_persona).first()
+
+def insertar_persona(dni, nombres, ape_paterno, ape_materno, fecha_nacimiento=None, telefono=None, direccion=None, ubigeo=None):
+    nueva = Persona(dni=dni, nombres=nombres, ape_paterno=ape_paterno, ape_materno=ape_materno,
                     fecha_nacimiento=fecha_nacimiento, telefono=telefono, direccion=direccion, ubigeo=ubigeo)
     bd.session.add(nueva)
     bd.session.commit()
 
-def actualizar_persona(id_persona, dni, nombres, apellidos, fecha_nacimiento=None, telefono=None, direccion=None, ubigeo=None):
+def actualizar_persona(id_persona, dni, nombres, ape_paterno, ape_materno, fecha_nacimiento=None, telefono=None, direccion=None, ubigeo=None):
     persona = Persona.query.get(id_persona)
     if persona:
         persona.dni = dni
         persona.nombres = nombres
-        persona.apellidos = apellidos
+        persona.ape_paterno = ape_paterno
+        persona.ape_materno = ape_materno
         persona.fecha_nacimiento = fecha_nacimiento
         persona.telefono = telefono
         persona.direccion = direccion

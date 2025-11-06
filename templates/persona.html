@@ -18,14 +18,19 @@
           <input required class="input" type="text" name="dni" placeholder="Ej: 12345678">
         </div>
 
+        <div class="field">
+          <label>Nombres *</label>
+          <input required class="input" type="text" name="nombres" placeholder="Ej: Juan">
+        </div>
+        
         <div class="row">
           <div class="field">
-            <label>Nombres *</label>
-            <input required class="input" type="text" name="nombres" placeholder="Ej: Juan">
+            <label>Apellido paterno *</label>
+            <input required class="input" type="text" name="ape_paterno" placeholder="Ej: Tórrez">
           </div>
           <div class="field">
-            <label>Apellidos *</label>
-            <input required class="input" type="text" name="apellidos" placeholder="Ej: Pérez">
+            <label>Apellido materno *</label>
+            <input required class="input" type="text" name="ape_materno" placeholder="Ej: Mendoza">
           </div>
         </div>
 
@@ -84,7 +89,8 @@
             <th>ID</th>
             <th>DNI</th>
             <th>Nombres</th>
-            <th>Apellidos</th>
+            <th>Apellido paterno</th>
+            <th>Apellido materno</th>
             <th>Fecha de nacimiento</th>
             <th>Teléfono</th>
             <th>Dirección</th>
@@ -96,7 +102,8 @@
             <td>{{ persona.id_persona }}</td>
             <td>{{ persona.dni }}</td>
             <td>{{ persona.nombres }}</td>
-            <td>{{ persona.apellidos }}</td>
+            <td>{{ persona.ape_paterno }}</td>
+            <td>{{ persona.ape_materno }}</td>
             <td>{{ persona.fecha_nacimiento }}</td>
             <td>{{ persona.telefono }}</td>
             <td>{{ persona.direccion }}</td>

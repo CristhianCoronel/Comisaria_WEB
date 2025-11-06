@@ -150,14 +150,15 @@ def api_guardar_persona():
 
         dni = data.get("dni")
         nombres = data.get("nombres")
-        apellidos = data.get("apellidos")
+        ape_paterno = data.get("ape_paterno")
+        ape_materno = data.get("ape_materno")
         fecha_nacimiento = data.get("fecha_nacimiento")
         telefono = data.get("telefono")
         direccion = data.get("direccion")
         ubigeo = data.get("ubigeo")
 
         # --- Validaciones ---
-        if not dni or not nombres or not apellidos:
+        if not dni or not nombres or not ape_paterno:
             return jsonify({
                 "status": 0,
                 "data": None,
@@ -166,7 +167,7 @@ def api_guardar_persona():
 
         # --- Insertar la nueva persona ---
         controlador_persona.insertar_persona(
-            dni, nombres, apellidos, fecha_nacimiento, telefono, direccion, ubigeo
+            dni, nombres, ape_paterno, ape_materno, fecha_nacimiento, telefono, direccion, ubigeo
         )
 
         persona = controlador_persona.obtener_ultima_persona()
@@ -182,7 +183,8 @@ def api_guardar_persona():
             "id_persona": persona.id_persona,
             "dni": persona.dni,
             "nombres": persona.nombres,
-            "apellidos": persona.apellidos,
+            "ape_paterno": persona.ape_paterno,
+            "ape_materno": persona.ape_materno,
             "fecha_nacimiento": persona.fecha_nacimiento.strftime("%Y-%m-%d") if persona.fecha_nacimiento else None,
             "telefono": persona.telefono,
             "direccion": persona.direccion,
@@ -209,13 +211,14 @@ def api_guardar_persona():
 def guardar_persona():
     dni = request.form["dni"]
     nombres = request.form["nombres"]
-    apellidos = request.form["apellidos"]
+    ape_paterno = request.form["ape_paterno"]
+    ape_materno = request.form["ape_materno"]
     fecha_nacimiento = request.form.get("fecha_nacimiento") or None  # puede venir vacío
     telefono = request.form.get("telefono") or None
     direccion = request.form.get("direccion") or None
     ubigeo = request.form.get("ubigeo") or None
 
-    controlador_persona.insertar_persona(dni, nombres, apellidos, fecha_nacimiento, telefono, direccion)
+    controlador_persona.insertar_persona(dni, nombres, ape_paterno, ape_materno, fecha_nacimiento, telefono, direccion)
     return redirect("/personas")
     
 @app.route("/editar_ciudadano/<int:id>")
@@ -289,7 +292,33 @@ def persona_por_id_json(id_persona):
                 "id_persona": persona.id_persona,
                 "dni": persona.dni,
                 "nombres": persona.nombres,
-                "apellidos": persona.apellidos,
+                "ape_paterno": persona.ape_paterno,
+                "ape_materno": persona.ape_materno,
+                "fecha_nacimiento": persona.fecha_nacimiento,
+                "telefono": persona.telefono,
+                "direccion": persona.direccion
+            }
+        })
+    except Exception as e:
+        return jsonify({"status": -1, "data": None, "message": str(e)}), 500
+    
+@app.route('/persona/<dni>/json', methods=['GET'])
+@login_required
+def persona_por_dni_json(dni):
+    """Devuelve los datos de una persona en formato JSON dado su id."""
+    try:
+        persona = controlador_persona.obtener_persona_por_dni(dni)
+        if not persona:
+            return jsonify({"status": 0, "data": None, "message": "Persona no encontrada"}), 404
+        print(persona.id_persona, persona.dni, persona.nombres, persona.direccion)
+        return jsonify({
+            "status": 1,
+            "data": {
+                "id_persona": persona.id_persona,
+                "dni": persona.dni,
+                "nombres": persona.nombres,
+                "ape_paterno": persona.ape_paterno,
+                "ape_materno": persona.ape_materno,
                 "fecha_nacimiento": persona.fecha_nacimiento,
                 "telefono": persona.telefono,
                 "direccion": persona.direccion
@@ -354,7 +383,7 @@ def eliminar_area():
 def buscar_area():
     return render_template('denuncia.html')
 
-@app.route('/area/<int:id_area>/json', methods=['GET'])
+@app.route('/api/area/<int:id_area>/json', methods=['GET'])
 @login_required
 def area_por_id_json(id_area):
     """Devuelve los datos de un área en formato JSON dado su id."""
@@ -444,7 +473,8 @@ def buscar_comisaria():
 @app.route('/denuncia')
 @login_required
 def denuncia():
-    return render_template('denuncia.html')
+    tipos_denuncias = Tipo_Denuncia.query.all()
+    return render_template('denuncia.html', tipos_denuncias = tipos_denuncias)
 
 
 
