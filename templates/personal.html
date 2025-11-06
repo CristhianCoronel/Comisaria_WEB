@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/formato_formulario.css') }}">
+{% endblock %}
+
+{% block content %}
+<section>
+  <div class="card">
+    <div class="form-title"><h3 class="is-size-3">Usuarios</h3></div>
+
+    <form id="form-usuario">
+      <div class="section">
+        <h4>Datos del Usuario</h4>
+
+        <div class="field">
+          <label>DNI *</label>
+          <input required class="input" type="text" name="dni" placeholder="Ej: 12345678">
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Nombres *</label>
+            <input required class="input" type="text" name="nombres" placeholder="Ej: Juan">
+          </div>
+          <div class="field">
+            <label>Apellido Paterno *</label>
+            <input required class="input" type="text" name="ape_paterno" placeholder="Ej: Pérez">
+          </div>
+          <div class="field">
+            <label>Apellido Materno *</label>
+            <input required class="input" type="text" name="ape_materno" placeholder="Ej: García">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Código de Usuario</label>
+            <input class="input" type="text" name="codigo_usuario" placeholder="Ej: U1234">
+          </div>
+
+          <div class="field">
+            <label>Tipo de Usuario</label>
+            <div class="select is-fullwidth">
+              <select name="tipo_usuario">
+                <option value="">Seleccione...</option>
+                <option value="A">Administrador</option>
+                <option value="O">Operador</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Comisaría</label>
+            <div class="select is-fullwidth">
+              <select name="id_comisaria">
+                <option value="">Seleccione...</option>
+                {% for c in comisarias %}
+                <option value="{{ c.id_comisaria }}">{{ c.nombre }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Rango</label>
+            <div class="select is-fullwidth">
+              <select name="id_rango">
+                <option value="">Seleccione...</option>
+                {% for r in rangos %}
+                <option value="{{ r.id_rango }}">{{ r.nombre }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Rol</label>
+            <div class="select is-fullwidth">
+              <select name="id_rol">
+                <option value="">Seleccione...</option>
+                {% for rol in roles %}
+                <option value="{{ rol.id_rol }}">{{ rol.nombre }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Estado</label>
+          <div class="select is-fullwidth">
+            <select name="estado">
+              <option value="A">Activo</option>
+              <option value="I">Inactivo</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="mensaje" class="notification is-hidden"></div>
+      </div>
+
+      <div style="margin-top:10px; display:flex; gap:12px;">
+        <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
+        <button type="button" class="button is-primary" id="btnAgregar">Agregar</button>
+        <button type="button" class="button is-success" id="btnEditar">Editar</button>
+      </div>
+    </form>
+  </div>
+
+  <br>
+
+  <div class="card">
+    <div class="column">
+      <form id="form-buscar" class="field has-addons mt-4">
+        <div class="control">
+          <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
+        </div>
+        <div class="control">
+          <input class="input" type="text" name="b_dni" placeholder="Buscar por DNI">
+        </div>
+        <div class="control">
+          <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
+        </div>
+      </form>
+
+      <table class="table is-striped is-hoverable mt-4" id="tabla-usuarios">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>DNI</th>
+            <th>Nombres</th>
+            <th>Apellido Paterno</th>
+            <th>Apellido Materno</th>
+            <th>Código Usuario</th>
+            <th>Tipo</th>
+            <th>Comisaría</th>
+            <th>Rango</th>
+            <th>Rol</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for usuario in usuarios %}
+          <tr>
+            <td>{{ usuario.id_usuario }}</td>
+            <td>{{ usuario.dni }}</td>
+            <td>{{ usuario.nombres }}</td>
+            <td>{{ usuario.ape_paterno }}</td>
+            <td>{{ usuario.ape_materno }}</td>
+            <td>{{ usuario.codigo_usuario }}</td>
+            <td>{{ usuario.tipo_usuario }}</td>
+            <td>{{ usuario.comisaria.nombre if usuario.comisaria }}</td>
+            <td>{{ usuario.rango.nombre if usuario.rango }}</td>
+            <td>{{ usuario.rol.nombre if usuario.rol }}</td>
+            <td>{{ 'Activo' if usuario.estado == 'A' else 'Inactivo' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/usuario.js') }}"></script>
+{% endblock %}

@@ -1,15 +1,15 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const menuToggle = document.getElementById('menu-toggle');
-  const dropdownMenu = document.getElementById('dropdown-menu');
+const menuToggle = document.getElementById("menu-toggle");
+const dropdown = document.getElementById("dropdown-menu");
 
-  menuToggle.addEventListener('click', () => {
-    dropdownMenu.classList.toggle('hidden');
-  });
-
-  // Para cerrar el menú si se hace clic fuera
-  document.addEventListener('click', (e) => {
-    if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
-      dropdownMenu.classList.add('hidden');
-    }
-  });
+menuToggle.addEventListener("click", (e) => {
+  e.stopPropagation(); // evita que el clic cierre inmediatamente
+  dropdown.classList.toggle("hidden");
 });
+
+// Cerrar al clicar fuera
+document.addEventListener("click", () => {
+  dropdown.classList.add("hidden");
+});
+
+// Evita que clicar dentro del dropdown lo cierre
+dropdown.addEventListener("click", (e) => e.stopPropagation());

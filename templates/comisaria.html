@@ -9,88 +9,89 @@
   <div class="card">
     <div class="form-title"><h3 class="is-size-3">Comisarías</h3></div>
 
-    <form action="{{ url_for('guardar_comisaria') }}" method="post" id="frmComisaria">
+    <form id="form-comisaria">
       <input type="hidden" name="id_comisaria" id="id_comisaria" value="{{ comisaria.id_comisaria if comisaria else '' }}">
 
       <div class="section">
         <h4>Datos de la Comisaría</h4>
 
-        <div class="field">
-          <label>Nombre *</label>
-          <input required class="input" type="text" name="nombre" placeholder="Ej: Comisaría Central">
-        </div>
-
-        <div class="field">
-          <label>Dirección</label>
-          <input class="input" type="text" name="direccion" placeholder="Ej: Av. Principal 123">
-        </div>
-
-        <div class="field">
-          <label>Teléfono</label>
-          <input class="input" type="text" name="telefono" placeholder="Ej: 054-123456">
-        </div>
-
-        <!-- ===================== UBIGEO ===================== -->
-        <div class="field">
-          <label>Ubigeo</label>
-          <div>
-            <label class="radio">
-              <input type="radio" name="rb_ubigeo" value="conocido" checked>
-              Seleccionar ubigeo existente
-            </label>
-            <label class="radio ml-3">
-              <input type="radio" name="rb_ubigeo" value="no_se">
-              No sé el ubigeo
-            </label>
+        <div class="row">
+          <div class="field">
+            <label>Nombre *</label>
+            <input required class="input" type="text" name="nombre" placeholder="Ej: Comisaría Central">
           </div>
-
-          <!-- Select normal de ubigeo -->
-          <div id="divUbigeoSelect" class="mt-2">
-            <div class="field">
-                <label>Ubigeo</label>
-                <input class="input" type="text" name="direccion" placeholder="Ej: Av. Principal 123">
-            </div>
-          </div>
-
-          <!-- Contenedor de los combos dependientes -->
-          <div id="divUbigeoDesconocido" class="mt-2" style="display:none;">
-            <label>Seleccione ubicación:</label>
-
-            <div class="select is-fullwidth mb-2">
-              <select id="cb_departamento">
-                <option value="">Seleccione departamento</option>
-              </select>
-            </div>
-
-            <div class="select is-fullwidth mb-2">
-              <select id="cb_provincia">
-                <option value="">Seleccione provincia</option>
-              </select>
-            </div>
-
-            <div class="select is-fullwidth mb-2">
-              <select id="cb_distrito">
-                <option value="">Seleccione distrito</option>
-              </select>
-            </div>
-
-            <label id="lbl_ubigeo" class="has-text-weight-semibold">Ubigeo: —</label>
-
-            <!-- Input oculto donde se guardará el ubigeo final -->
-            <input type="hidden" name="ubigeo" id="txt_ubigeo_final">
+          <div class="field">
+            <label>Teléfono</label>
+            <input class="input" type="text" name="telefono" placeholder="Ej: 054-123456">
           </div>
         </div>
-        <!-- ================================================== -->
+
+        <div class="row">
+          <div class="field">
+            <label>Dirección</label>
+            <input class="input" type="text" name="direccion" placeholder="Ej: Av. Principal 123">
+          </div>
+          <div class="field">
+            <label>Ubigeo</label>
+            <input class="input" type="text" name="ubigeo" id="txt_ubigeo" placeholder="Ej: 150101">
+          </div>
+        </div>
+
+        <div id="mensaje" class="notification is-hidden"></div>
       </div>
 
       <div style="margin-top:10px; display:flex; gap:12px;">
-        <button type="submit" class="button is-success">Guardar</button>
+        <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
+        <button type="button" class="button is-primary" id="btnAgregar">Agregar</button>
+        <button type="button" class="button is-success" id="btnEditar">Editar</button>
       </div>
     </form>
+  </div>
+
+  <br>
+
+  <!-- ====== Tabla de comisarías ====== -->
+  <div class="card">
+    <div class="column">
+      <form id="form-buscar" class="field has-addons mt-4">
+        <div class="control">
+          <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
+        </div>
+        <div class="control">
+          <input class="input" type="text" name="b_ubigeo" placeholder="Buscar por ubigeo">
+        </div>
+        <div class="control">
+          <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
+        </div>
+      </form>
+
+      <table class="table is-striped is-hoverable mt-4" id="tabla-comisarias">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Ubigeo</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for com in comisarias %}
+          <tr class="clickable-row" data-id="{{ com.id_comisaria }}">
+            <td>{{ com.id_comisaria }}</td>
+            <td>{{ com.nombre }}</td>
+            <td>{{ com.direccion }}</td>
+            <td>{{ com.telefono }}</td>
+            <td>{{ com.ubigeo }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 {% endblock %}
 
 {% block js %}
-  <script src="{{ url_for('static', filename='js/comisaria.js') }}"></script>
+<script src="{{ url_for('static', filename='js/comisaria.js') }}"></script>
 {% endblock %}

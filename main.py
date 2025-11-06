@@ -101,13 +101,19 @@ def login():
     if request.method == 'POST':
         dni = request.form['usuario']
         contrasena = request.form['contrasena']
-
         usuario = Usuario.query.filter_by(dni=dni, estado='A').first()
-
+        
         if usuario and bcrypt.check_password_hash(usuario.codigo_usuario, contrasena):
             token = create_access_token(identity=usuario.dni)
             
             session['token'] = token
+            session['dni'] = usuario.dni
+            session['usuario'] = f"{usuario.ape_paterno} {usuario.ape_materno[0]}. {usuario.nombres}"
+            session['tipo'] = usuario.tipo_usuario
+            comisaria = Comisaria.query.filter_by(id_comisaria=usuario.id_comisaria).first()
+            rango = Rango.query.filter_by(id_rango=usuario.id_rango).first()
+            session['comisaria'] = comisaria.nombre
+            session['rango'] = rango.nombre
             
             flash("Inicio de sesión exitoso", "success")
             return redirect(url_for('index')) 
@@ -115,13 +121,13 @@ def login():
             flash("Credenciales incorrectas o usuario inactivo.", "danger")
             return redirect(url_for('login'))
 
-    
     return render_template('login.html', departamentos=departamentos)
 
 
 @app.route('/logout')
 def logout():
-    session.pop('token', None)
+    for key in list(session.keys()):
+        session.pop(key)
     flash("Has cerrado sesión.", "success")
     return redirect(url_for('login'))
 
