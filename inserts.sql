@@ -51,14 +51,17 @@ INSERT INTO tipo_denuncia (id_tipo, tipo_denuncia, descripcion, id_area) VALUES
 (3, 'Violencia Familiar', 'Denuncia por violencia familiar', 2);
 
 -- PERSONA
-INSERT INTO persona (dni, nombres, ape_paterno, ape_materno, fecha_nacimiento, telefono, direccion, ubigeo)
-VALUES ('12345678', 'Juan Carlos', 'Pérez', 'Gómez', '1990-05-14', '987654321', 'Av. Los Olivos 123', '01001');
+INSERT INTO persona (dni, nombres, ape_paterno, ape_materno, fecha_nacimiento, estado_civil, ocupacion, telefono, direccion, ubigeo)
+VALUES 
+('12345678', 'Juan Carlos', 'Pérez', 'Gómez', '1990-05-14', 'SOLTERO(A)', 'Ingeniero', '987654321', 'Av. Los Olivos 123', '01001');
 
-INSERT INTO persona (dni, nombres, ape_paterno, ape_materno, fecha_nacimiento, telefono, direccion, ubigeo)
-VALUES ('87654321', 'María Fernanda', 'López', 'Ruiz', '1985-09-22', '912345678', 'Jr. Las Flores 456', '01001');
+INSERT INTO persona (dni, nombres, ape_paterno, ape_materno, fecha_nacimiento, estado_civil, ocupacion, telefono, direccion, ubigeo)
+VALUES 
+('87654321', 'María Fernanda', 'López', 'Ruiz', '1985-09-22', 'CASADO(A)', 'Abogada', '912345678', 'Jr. Las Flores 456', '01001');
 
-INSERT INTO persona (dni, nombres, ape_paterno, ape_materno, fecha_nacimiento, telefono, direccion, ubigeo)
-VALUES ('45678912', 'Luis Alberto', 'Torres', 'Mendoza', '1992-03-10', '998877665', 'Calle Central 789', '01002');
+INSERT INTO persona (dni, nombres, ape_paterno, ape_materno, fecha_nacimiento, estado_civil, ocupacion, telefono, direccion, ubigeo)
+VALUES 
+('45678912', 'Luis Alberto', 'Torres', 'Mendoza', '1992-03-10', 'SOLTERO(A)', 'Contador', '998877665', 'Calle Central 789', '01002');
 
 
 

@@ -286,7 +286,7 @@ def persona_por_id_json(id_persona):
         if not persona:
             return jsonify({"status": 0, "data": None, "message": "Persona no encontrada"}), 404
 
-        return jsonify({
+        data = ({
             "status": 1,
             "data": {
                 "id_persona": persona.id_persona,
@@ -299,18 +299,19 @@ def persona_por_id_json(id_persona):
                 "direccion": persona.direccion
             }
         })
+        return Response(json.dumps(data, ensure_ascii=False), mimetype='application/json; charset=utf-8')
     except Exception as e:
         return jsonify({"status": -1, "data": None, "message": str(e)}), 500
     
-@app.route('/persona/<dni>/json', methods=['GET'])
+@app.route('/persona_dni/<string:dni>/json', methods=['GET'])
 @login_required
 def persona_por_dni_json(dni):
     """Devuelve los datos de una persona en formato JSON dado su id."""
+    print("API llamada para DNI:", repr(dni))
     try:
         persona = controlador_persona.obtener_persona_por_dni(dni)
         if not persona:
             return jsonify({"status": 0, "data": None, "message": "Persona no encontrada"}), 404
-        print(persona.id_persona, persona.dni, persona.nombres, persona.direccion)
         return jsonify({
             "status": 1,
             "data": {

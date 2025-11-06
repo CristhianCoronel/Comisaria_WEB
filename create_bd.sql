@@ -62,6 +62,8 @@ CREATE TABLE persona (
     ape_paterno varchar(100) NOT NULL,
     ape_materno varchar(100) NOT NULL,
     fecha_nacimiento date,
+    estado_civil varchar(50) NOT NULL CHECK (estado_civil IN ('SOLTERO(A)', 'CASADO(A)', 'VIUDO(A)', 'DIVORCIADO(A)')),
+    ocupacion varchar(100) NOT NULL,
     telefono varchar(20),
     direccion varchar(150),
     ubigeo char(5),

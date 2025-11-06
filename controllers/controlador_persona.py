@@ -8,7 +8,12 @@ def obtener_persona_por_id(id_persona):
     return Persona.query.get(id_persona)
 
 def obtener_persona_por_dni(dni_persona):
-    return Persona.query.filter_by(dni=dni_persona).first()
+    try:
+        persona = Persona.query.filter_by(dni=dni_persona).first()
+        return persona
+    except Exception as e:
+        print("Error al buscar persona:", e)
+        return None
 
 def insertar_persona(dni, nombres, ape_paterno, ape_materno, fecha_nacimiento=None, telefono=None, direccion=None, ubigeo=None):
     nueva = Persona(dni=dni, nombres=nombres, ape_paterno=ape_paterno, ape_materno=ape_materno,
