@@ -39,3 +39,13 @@ class D_Violencia_Familiar(bd.Model):
 
     denuncia = bd.relationship('Denuncia', backref='violencia_familiar')
 
+# class D_Agresion(bd.Model):
+#     __tablename__ = 'd_agresion'
+
+#     id_denuncia = bd.Column(bd.Integer, bd.ForeignKey('denuncia.id_denuncia'), primary_key=True)
+#     tipo_agresion = bd.Column(bd.String(100))  # física, verbal, psicológica
+#     hubo_lesiones = bd.Column(bd.Boolean)
+#     descripcion_lesiones = bd.Column(bd.Text)
+
+#     denuncia = bd.relationship('Denuncia', backref='agresion')
+

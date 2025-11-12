@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/formato_formulario.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="form-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" style="opacity:0.9">
+            <path d="M9 2h6v2H9zM5 6h14v14H5z" fill="#2b4a86" />
+        </svg>
+        <div>Registrar Nueva Denuncia</div>
+    </div>
+    <div class="form-sub">Complete todos los campos del formulario con la información del denunciante</div>
+
+    <form id="denuncia-form">
+        <!-- PASO 1: Datos Generales -->
+        <div class="form-step" id="step-1">
+            <h4>Datos Generales</h4>
+            <div class="row">
+                <div class="field">
+                    <label>DNI *</label>
+                    <input class="input" name="dni" id="dni" type="text" placeholder="Ej: 12345678" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="field">
+                    <label>Nombre Completo *</label>
+                    <input class="input" name="nombres" id="nombres" type="text" readonly />
+                </div>
+            </div>
+            <!-- Aquí otros campos generales de la denuncia (fecha, dirección, oficial, etc) -->
+            <button type="button" class="btn btn-secondary" onclick="nextStep()">Siguiente</button>
+        </div>
+
+        <!-- PASO 2: Datos Específicos de la Denuncia -->
+        <div class="form-step" id="step-2" style="display:none;">
+            <div id="datos-tipo-denuncia">
+                <!-- Se cargará dinámicamente según el tipo de denuncia seleccionado -->
+            </div>
+            <div style="margin-top:12px;">
+                <button type="button" class="btn btn-secondary" onclick="prevStep()">Atrás</button>
+                <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente</button>
+            </div>
+        </div>
+
+        <!-- PASO 3: Evidencias -->
+        <div class="form-step" id="step-3" style="display:none;">
+            <h4>Evidencias</h4>
+            <div class="row">
+                <div class="field">
+                    <label>Tipo de Evidencia *</label>
+                    <select class="input" name="tipo_evidencia" id="tipo_evidencia" required>
+                        <option value="">Seleccione tipo</option>
+                        <option value="foto">Foto</option>
+                        <option value="video">Video</option>
+                        <option value="documento">Documento</option>
+                        <option value="audio">Audio</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Archivo *</label>
+                    <input class="input" type="file" name="archivo_evidencia" id="archivo_evidencia" />
+                </div>
+            </div>
+            <div class="field">
+                <label>Descripción</label>
+                <input class="input" type="text" name="descripcion_evidencia" id="descripcion_evidencia" placeholder="Opcional" />
+            </div>
+            <button type="button" class="btn btn-secondary" id="agregar-evidencia-btn">Agregar Evidencia</button>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Archivo</th>
+                        <th>Descripción</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="evidencias-table-body"></tbody>
+            </table>
+
+            <div style="margin-top:12px;">
+                <button type="button" class="btn btn-secondary" onclick="prevStep()">Atrás</button>
+                <button type="submit" class="btn btn-primary">Registrar</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/registrar_denuncia.js') }}"></script>
+<script src="{{ url_for('static', filename='js/denuncia.js') }}"></script>
+{% endblock %}

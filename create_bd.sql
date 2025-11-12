@@ -180,3 +180,13 @@ CREATE TABLE evidencia (
     descripcion text,
     FOREIGN KEY (id_denuncia) REFERENCES denuncia(id_denuncia)
 );
+
+CREATE TABLE detalle_sospechoso (
+    id_detalle serial PRIMARY KEY,
+    id_denuncia int NOT NULL,
+    dni_denunciado varchar(15) NOT NULL,
+    rol_sospechoso varchar(50),
+    observaciones text,
+    FOREIGN KEY (id_denuncia) REFERENCES denuncia(id_denuncia),
+    FOREIGN KEY (dni_denunciado) REFERENCES persona(dni)
+);

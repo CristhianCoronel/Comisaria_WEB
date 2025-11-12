@@ -63,6 +63,11 @@ INSERT INTO persona (dni, nombres, ape_paterno, ape_materno, fecha_nacimiento, e
 VALUES 
 ('45678912', 'Luis Alberto', 'Torres', 'Mendoza', '1992-03-10', 'SOLTERO(A)', 'Contador', '998877665', 'Calle Central 789', '01002');
 
-
+-- CATEGORIA BIENES
+INSERT INTO categoria_bienes (nombre, descripcion) VALUES
+('Electrónicos', 'Equipos como laptops, celulares, tablets, televisores.'),
+('Joyas', 'Anillos, collares, pulseras, relojes de valor.'),
+('Dinero en efectivo', 'Billetes y monedas robados o perdidos.'),
+('Ropa y accesorios', 'Prendas de vestir, bolsos, calzado y accesorios personales.');
 
 

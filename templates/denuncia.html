@@ -1,115 +1,57 @@
 {% extends "base.html" %}
 
 {% block style %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/formato_formulario.css') }}">
 {% endblock %}
 
 {% block content %}
-
-<!-- LEFT: Form card -->
 <section>
-    <div  class="card">
-        <div class="form-title">
-            <!-- icon -->
-            <svg width="20" height="20" viewBox="0 0 24 24" style="opacity:0.9">
-                <path d="M9 2h6v2H9zM5 6h14v14H5z" fill="#2b4a86" />
-            </svg>
-            <div>Registrar Nueva Denuncia</div>
-        </div>
-        <div class="form-sub">Complete todos los campos del formulario con la información del denunciante</div>
-
-        <form>
-
-            <div class="section">
-                <h4>Datos del Denunciante</h4>
-
-                <div class="row">
-                    <div class="field">
-                        <label>Documento de Identidad *</label>
-                        <input class="input" name="dni" id="dni" type="text" placeholder="Ej: 12345678" />
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="field">
-                        <label>Apellido paterno *</label>
-                        <input class="input" name="ape_paterno" id="ape_paterno" type="text" placeholder="Ej: Pérez" />
-                    </div>
-                    <div class="field">
-                        <label>Apellido Materno *</label>
-                        <input class="input" name="ape_materno" id="ape_materno" type="text" placeholder="Ej: Ruiz" />
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="field">
-                        <label>Nombre Completo *</label>
-                        <input class="input" name="nombres" id="nombres" type="text" placeholder="Ej: María Fernanda" />
-                    </div>
-                    <div class="field">
-                        <label>Teléfono *</label>
-                        <input class="input" name="telefono" id="telefono" type="tel" placeholder="Ej: 912345678" />
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label>Dirección *</label>
-                    <input class="input" name="direccion" id="direccion" type="text" placeholder="Ej: Jr. Las Flores 456" />
-                </div>
-
-            <div class="section">
-                <h4>Datos del Incidente</h4>
-
-                <div class="row">
-                    <div class="field">
-                        <label>Fecha del Incidente *</label>
-                        <input class="input" type="date" name="fecha_incidente"/>
-                    </div>
-                    <div class="field">
-                        <label>Hora del Incidente *</label>
-                        <input class="input" type="time" name="hora_incidente"/>
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label>Dirección del Incidente *</label>
-                    <input class="input" type="text"
-                        placeholder="Ej: Avenida Principal con Calle 5, frente al banco" />
-                </div>
-                <div class="row">
-                    <div class="field">
-                        <label>Tipo de Incidente *</label>
-                        <select class="input" id="tipo_denuncia" name="tipo_denuncia" required>
-                            <option value="0">Seleccione el tipo de incidente</option>
-                            {% for tipo in tipos_denuncias %}
-                            <option value="{{ tipo.id_tipo }}">{{ tipo.tipo_denuncia}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Botón submit (estilizado) -->
-            <div style="margin-top:10px; display:flex; gap:12px;">
-                <button type="button"
-                    style="padding:10px 16px; border-radius:10px; border:0; background:#1f68c7; color:white; cursor:pointer;">Registrar</button>
-                <button type="reset"
-                    style="padding:10px 16px; border-radius:10px; border:1px solid #d6dbe0; background:white; color:#334; cursor:pointer;">Limpiar</button>
-            </div>
-
-        </form>
-    </div>
-    <br>
     <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
             <div>
                 <div style="font-weight:700; color:#233c6b">Denuncias Registradas</div>
-                <div style="font-size:13px; color:var(--muted)">Total: 0 denuncias</div>
+                <div style="font-size:13px; color:var(--muted)">Total: {{ denuncias|length if denuncias else 0 }} denuncias</div>
             </div>
-            <!-- (Opcional) un botón para filtro o añadir -->
-            <div style="opacity:0.6; font-size:12px;">&nbsp;</div>
-        </div>  
 
+            <!-- 🔹 Botón para agregar nueva denuncia -->
+            <div>
+                <a href="{{ url_for('registrar_denuncia') }}" 
+                   class="btn" 
+                   style="background:#1f68c7; color:white; padding:8px 14px; border-radius:8px; text-decoration:none; font-size:14px;">
+                    + Nueva Denuncia
+                </a>
+            </div>
+        </div>
+
+        {% if denuncias and denuncias|length > 0 %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Denunciante</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in denuncias %}
+                <tr>
+                    <td>{{ d.id_denuncia }}</td>
+                    <td>{{ d.fecha_registro.strftime('%d/%m/%Y') if d.fecha_registro else '' }}</td>
+                    <td>{{ d.tipo_denuncia.tipo_denuncia if d.tipo_denuncia else '' }}</td>
+                    <td>{{ d.denunciante.nombres }} {{ d.denunciante.ape_paterno }}</td>
+                    <td>{{ 'Pendiente' if d.estado == 'P' else 'Atendida' }}</td>
+                    <td>
+                        <a href="{{ url_for('editar_denuncia', id=d.id_denuncia) }}" 
+                           class="btn btn-sm" 
+                           style="background:#f1f1f1; color:#333; border-radius:6px; padding:4px 10px;">Editar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
         <div class="empty-state">
             <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14 2H6c-1.1 0-2 .9-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#b9c5d3"
@@ -118,6 +60,7 @@
             </svg>
             <div>No hay denuncias registradas</div>
         </div>
+        {% endif %}
     </div>
 </section>
 {% endblock %}
@@ -125,4 +68,3 @@
 {% block js %}
 <script src="{{ url_for('static', filename='js/denuncia.js') }}"></script>
 {% endblock %}
-
