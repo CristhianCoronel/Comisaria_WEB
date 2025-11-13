@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/denuncia_detalle.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="denuncia-detalle">
+
+    <!-- Barra superior con botón imprimir -->
+    <div class="detalle-toolbar">
+        <div>
+            <h2>Denuncia N° {{ "%06d"|format(denuncia.id_denuncia) }}</h2>
+            <p class="sub">
+                Registrada el {{ denuncia.fecha_registro.strftime("%d/%m/%Y %H:%M") if denuncia.fecha_registro else "" }}
+            </p>
+        </div>
+        <button class="button is-primary" type="button" onclick="window.print()">
+            Imprimir
+        </button>
+    </div>
+
+    <!-- Encabezado tipo parte policial -->
+    <section class="bloque bloque-encabezado">
+        <div class="encabezado-left">
+            <p><strong>POLICÍA NACIONAL DEL PERÚ</strong></p>
+            {% if comisaria %}
+                <p>COMISARÍA: {{ comisaria.nombre }}</p>
+            {% endif %}
+        </div>
+        <div class="encabezado-right">
+            <p><strong>Código:</strong> DEN-{{ "%06d"|format(denuncia.id_denuncia) }}</p>
+            <p><strong>Estado:</strong>
+                {% if denuncia.estado == 'P' %}
+                    PENDIENTE
+                {% else %}
+                    ATENDIDA
+                {% endif %}
+            </p>
+        </div>
+    </section>
+
+    <!-- Datos del denunciante -->
+    <section class="bloque">
+        <h3>I. DATOS DEL DENUNCIANTE</h3>
+        <div class="grid-2">
+            <div>
+                <p><strong>Nombre completo:</strong>
+                    {{ denunciante.nombres }} {{ denunciante.ape_paterno }} {{ denunciante.ape_materno }}
+                </p>
+                <p><strong>DNI:</strong> {{ denunciante.dni }}</p>
+                <p><strong>Estado civil:</strong> {{ denunciante.estado_civil }}</p>
+            </div>
+            <div>
+                <p><strong>Teléfono:</strong> {{ denunciante.telefono or "-" }}</p>
+                <p><strong>Dirección:</strong> {{ denunciante.direccion or "-" }}</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Datos de la denuncia -->
+    <section class="bloque">
+        <h3>II. DATOS DE LA DENUNCIA</h3>
+        <div class="grid-2">
+            <div>
+                <p><strong>Tipo de denuncia:</strong> {{ denuncia.tipo_denuncia.tipo_denuncia }}</p>
+                <p><strong>Fecha de los hechos:</strong>
+                    {{ denuncia.fecha_acto.strftime("%d/%m/%Y") if denuncia.fecha_acto else "-" }}
+                </p>
+            </div>
+            <div>
+                <p><strong>Lugar de los hechos:</strong> {{ denuncia.lugar_hechos }}</p>
+            </div>
+        </div>
+        <div class="texto-largo">
+            <p><strong>Descripción de los hechos:</strong></p>
+            <p>{{ denuncia.descripcion | replace('\n', '<br>')|safe }}</p>
+        </div>
+    </section>
+
+    <!-- Evidencias -->
+    <section class="bloque">
+        <h3>III. EVIDENCIAS</h3>
+        {% if evidencias and evidencias|length > 0 %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ev in evidencias %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ ev.tipo or "-" }}</td>
+                        <td>{{ ev.descripcion or "-" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No se registraron evidencias para esta denuncia.</p>
+        {% endif %}
+    </section>
+
+    <!-- Pie: datos del efectivo que registra -->
+    <section class="bloque bloque-firma">
+        <div class="firma-block">
+            <p>_______________________________________</p>
+            <p><strong>OFICIAL QUE REGISTRA</strong></p>
+            {% if usuario %}
+                <p>{{ usuario.nombres }} {{ usuario.ape_paterno }} {{ usuario.ape_materno }}</p>
+                <p>DNI: {{ usuario.dni }}</p>
+            {% endif %}
+        </div>
+    </section>
+
+</div>
+{% endblock %}

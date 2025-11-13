@@ -1,0 +1,85 @@
+.denuncia-detalle {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 900px;
+    margin: 0 auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    font-size: 14px;
+}
+
+.detalle-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.detalle-toolbar h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.detalle-toolbar .sub {
+    color: #666;
+    font-size: 13px;
+}
+
+.bloque {
+    border: 1px solid #d4d4d4;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    background: #fafafa;
+}
+
+.bloque h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: #233c6b;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 10px;
+}
+
+.texto-largo {
+    margin-top: 8px;
+}
+
+.bloque-encabezado {
+    display: flex;
+    justify-content: space-between;
+    background: #eef3ff;
+}
+
+.bloque-firma {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.firma-block p {
+    margin: 4px 0;
+}
+
+/* Para impresión: ocultar sidebar y toolbar si quieres */
+@media print {
+    aside,
+    header {
+        display: none !important;
+    }
+    body {
+        background: white;
+    }
+    .denuncia-detalle {
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+    }
+    .detalle-toolbar button {
+        display: none;
+    }
+}

@@ -154,3 +154,37 @@ def editar_denuncia(id):
     """
     flash("La edición de denuncias aún no está implementada.", "info")
     return redirect(url_for('denuncia'))
+
+@app.route("/denuncia/<int:id>/ver")
+@login_required
+def ver_denuncia(id):
+    # 1) Obtenemos la denuncia
+    denuncia = Denuncia.query.get_or_404(id)
+
+    # 2) Denunciante (gracias a la relación ya definida en el modelo)
+    denunciante = denuncia.denunciante
+
+    # 3) Usuario que registró la denuncia
+    usuario = denuncia.usuario  # por la relationship en el modelo Denuncia
+
+    # 4) Comisaría (según cómo tengas el modelo Usuario)
+    comisaria = None
+    try:
+        # si hay relación usuario.comisaria la usamos
+        comisaria = usuario.comisaria
+    except Exception:
+        # si no, buscamos por id_comisaria
+        if hasattr(usuario, "id_comisaria") and usuario.id_comisaria:
+            comisaria = Comisaria.query.get(usuario.id_comisaria)
+
+    # 5) Evidencias asociadas
+    evidencias = Evidencia.query.filter_by(id_denuncia=denuncia.id_denuncia).all()
+
+    return render_template(
+        "denuncia_detalle.html",
+        denuncia=denuncia,
+        denunciante=denunciante,
+        usuario=usuario,
+        comisaria=comisaria,
+        evidencias=evidencias
+    )
