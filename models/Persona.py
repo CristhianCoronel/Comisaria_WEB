@@ -10,6 +10,7 @@ class Persona(bd.Model):
     ape_paterno = bd.Column(bd.String(100), nullable=False)
     ape_materno = bd.Column(bd.String(100), nullable=False)
     estado_civil = bd.Column('estado_civil', bd.String(20), nullable=False)
+    ocupacion = bd.Column(bd.String(100), nullable=False)
     correo = bd.Column(bd.String(150), nullable=True)
     fecha_nacimiento = bd.Column(bd.Date)
     telefono = bd.Column(bd.String(20))
