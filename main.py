@@ -194,6 +194,7 @@ def logout():
 # Importar rutas que están separadas en otros archivos
 from routes_persona import *
 from routes_area import *
+from routes_roles import *
 from routes_comisaria import *
 from routes_denuncia import *
 

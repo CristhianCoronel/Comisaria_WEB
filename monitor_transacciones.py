@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from bd import get_connection  # usa tu conexión actual a la base de datos
+from bd import bd  # usa tu conexión actual a la base de datos
 
 @contextmanager
 def monitor_transaccion():
@@ -7,7 +7,7 @@ def monitor_transaccion():
     Monitor de Procesamiento de Transacciones (TPM).
     Garantiza commit o rollback automático.
     """
-    conn = get_connection()
+    conn = bd()
     cursor = conn.cursor()
     try:
         yield cursor  # Aquí se ejecutan las operaciones SQL

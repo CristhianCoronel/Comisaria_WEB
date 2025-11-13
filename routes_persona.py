@@ -2,9 +2,10 @@
 from flask import render_template, request, jsonify, redirect, url_for, flash, Response
 from main import app, login_required  # usamos el mismo app y el mismo decorador
 import json
-from controllers import controlador_persona
+from controllers import controlador_persona, controlador_usuario, controlador_comisaria, controlador_rol, controlador_rango
 from services.reniec_service import consultar_dni_faciliza
 from models.Persona import Persona
+from models.Usuario import Usuario
 from main import FACILIZA_TOKEN, FACILIZA_URL
 import requests
 
@@ -100,7 +101,7 @@ def formulario_editar_persona(id):
     return render_template("editar_persona.html", persona=persona)
 
 
-@app.route("/actualizar_persona", methods=["POST"])
+@app.route("/actualizar_ciudadano", methods=["POST"])
 @login_required
 def actualizar_persona():
     id_persona = request.form["id_persona"]
@@ -261,7 +262,52 @@ def persona_por_dni_json(dni):
             "message": "Error interno en el servidor",
         }), 500
 
+###########################
+###########################
 
+
+@app.route("/personal")
+@login_required
+def usuario():
+    usuarios = controlador_usuario.obtener_usuarios()
+    roles = controlador_rol.obtener_roles()
+    rangos = controlador_rango.obtener_rangos()
+    comisarias = controlador_comisaria.obtener_comisarias()    
+    return render_template("personal.html", usuarios=usuarios, roles=roles, rangos=rangos, comisarias=comisarias)
+
+@app.route("/guardar_personal", methods=["POST"])
+@login_required
+def guardar_usuario():
+    codigo_usuario = request.form["codigo_usuario"]
+    id_oficial = request.form["id_oficial"]
+    id_rol = request.form["id_rol"]
+    id_rango = request.form["id_rango"]
+    id_comisaria = request.form["id_comisaria"]
+    contraseña = request.form["contraseña"]
+
+    controlador_usuario.insertar_usuario(codigo_usuario, id_oficial, id_rol, id_rango, id_comisaria, contraseña)
+    return redirect("/personal")
+
+@app.route("/editar_personal/<int:id>")
+@login_required
+def formulario_editar_usaurio(id):
+    persona = controlador_persona.obtener_persona_por_id(id)
+    return render_template("editar_persona.html", persona=persona)
+
+
+@app.route("/actualizar_personal", methods=["POST"])
+@login_required
+def actualizar_usaurio():
+    id_persona = request.form["id_persona"]
+    dni = request.form["dni"]
+    nombres = request.form["nombres"]
+    apellidos = request.form["apellidos"]
+    fecha_nacimiento = request.form.get("fecha_nacimiento") or None
+    telefono = request.form.get("telefono") or None
+    direccion = request.form.get("direccion") or None
+
+    controlador_persona.actualizar_persona(dni, nombres, apellidos, fecha_nacimiento, telefono, direccion, id_persona)
+    return redirect("/personas")
 
 @app.route("/historial")
 @login_required

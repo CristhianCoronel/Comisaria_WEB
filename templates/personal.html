@@ -134,7 +134,6 @@
             <th>Nombres</th>
             <th>Apellido Paterno</th>
             <th>Apellido Materno</th>
-            <th>Código Usuario</th>
             <th>Tipo</th>
             <th>Comisaría</th>
             <th>Rango</th>
@@ -150,8 +149,7 @@
             <td>{{ usuario.nombres }}</td>
             <td>{{ usuario.ape_paterno }}</td>
             <td>{{ usuario.ape_materno }}</td>
-            <td>{{ usuario.codigo_usuario }}</td>
-            <td>{{ usuario.tipo_usuario }}</td>
+            <td>{{ 'Administrador' if usuario.tipo_usaurio == 'A' else 'Regular' }}</td>
             <td>{{ usuario.comisaria.nombre if usuario.comisaria }}</td>
             <td>{{ usuario.rango.nombre if usuario.rango }}</td>
             <td>{{ usuario.rol.nombre if usuario.rol }}</td>
