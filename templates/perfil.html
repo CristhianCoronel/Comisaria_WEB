@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/perfil.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="min-h-screen bg-gray-50 p-6">
+    <div class="max-w-5xl mx-auto space-y-6">
+      <!-- Header del perfil -->
+      <div class="flex items-center justify-between header-perfil">
+        <div>
+          <h1 class="text-gray-900">Perfil de Usuario</h1>
+          <p class="text-gray-600 mt-1">Gestiona la información de tu cuenta</p>
+        </div>
+        <div id="acciones">
+          <button id="btnEditar" class="btn primary gap-2">
+            ✏️ Editar Perfil
+          </button>
+          <div id="accionesEdicion" class="hidden flex gap-2">
+            <button id="btnGuardar" class="btn primary gap-2">💾 Guardar</button>
+            <button id="btnCancelar" class="btn outline gap-2">❌ Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card principal -->
+      <div class="card">
+        <div class="card-header flex items-center gap-6">
+          <div class="avatar">
+            <div class="avatar-fallback">JG</div>
+          </div>
+          <div class="flex-1">
+            <h2 id="nombreCompleto">Juan Carlos García López</h2>
+            <p class="mt-1 text-gray-600">Código: <span id="codigoUsuario">USR-001-2024</span></p>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Información personal -->
+      <div class="card personal-card">
+        <div class="card-header flex items-center gap-2">
+          <span class="icon">👤</span>
+          <h3>Información Personal</h3>
+        </div>
+        <div class="card-content grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="column space-y-6">
+            <div class="input-group">
+              <label for="dni">DNI</label>
+              <input id="dni" type="text" disabled value="12345678" />
+            </div>
+
+            <div class="input-group">
+              <label for="nombres">Nombres</label>
+              <input id="nombres" type="text" disabled value="Juan Carlos" />
+            </div>
+
+            <div class="input-group">
+              <label for="ape_materno">Apellido Materno</label>
+              <input id="ape_materno" type="text" disabled value="López" />
+            </div>
+          </div>
+
+          <div class="column space-y-6">
+            <div class="input-group">
+              <label for="codigo">Código de Usuario</label>
+              <input id="codigo" type="text" disabled value="USR-001-2024" />
+            </div>
+
+            <div class="input-group">
+              <label for="ape_paterno">Apellido Paterno</label>
+              <input id="ape_paterno" type="text" disabled value="García" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información Institucional -->
+      <div class="card">
+        <div class="card-header flex items-center gap-2">
+          <span class="icon">🛡️</span>
+          <h3>Información Institucional</h3>
+        </div>
+        <div class="card-content grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="column space-y-6">
+            <div class="input-group">
+              <label for="comisaria">Comisaría Asignada</label>
+              <input id="comisaria" type="text" disabled value="Comisaría Central Lima" />
+            </div>
+
+            <div class="input-group">
+              <label for="rol">Rol en el Sistema</label>
+              <input id="rol" type="text" disabled value="Administrador del Sistema" />
+            </div>
+          </div>
+
+          <div class="column space-y-6">
+            <div class="input-group">
+              <label for="rango">Rango</label>
+              <input id="rango" type="text" disabled value="Suboficial de Primera" />
+            </div>
+          </div>
+
+          <hr class="separator" />
+
+          <div class="alert">
+            <span class="icon">🔐</span>
+            <div>
+              <p class="text-blue-900">Información de Seguridad</p>
+              <p class="text-blue-700 text-sm mt-1">
+                Para modificar tu comisaría, rango o rol, contacta con recursos humanos o un administrador del sistema.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/perfil.js') }}"></script>
+{% endblock %}

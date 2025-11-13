@@ -1,5 +1,5 @@
 # routes_persona.py
-from flask import render_template, request, jsonify, redirect, url_for, flash, Response
+from flask import render_template, request, session, jsonify, redirect, url_for, flash, Response
 from main import app, login_required  # usamos el mismo app y el mismo decorador
 import json
 from controllers import controlador_persona, controlador_usuario, controlador_comisaria, controlador_rol, controlador_rango
@@ -8,6 +8,15 @@ from models.Persona import Persona
 from models.Usuario import Usuario
 from main import FACILIZA_TOKEN, FACILIZA_URL
 import requests
+
+@app.route('/perfil')
+@login_required
+def perfil():
+    dni_usuario = session.get('dni_usuario')
+    usuario = controlador_usuario.obtener_usuario_por_dni(dni_usuario)
+    return render_template('perfil.html', usuario=usuario)
+
+
 
 @app.route('/ciudadanos')
 @login_required

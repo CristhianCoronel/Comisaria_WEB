@@ -10,6 +10,9 @@ def obtener_usuario_por_id(id_usuario):
     """Devuelve un usuario específico por su ID."""
     return Usuario.query.get(id_usuario)
 
+def obtener_usuario_por_dni(dni_usuario):
+    return Usuario.query.filter_by(dni=dni_usuario).first()
+
 def insertar_usuario(dni, nombres, ape_paterno, ape_materno, codigo_usuario, estado, id_comisaria, id_rango, id_rol, tipo_usuario):
     """Inserta un nuevo usuario en la base de datos."""
     nuevo = Usuario(
