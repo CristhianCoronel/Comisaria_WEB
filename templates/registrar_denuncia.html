@@ -5,72 +5,217 @@
 {% endblock %}
 
 {% block content %}
-<div class="card">
-    <div class="form-title">
-        <svg width="20" height="20" viewBox="0 0 24 24" style="opacity:0.9">
-            <path d="M9 2h6v2H9zM5 6h14v14H5z" fill="#2b4a86" />
-        </svg>
-        <div>Registrar Nueva Denuncia</div>
+<div class="card denuncia-card">
+
+    <!-- Encabezado -->
+    <div class="form-header">
+        <div class="title-block">
+            <div class="icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path d="M6 3h9l3 3v15H6z" fill="#1f4fa8" />
+                    <path d="M15 3v3h3" fill="none" stroke="#fff" stroke-width="1.4" />
+                </svg>
+            </div>
+            <div>
+                <div class="form-title">Registrar Nueva Denuncia</div>
+                <div class="form-sub">
+                    Complete todos los campos con la información del denunciante y de los hechos.
+                </div>
+            </div>
+        </div>
+
+        <!-- Pasos -->
+        <div class="steps">
+            <div class="step-item active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Denunciante</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-item" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Detalles</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-item" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Evidencias</div>
+            </div>
+        </div>
     </div>
-    <div class="form-sub">Complete todos los campos del formulario con la información del denunciante</div>
 
-    <form id="denuncia-form">
-        <!-- PASO 1: Datos Generales -->
+    <!-- FORM -->
+    <form id="denuncia-form" method="POST" action="{{ url_for('guardar_denuncia') }}" enctype="multipart/form-data">
+
+        {# --------- PASO 1: DENUNCIANTE --------- #}
         <div class="form-step" id="step-1">
-            <h4>Datos Generales</h4>
+            <h4 class="section-title">Datos del Denunciante</h4>
+
             <div class="row">
                 <div class="field">
-                    <label>DNI *</label>
-                    <input class="input" name="dni" id="dni" type="text" placeholder="Ej: 12345678" />
+                    <label for="dni">DNI *</label>
+                    <div class="dni-group">
+                        <input class="input" name="dni" id="dni" type="text" placeholder="Ej: 12345678" maxlength="8"
+                            autocomplete="off" required>
+                        <button type="button" class="button is-primary" id="btn-buscar-dni">
+                            Buscar
+                        </button>
+                    </div>
+                    <small class="hint">Presione Enter o el botón para buscar en el sistema / RENIEC.</small>
                 </div>
+                
             </div>
-            <div class="row">
+
+            <div class="row two-cols">
                 <div class="field">
-                    <label>Nombre Completo *</label>
-                    <input class="input" name="nombres" id="nombres" type="text" readonly />
+                    <label for="nombres">Nombre completo *</label>
+                    <input class="input" name="nombres" id="nombres" type="text"
+                        placeholder="Se completará automáticamente" required>
+                </div>
+                <div class="field">
+                    <label for="telefono">Teléfono</label>
+                    <input class="input" name="telefono" id="telefono" type="text" placeholder="Ej: 987654321">
+                </div>
+                <div class="field">
+                    <label for="estado_civil">Estado Civil *</label>
+                    <select class="input" name="estado_civil" id="estado_civil" required>
+                        <option value="SOLTERO">Soltero(a)</option>
+                        <option value="CASADO">Casado(a)</option>
+                        <option value="DIVORCIADO">Divorciado(a)</option>
+                        <option value="CONVIVIENTE">Conviviente</option>
+                        <option value="VIUDO">Viudo(a)</option>
+                    </select>
                 </div>
             </div>
-            <!-- Aquí otros campos generales de la denuncia (fecha, dirección, oficial, etc) -->
-            <button type="button" class="btn btn-secondary" onclick="nextStep()">Siguiente</button>
+            
+            <input type="hidden" name="ape_paterno" id="ape_paterno">
+            <input type="hidden" name="ape_materno" id="ape_materno">
+
+            <div class="row two-cols">
+                <div class="field">
+                    <label for="direccion_denunciante">Dirección del denunciante</label>
+                    <input class="input" name="direccion_denunciante" id="direccion_denunciante" type="text"
+                        placeholder="Ej: Jr. Los Olivos 123, Urb. Central">
+                </div>
+                <div class="field">
+                    <label for="correo">Correo (opcional)</label>
+                    <input class="input" name="correo" id="correo" type="email" placeholder="Ej: ciudadano@correo.com">
+                </div>
+            </div>
+
+            <div class="step-actions">
+                <span></span>
+                <button type="button" class="button is-primary" id="btn-next-1">
+                    Siguiente
+                </button>
+            </div>
         </div>
 
-        <!-- PASO 2: Datos Específicos de la Denuncia -->
+        {# --------- PASO 2: DETALLES DE LA DENUNCIA --------- #}
         <div class="form-step" id="step-2" style="display:none;">
-            <div id="datos-tipo-denuncia">
-                <!-- Se cargará dinámicamente según el tipo de denuncia seleccionado -->
-            </div>
-            <div style="margin-top:12px;">
-                <button type="button" class="btn btn-secondary" onclick="prevStep()">Atrás</button>
-                <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente</button>
-            </div>
-        </div>
+            <h4 class="section-title">Detalles de la Denuncia</h4>
 
-        <!-- PASO 3: Evidencias -->
-        <div class="form-step" id="step-3" style="display:none;">
-            <h4>Evidencias</h4>
-            <div class="row">
+            <div class="row two-cols">
                 <div class="field">
-                    <label>Tipo de Evidencia *</label>
-                    <select class="input" name="tipo_evidencia" id="tipo_evidencia" required>
+                    <label for="id_tipo_denuncia">Tipo de Denuncia *</label>
+                    <select class="input" name="id_tipo_denuncia" id="id_tipo_denuncia" required>
                         <option value="">Seleccione tipo</option>
-                        <option value="foto">Foto</option>
-                        <option value="video">Video</option>
-                        <option value="documento">Documento</option>
-                        <option value="audio">Audio</option>
+                        {% for t in tipos_denuncias %}
+                        <option value="{{ t.id_tipo }}">{{ t.tipo_denuncia }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="field">
-                    <label>Archivo *</label>
-                    <input class="input" type="file" name="archivo_evidencia" id="archivo_evidencia" />
+                    <label for="modalidad">Modalidad *</label>
+                    <select class="input" name="modalidad" id="modalidad" required>
+                        <option value="">Seleccione</option>
+                        <option value="VERBAL">Verbal</option>
+                        <option value="ESCRITA">Escrita</option>
+                    </select>
                 </div>
             </div>
-            <div class="field">
-                <label>Descripción</label>
-                <input class="input" type="text" name="descripcion_evidencia" id="descripcion_evidencia" placeholder="Opcional" />
-            </div>
-            <button type="button" class="btn btn-secondary" id="agregar-evidencia-btn">Agregar Evidencia</button>
 
-            <table>
+            <div class="row two-cols">
+                <div class="field">
+                    <label for="fecha_hechos">Fecha de los hechos *</label>
+                    <input class="input" type="date" name="fecha_hechos" id="fecha_hechos" required>
+                </div>
+                <div class="field">
+                    <label for="hora_hechos">Hora de los hechos *</label>
+                    <input class="input" type="time" name="hora_hechos" id="hora_hechos" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="field">
+                    <label for="direccion_hechos">Lugar / Dirección de los hechos *</label>
+                    <input class="input" name="direccion_hechos" id="direccion_hechos" type="text"
+                        placeholder="Ej: Av. Principal 123, frente al banco" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="field">
+                    <label for="descripcion_hechos">Descripción de los hechos *</label>
+                    <textarea class="input textarea" name="descripcion_hechos" id="descripcion_hechos" rows="4"
+                        placeholder="Describa brevemente lo ocurrido" required></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="field">
+                    <label for="condicion">Condición de la denuncia</label>
+                    <select class="input" name="condicion" id="condicion">
+                        <option value="">Seleccione (opcional)</option>
+                        <option value="DIRECTA">Denuncia directa</option>
+                        <option value="DEINPOL">DEINPOL / derivada</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="step-actions">
+                <button type="button" class="button is-secondary" id="btn-prev-2">Atrás</button>
+                <button type="button" class="button is-primary" id="btn-next-2">Siguiente</button>
+            </div>
+        </div>
+
+        {# --------- PASO 3: EVIDENCIAS --------- #}
+        <div class="form-step" id="step-3" style="display:none;">
+            <h4 class="section-title">Evidencias</h4>
+
+            <p class="hint" style="margin-bottom:12px;">
+                Adjunte fotografías, documentos o archivos relevantes. Puede agregar varias evidencias.
+            </p>
+
+            <div class="row two-cols">
+                <div class="field">
+                    <label for="tipo_evidencia">Tipo de Evidencia</label>
+                    <select class="input" name="tipo_evidencia_temp" id="tipo_evidencia">
+                        <option value="">Seleccione tipo</option>
+                        <option value="FOTO">Foto</option>
+                        <option value="VIDEO">Video</option>
+                        <option value="DOCUMENTO">Documento</option>
+                        <option value="AUDIO">Audio</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="archivo_evidencia">Archivo</label>
+                    <input class="input" type="file" id="archivo_evidencia">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="field">
+                    <label for="descripcion_evidencia">Descripción</label>
+                    <input class="input" type="text" id="descripcion_evidencia"
+                        placeholder="Ej: Foto del vehículo, copia de contrato, etc.">
+                </div>
+            </div>
+
+            <button type="button" class="button is-link" id="agregar-evidencia-btn">
+                Agregar Evidencia
+            </button>
+
+            <table class="table mt-4" id="tabla-evidencias">
                 <thead>
                     <tr>
                         <th>Tipo</th>
@@ -79,12 +224,14 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody id="evidencias-table-body"></tbody>
+                <tbody id="evidencias-table-body">
+                    <!-- Filas dinámicas -->
+                </tbody>
             </table>
 
-            <div style="margin-top:12px;">
-                <button type="button" class="btn btn-secondary" onclick="prevStep()">Atrás</button>
-                <button type="submit" class="btn btn-primary">Registrar</button>
+            <div class="step-actions">
+                <button type="button" class="button is-secondary" id="btn-prev-3">Atrás</button>
+                <button type="submit" class="button is-primary">Registrar</button>
             </div>
         </div>
     </form>
@@ -93,5 +240,4 @@
 
 {% block js %}
 <script src="{{ url_for('static', filename='js/registrar_denuncia.js') }}"></script>
-<script src="{{ url_for('static', filename='js/denuncia.js') }}"></script>
 {% endblock %}

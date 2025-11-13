@@ -7,15 +7,16 @@
     box-sizing: border-box;
 }
 
-body, html {
+html,
+body {
     height: 100%;
     width: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f9f8;
-    color: #2c3e50;
+    background-color: #f3f4f6;
+    color: #1f2933;
 }
 
-body {
+body.layout {
     display: flex;
     height: 100vh;
 }
@@ -23,43 +24,101 @@ body {
 /* ================================
    SIDEBAR
 ================================ */
-aside {
-    width: 220px;
-    background: #e6f0ea; /* Verde muy claro */
-    border-right: 2px solid #a1c4b8;
-    padding: 20px 10px;
+.sidebar {
+    width: 250px;
+    background: linear-gradient(180deg, #0b4fd8, #0640b3);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 18px 16px;
+    border-radius: 0 16px 16px 0;
+    box-shadow: 4px 0 18px rgba(15, 23, 42, 0.25);
+}
+
+.sidebar-header {
     display: flex;
     align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    padding: 8px;
+}
+
+.sidebar-logo-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.2);
+}
+
+.sidebar-logo-icon {
+    font-size: 1.2rem;
+}
+
+.sidebar-title-block {
+    display: flex;
     flex-direction: column;
 }
 
-aside nav ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
-    align-items: center;
+.sidebar-title {
+    font-weight: 700;
+    font-size: 1rem;
 }
 
-aside nav ul li a {
+/* Navegación */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: auto;
+    margin-top: 10px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
     text-decoration: none;
-    color: #2a7a48; /* Verde oscuro */
-    font-weight: 600;
-    padding: 8px 12px;
-    border-radius: 6px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    font-size: 20px;
+    color: #e5e7eb;
+    font-size: 0.92rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
 }
 
-aside nav ul li a:hover {
-    background-color: #a1c4b8; /* Verde medio */
-    color: #1b4d2e;
+.nav-icon {
+    font-size: 1.1rem;
+}
+
+.nav-item:hover {
+    background-color: rgba(37, 99, 235, 0.35);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.nav-item.active {
+    background-color: #1d4ed8;
+    color: #ffffff;
+}
+
+/* Footer sidebar */
+.sidebar-footer {
+    font-size: 0.75rem;
+    color: #bfdbfe;
+    text-align: center;
+    padding-top: 16px;
+    border-top: 1px solid rgba(191, 219, 254, 0.3);
+    margin-top: 16px;
 }
 
 /* ================================
    CONTENEDOR DERECHO
 ================================ */
-.content-right {
+.main-wrapper {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -67,91 +126,103 @@ aside nav ul li a:hover {
 }
 
 /* ================================
-   HEADER
+   HEADER / TOPBAR
 ================================ */
-header {
+.topbar {
     height: 70px;
-    background: #d0e6f7;
-    border-bottom: 2px solid #a3c4f3;
-    display: flex;              /* <--- Cambiado de inline-block */
-    justify-content: space-between; /* espacio entre izquierda y derecha */
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 0 25px;
-    box-sizing: border-box;
-    width: 100%;
+    padding: 0 22px;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
 }
 
-/* Comisaría a la izquierda */
-.comisaria-name {
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: #145374;
+/* Parte izquierda */
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-/* Usuario a la derecha */
-.user-info {
+.topbar-system-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.topbar-system-subtitle {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.topbar-comisaria {
+    font-size: 0.8rem;
+    color: #2563eb;
+}
+
+/* Parte derecha */
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.topbar-icon-button {
+    border: none;
+    background: #e5edff;
+    border-radius: 999px;
+    padding: 6px 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #1d4ed8;
+}
+
+/* Usuario */
+.topbar-user {
     display: flex;
     align-items: center;
     gap: 10px;
+    position: relative;
 }
 
-.user-text {
+.topbar-user-avatar img {
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 2px solid #dbeafe;
+    background-color: #eff6ff;
+}
+
+.topbar-user-info {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    text-align: right;
-    color: #145374;
+    align-items: flex-start;
 }
 
-.username {
-    font-weight: 700;
-    font-size: 1.1rem;
-}
-
-.user-rank {
-    font-weight: 500;
+.topbar-username {
     font-size: 0.9rem;
-    color: #4a7a9d;
+    font-weight: 600;
+    color: #111827;
 }
 
-/* ================================
-   MENÚ DE USUARIO
-================================ */
-.user-menu {
-    align-items: center;
+.topbar-user-role {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+/* Menú de usuario */
+.topbar-user-menu {
     position: relative;
-    gap: 8px;
-    display: inline-block;
 }
 
-/* Avatar usuario */
-.user-avatar {
-    border-radius: 50%;
-    width: 42px;
-    height: 42px;
-    object-fit: cover;
-    border: 2px solid #145374;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.user-avatar:hover {
-    transform: scale(1.05);
-}
-
-/* Botón ▼ */
-#menu-toggle {
-    background: transparent;
+.topbar-menu-toggle {
     border: none;
-    font-size: 1rem;
-    color: #145374;
+    background: transparent;
     cursor: pointer;
-    padding: 4px;
-    transition: transform 0.2s ease;
-}
-
-#menu-toggle:hover {
-    transform: rotate(180deg);
+    font-size: 0.8rem;
 }
 
 /* ================================
@@ -160,34 +231,31 @@ header {
 .dropdown {
     display: none;
     position: absolute;
-    top: 50px; 
+    top: 32px;
     right: 0;
-    background: white;
-    border: 1px solid #a3c4f3;
-    border-radius: 6px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    min-width: 150px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.15);
+    min-width: 160px;
+    list-style: none;
     z-index: 100;
 }
 
-/* Mostrar cuando hover sobre el contenedor completo */
-.user-menu:hover .dropdown {
-    display: block;
-}
-
-.dropdown li {
-  padding: 10px 15px;
-}
-
 .dropdown li a {
-  text-decoration: none;
-  color: #145374;
-  display: block;
-  font-weight: 600;
+    display: block;
+    padding: 10px 14px;
+    text-decoration: none;
+    color: #111827;
+    font-size: 0.9rem;
 }
 
 .dropdown li a:hover {
-  background-color: #d0e6f7;
+    background-color: #eff6ff;
+}
+
+.dropdown.hidden {
+    display: none;
 }
 
 /* ================================
@@ -195,15 +263,13 @@ header {
 ================================ */
 main {
     flex: 1;
-    padding: 20px;
-    background-color: #f5f9f8;
+    padding: 20px 22px;
+    background-color: #f3f4f6;
     overflow-y: auto;
-    width: 100%;
-    box-sizing: border-box;
 }
 
 /* ================================
-   TARJETAS (EXTRA ESTILO)
+   TARJETAS / CARD
 ================================ */
 .card {
     background: white;
@@ -216,8 +282,6 @@ main {
 /* ======================
    TABLAS
 ====================== */
-
-/* Tabla básica */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -226,7 +290,6 @@ main {
     font-size: 0.95rem;
 }
 
-/* Encabezados */
 .table th {
     text-align: left;
     padding: 0.75rem;
@@ -236,36 +299,27 @@ main {
     font-weight: 600;
 }
 
-/* Celdas */
 .table td {
     padding: 0.75rem;
     border-bottom: 1px solid #dbdbdb;
 }
 
-/* Filas rayadas (striped) */
 .table.is-striped tbody tr:nth-child(odd) {
     background-color: #f9f9f9;
 }
 
-/* Hover sobre filas */
 .table.is-hoverable tbody tr:hover {
     background-color: #f1f1f1;
     cursor: pointer;
 }
 
-/* Margen superior (mt-4) */
 .mt-4 {
     margin-top: 1.5rem;
 }
 
-
 /* ======================
-     BOTONES
+   BOTONES
 ====================== */
-
-/* ================================
-   BOTONES (Bulma minimal)
-================================= */
 .button {
     display: inline-block;
     font-weight: 600;
@@ -280,22 +334,36 @@ main {
     cursor: pointer;
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     color: #fff;
-    background-color: #7a7a7a; /* default gris */
+    background-color: #7a7a7a;
 }
 
 .button:hover {
     opacity: 0.9;
 }
 
-/* Variantes */
-.button.is-primary { background-color: #3273dc; border-color: #3273dc; }
-.button.is-success { background-color: #23d160; border-color: #23d160; }
-.button.is-link    { background-color: #209cee; border-color: #209cee; }
-.button.is-secondary { background-color: #7a7a7a; border-color: #7a7a7a; }
+.button.is-primary {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+
+.button.is-success {
+    background-color: #22c55e;
+    border-color: #22c55e;
+}
+
+.button.is-link {
+    background-color: #0ea5e9;
+    border-color: #0ea5e9;
+}
+
+.button.is-secondary {
+    background-color: #6b7280;
+    border-color: #6b7280;
+}
 
 /* ================================
-   INPUTS (Bulma minimal)
-================================= */
+   INPUTS Y FORM
+================================ */
 .input {
     display: block;
     width: 100%;
@@ -312,13 +380,10 @@ main {
 
 .input:focus {
     outline: none;
-    border-color: #3273dc;
-    box-shadow: 0 0 0 0.125em rgba(50, 115, 220, 0.25);
+    border-color: #2563eb;
+    box-shadow: 0 0 0 0.125em rgba(37, 99, 235, 0.25);
 }
 
-/* ================================
-   FORMULARIOS (Bulma minimal)
-================================= */
 .field {
     margin-bottom: 1rem;
 }
@@ -332,9 +397,34 @@ main {
     gap: 0.5rem;
 }
 
-.mt-4 {
-    margin-top: 1.5rem;
+/* Responsivo simple */
+@media (max-width: 900px) {
+    .sidebar {
+        width: 220px;
+    }
 }
 
+@media (max-width: 768px) {
+    body.layout {
+        flex-direction: column;
+    }
 
+    .sidebar {
+        width: 100%;
+        border-radius: 0;
+        flex-direction: row;
+        align-items: center;
+        overflow-x: auto;
+    }
 
+    .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+}

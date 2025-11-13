@@ -3,6 +3,10 @@ from flask import render_template, request, jsonify, redirect, url_for, flash, R
 from main import app, login_required  # usamos el mismo app y el mismo decorador
 import json
 from controllers import controlador_persona
+from services.reniec_service import consultar_dni_faciliza
+from models.Persona import Persona
+from main import FACILIZA_TOKEN, FACILIZA_URL
+import requests
 
 @app.route('/ciudadanos')
 @login_required
@@ -174,27 +178,89 @@ def persona_por_id_json(id_persona):
 @app.route('/persona_dni/<string:dni>/json', methods=['GET'])
 @login_required
 def persona_por_dni_json(dni):
-    """Devuelve los datos de una persona en formato JSON dado su id."""
-    print("API llamada para DNI:", repr(dni))
     try:
-        persona = controlador_persona.obtener_persona_por_dni(dni)
-        if not persona:
-            return jsonify({"status": 0, "data": None, "message": "Persona no encontrada"}), 404
+        # 1) Buscar primero en tu BD local
+        persona = Persona.query.filter_by(dni=dni).first()
+
+        if persona:
+            return jsonify({
+                "status": 1,
+                "data": {
+                    "dni": persona.dni,
+                    "nombres": persona.nombres,
+                    "ape_paterno": persona.ape_paterno,
+                    "ape_materno": persona.ape_materno,
+                    "fecha_nacimiento": (
+                        str(persona.fecha_nacimiento)
+                        if persona.fecha_nacimiento else None
+                    ),
+                    "telefono": persona.telefono,
+                    "direccion": persona.direccion,
+                },
+                "source": "db",
+            })
+
+        # 2) Si no existe en la BD, consultamos FACILIZA
+        if not FACILIZA_TOKEN or not FACILIZA_URL:
+            return jsonify({
+                "status": 0,
+                "data": None,
+                "message": "FACILIZA_TOKEN o FACILIZA_URL no configurados",
+            }), 500
+
+        # Asegurarnos de que no se dupliquen las barras
+        url = f"{FACILIZA_URL.rstrip('/')}/{dni}"
+        
+        print("URL consultada:", f"{FACILIZA_URL}/{dni}")
+        print("Token usado (primeros 10 chars):", (FACILIZA_TOKEN or "")[:10])
+
+        resp = requests.get(
+            url,
+            headers={"Authorization": f"Bearer {FACILIZA_TOKEN}"},
+            timeout=5,
+        )
+
+        if resp.status_code != 200:
+            return jsonify({
+                "status": 0,
+                "data": None,
+                "message": f"Error al consultar FACILIZA (HTTP {resp.status_code})",
+            }), 400
+
+        body = resp.json()
+
+        if not body.get("success"):
+            return jsonify({
+                "status": 0,
+                "data": None,
+                "message": body.get("message", "DNI no encontrado en FACILIZA"),
+            }), 404
+
+        info = body.get("data", {})
+
+        # Normalizamos lo que devuelve FACILIZA para tu front
+        data = {
+            "dni": info.get("numero"),
+            "nombres": info.get("nombres", ""),
+            "ape_paterno": info.get("apellido_paterno", ""),
+            "ape_materno": info.get("apellido_materno", ""),
+            "direccion": info.get("direccion_completa", ""),
+        }
+
         return jsonify({
             "status": 1,
-            "data": {
-                "id_persona": persona.id_persona,
-                "dni": persona.dni,
-                "nombres": persona.nombres,
-                "ape_paterno": persona.ape_paterno,
-                "ape_materno": persona.ape_materno,
-                "fecha_nacimiento": persona.fecha_nacimiento,
-                "telefono": persona.telefono,
-                "direccion": persona.direccion
-            }
+            "data": data,
+            "source": "faciliza",
         })
+
     except Exception as e:
-        return jsonify({"status": -1, "data": None, "message": str(e)}), 500
+        print("Error en persona_por_dni_json:", e)
+        return jsonify({
+            "status": 0,
+            "data": None,
+            "message": "Error interno en el servidor",
+        }), 500
+
 
 
 @app.route("/historial")

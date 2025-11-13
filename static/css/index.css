@@ -1,100 +1,224 @@
-/* Estilos generales para la página */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f7fc;
-    color: #333;
+/* Contenedor general del dashboard */
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Encabezado del panel */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.dashboard-system-name {
+    font-size: 0.9rem;
+    color: #6c7a89;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+}
+
+.dashboard-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1f2d3d;
+    margin-bottom: 4px;
+}
+
+.dashboard-subtitle {
+    font-size: 0.95rem;
+    color: #7f8c8d;
+}
+
+/* Grid de estadísticas */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.stat-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.stat-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.stat-caption {
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+.stat-trend {
+    font-size: 0.8rem;
+    margin-top: 4px;
+}
+
+.stat-up {
+    color: #16a34a;
+}
+
+.stat-down {
+    color: #dc2626;
+}
+
+/* Grid principal: izquierda / derecha */
+.main-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr);
+    gap: 16px;
+    align-items: flex-start;
+}
+
+/* Tarjetas de panel (actividad / denuncias) */
+.panel-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 18px 20px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.panel-header {
+    margin-bottom: 12px;
+}
+
+.panel-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.panel-icon {
+    font-size: 1.3rem;
+}
+
+.panel-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 2px;
+}
+
+.panel-subtitle {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+/* Lista de actividad reciente */
+.activity-list {
+    list-style: none;
     margin: 0;
     padding: 0;
 }
 
-h3 {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 24px;
-    color: #444;
+.activity-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-/* Estilos de la tabla */
-.departamentos-table {
-    width: 80%;
-    margin: 30px auto;
-    border-collapse: collapse;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-/* Cabecera de la tabla */
-.departamentos-table thead {
-    background-color: #3faffa;
-    color: white;
-    text-align: left;
-}
-
-.departamentos-table th {
-    padding: 15px 20px;
-    font-size: 16px;
-}
-
-/* Filas de la tabla */
-.departamentos-table tbody tr {
-    background-color: white;
-    transition: background-color 0.3s ease;
-}
-
-.departamentos-table tbody tr:hover {
-    background-color: #f0f8ff;
-}
-
-.departamentos-table td {
-    padding: 12px 20px;
-    font-size: 14px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-/* Estilo para la última fila (sin borde inferior) */
-.departamentos-table tbody tr:last-child td {
+.activity-item:last-child {
     border-bottom: none;
 }
 
-/* Estilos de la tabla cuando está vacía */
-.departamentos-table tbody tr.empty-row td {
-    text-align: center;
-    font-style: italic;
-    color: #aaa;
+.activity-main {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 2px;
 }
 
-.container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    padding: 20px;
-    justify-content: center;
+.activity-meta {
+    font-size: 0.8rem;
+    color: #6b7280;
 }
 
-/* Estilo de los cuadros de estadísticas */
-.counter-box {
-    background-color: #fff;
-    border: 2px solid #ccc;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
+/* Lista de denuncias pendientes */
+.cases-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-.counter-box h3 {
-    margin: 0 0 10px;
-    color: #333;
+.case-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-.counter-box .count {
-    font-size: 2.5em;
-    margin: 10px 0;
-    color: #4CAF50;
+.case-item:last-child {
+    border-bottom: none;
 }
 
-.counter-box:hover {
-    transform: scale(1.05);
+.case-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 2px;
+}
+
+.case-meta {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+/* Badges de prioridad */
+.badge {
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.badge-high {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.badge-medium {
+    background-color: #fef3c7;
+    color: #b45309;
+}
+
+.badge-low {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+
+/* Responsivo básico */
+@media (max-width: 1100px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
 }

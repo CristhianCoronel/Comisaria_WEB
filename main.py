@@ -3,6 +3,7 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from bd import bd
 from functools import wraps
+from dotenv import load_dotenv
 
 from controllers import controlador_departamento
 from controllers import controlador_provincia
@@ -59,6 +60,12 @@ bd.init_app(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
+# ACTIVO TOKEN PARA LA API DE LA RENIEC
+
+load_dotenv()
+
+FACILIZA_TOKEN = os.getenv("FACILIZA_TOKEN")
+FACILIZA_URL = os.getenv("FACILIZA_URL", "https://api.factiliza.com/v1/dni/info")
 
 # Crear tablas si no existen
 with app.app_context():
@@ -87,10 +94,62 @@ def home():
 
 
 @app.route('/index')
+@login_required
 def index():
-    departamentos = list()
-    # departamentos = controlador_departamento.obtener_departamentos()
-    return render_template('index.html', departamentos=departamentos)
+    # 1) Total de ciudadanos (todas las personas registradas)
+    total_ciudadanos = Persona.query.count()
+
+    # 2) Denuncias activas (por ejemplo estados P = pendiente, A = activa)
+    denuncias_activas = Denuncia.query.filter(
+        Denuncia.estado.in_(["P", "A"])
+    ).count()
+
+    # 3) Personal activo (usuarios con estado 'A')
+    personal_activo = Usuario.query.filter_by(estado="A").count()
+
+    # 4) Total de comisarías registradas
+    total_comisarias = Comisaria.query.count()
+
+    # 5) Actividad reciente: últimas 5 denuncias registradas
+    actividad_reciente = (
+        Denuncia.query
+        .order_by(Denuncia.fecha_registro.desc())
+        .limit(5)
+        .all()
+    )
+
+    # 6) Denuncias pendientes (estado 'P') + nombre del tipo de denuncia
+    pendientes_raw = (
+        bd.session.query(Denuncia, Tipo_Denuncia)
+        .join(Tipo_Denuncia, Denuncia.id_tipo_denuncia == Tipo_Denuncia.id_tipo)
+        .filter(Denuncia.estado == "P")
+        .order_by(Denuncia.fecha_registro.desc())
+        .limit(5)
+        .all()
+    )
+
+    # Transformar a una lista simple de diccionarios para el template
+    denuncias_pendientes = []
+    for denuncia, tipo in pendientes_raw:
+        denuncias_pendientes.append({
+            "id": denuncia.id_denuncia,
+            "codigo": f"DEN-{denuncia.id_denuncia:06d}",
+            "tipo": tipo.tipo_denuncia,
+            "fecha": denuncia.fecha_registro,  # por si luego quieres mostrarla
+            # si quieres más adelante, aquí puedes calcular prioridad según tipo
+            "prioridad": "Alta"
+        })
+
+    return render_template(
+        "index.html",
+        total_ciudadanos=total_ciudadanos,
+        denuncias_activas=denuncias_activas,
+        personal_activo=personal_activo,
+        total_comisarias=total_comisarias,
+        actividad_reciente=actividad_reciente,
+        denuncias_pendientes=denuncias_pendientes
+    )
+
 
 
 ########## CONTROL DE SESION  ##########

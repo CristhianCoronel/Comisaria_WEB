@@ -5,45 +5,117 @@
 {% endblock %}
 
 {% block content %}
-<h2>Panel de Control</h2>
-<h3>Conteo semanal</h3>
-<div class="container">
-    <div class="counter-box" id="total-usuarios">
-        <h3>Total Usuarios</h3>
-        <p class="count" id="count-usuarios">100</p>
+<div class="dashboard">
+
+    <!-- Encabezado del panel -->
+    <div class="dashboard-header">
+        <div>
+            <p class="dashboard-system-name">Sistema de Gestión</p>
+            <h1 class="dashboard-title">Panel de Control</h1>
+            <p class="dashboard-subtitle">
+                Bienvenido al Sistema de Gestión de Comisaría
+            </p>
+        </div>
     </div>
-    <div class="counter-box" id="registros-totales">
-        <h3>Registros Totales</h3>
-        <p class="count" id="count-registros">200</p>
+
+    <!-- Tarjetas de estadísticas -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Ciudadanos</div>
+            <div class="stat-value">{{ total_ciudadanos }}</div>
+            <div class="stat-caption">Registrados en el sistema</div>
+            <div class="stat-trend stat-up">+12% vs mes anterior</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Denuncias Activas</div>
+            <div class="stat-value">{{ denuncias_activas }}</div>
+            <div class="stat-caption">Casos en proceso</div>
+            <div class="stat-trend stat-down">-8% vs mes anterior</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Personal Activo</div>
+            <div class="stat-value">{{ personal_activo }}</div>
+            <div class="stat-caption">Oficiales en servicio</div>
+            <div class="stat-trend">Sin cambios</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Comisarías</div>
+            <div class="stat-value">{{ total_comisarias }}</div>
+            <div class="stat-caption">En la jurisdicción</div>
+            <div class="stat-trend stat-up">+2 nuevas este año</div>
+        </div>
     </div>
-    <div class="counter-box" id="operaciones-culminadas">
-        <h3>Operaciones Culminadas</h3>
-        <p class="count" id="count-culminadas">150</p>
-    </div>
-    <div class="counter-box" id="operaciones-canceladas">
-        <h3>Operaciones Canceladas</h3>
-        <p class="count" id="count-canceladas">50</p>
+
+    <!-- Fila principal: Actividad + Denuncias pendientes -->
+    <div class="main-grid">
+
+        <!-- Actividad reciente (últimas denuncias) -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <div class="panel-title-wrapper">
+                    <span class="panel-icon">ℹ️</span>
+                    <div>
+                        <h2 class="panel-title">Actividad Reciente</h2>
+                        <p class="panel-subtitle">Últimas denuncias registradas en el sistema</p>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="activity-list">
+                {% if actividad_reciente %}
+                    {% for den in actividad_reciente %}
+                    <li class="activity-item">
+                        <p class="activity-main">
+                            Denuncia #{{ "%06d"|format(den.id_denuncia) }}
+                        </p>
+                        <p class="activity-meta">
+                            Registrada el
+                            {{ den.fecha_registro.strftime("%d/%m/%Y %H:%M") if den.fecha_registro }}
+                        </p>
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="activity-item">
+                        <p class="activity-main">No hay actividad reciente.</p>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Denuncias pendientes -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <div class="panel-title-wrapper">
+                    <span class="panel-icon">📄</span>
+                    <div>
+                        <h2 class="panel-title">Denuncias Pendientes</h2>
+                        <p class="panel-subtitle">Casos que requieren atención</p>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="cases-list">
+                {% if denuncias_pendientes %}
+                    {% for d in denuncias_pendientes %}
+                    <li class="case-item">
+                        <div>
+                            <p class="case-title">{{ d.tipo }}</p>
+                            <p class="case-meta">#{{ d.codigo }}</p>
+                        </div>
+                        <span class="badge badge-high">{{ d.prioridad }}</span>
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="case-item">
+                        <p class="case-title">No hay denuncias pendientes.</p>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
     </div>
 </div>
-<h3>Entradas recientes</h3>
-<table class="departamentos-table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Nombre Completo</th>
-            <th>DNI</th>
-            <th>Hora ingreso</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for departamento in departamentos %}
-        <tr>
-            <td>{{ departamento.id_departamento }}</td>
-            <td>{{ departamento.nombre }}</td>
-            <td>{{ departamento.id_departamento }}</td>
-            <td>{{ departamento.nombre }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
 {% endblock %}
