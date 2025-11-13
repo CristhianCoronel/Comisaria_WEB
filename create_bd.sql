@@ -129,7 +129,7 @@ CREATE TABLE denuncia (
     descripcion text NOT NULL,
     estado char(1) DEFAULT 'P',
     id_denunciante int4 NOT NULL,
-    id_denunciado int4,
+    id_denunciado int4, -- Eliminar más tarde si es necesario
     id_usuario int4 NOT NULL,
     id_tipo_denuncia int4 NOT NULL,
     ubigeo char(5),
