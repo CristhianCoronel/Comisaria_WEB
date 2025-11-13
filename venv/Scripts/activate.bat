@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set "VIRTUAL_ENV=C:\Users\Holcen\Desktop\Proyecto_Comisaria\Comisaria_WEB\venv"
+set "VIRTUAL_ENV=C:\Users\editor\Desktop\Sistema_Denuncias\Comisaria_WEB\venv"
 
 if not defined PROMPT set PROMPT=$P$G
 

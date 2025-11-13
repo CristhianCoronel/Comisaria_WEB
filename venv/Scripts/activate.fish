@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV 'C:\Users\Holcen\Desktop\Proyecto_Comisaria\Comisaria_WEB\venv'
+set -gx VIRTUAL_ENV 'C:\Users\editor\Desktop\Sistema_Denuncias\Comisaria_WEB\venv'
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"Scripts $PATH
