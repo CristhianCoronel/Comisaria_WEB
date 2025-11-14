@@ -1,96 +1,106 @@
 {% extends "base.html" %}
 
 {% block style %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/formato_formulario.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/formato_formulario.css') }}">
 {% endblock %}
 
 {% block content %}
 <section>
+
+  <!-- =================== FORMULARIO =================== -->
   <div class="card">
-    <div class="form-title"><h3 class="is-size-3">Roles</h3></div>
 
-    <form id="form-rol">
-      <div class="section">
-        <h4>Datos del Rol</h4>
-
-        <div class="field">
-          <label>ID</label>
-          <input id="input-id_rol" class="input" type="text" name="id_rol" readonly>
-        </div>
-
-        <div class="field">
-          <label>Nombre *</label>
-          <input required id="input-nombre" class="input" type="text" name="nombre" placeholder="Ej: Coordinador, Analista, etc.">
-        </div>
-
-        <div class="field">
-          <label>Descripción</label>
-          <input id="input-descripcion" class="input" type="text" name="descripcion" placeholder="Ej: Responsable del área de soporte.">
-        </div>
-
-        <div class="field">
-          <label>Área *</label>
-          <div class="select is-fullwidth">
-            <select required id="input-id_area" name="id_area">
-              <option value="">Seleccione un área</option>
-              {% for area in areas %}
-              <option value="{{ area.id_area }}">{{ area.nombre }}</option>
-              {% endfor %}
-            </select>
+      <!-- TÍTULO (idéntico estilo que Personal / Ciudadanía) -->
+      <div class="title-block">
+          <div class="icon-box">
+              <span class="nav-icon">🛡️</span>
           </div>
-        </div>
-
-        <div id="mensaje" class="notification is-hidden"></div>
+          <div>
+              <div class="form-title">Roles</div>
+              <div class="form-sub">Gestión de roles del sistema</div>
+          </div>
       </div>
 
-      <div style="margin-top:10px; display:flex; gap:12px;">
-        <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
-        <button type="button" class="button is-primary" id="btnAgregar">Agregar</button>
-        <button type="button" class="button is-success" id="btnEditar">Editar</button>
-      </div>
-    </form>
+      <form id="form-rol">
+
+          <div class="section">
+              <h4>Datos del Rol</h4>
+              <input type="hidden" name="id_rol" id="input-id_rol">
+              <!-- Nombre y Estado -->
+              <div class="row two-cols">
+                  <div class="field">
+                      <label>Nombre *</label>
+                      <input required class="input" type="text" name="nombre" placeholder="Ej: Supervisor">
+                  </div>
+
+                  <div class="field">
+                      <label>Estado</label>
+                      <select class="input" name="estado">
+                          <option value="A">Activo</option>
+                          <option value="I">Inactivo</option>
+                      </select>
+                  </div>
+              </div>
+
+              <!-- Descripción -->
+              <div class="field">
+                  <label>Descripción</label>
+                  <textarea class="input" name="descripcion" rows="3" placeholder="Ej: Rol encargado de supervisar el sistema"></textarea>
+              </div>
+
+              <div id="mensaje" class="notification is-hidden"></div>
+          </div>
+
+          <!-- BOTONES (idénticos a Personal / Ciudadanía) -->
+          <div class="form-actions">
+              <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
+              <button type="button" class="button is-primary" id="btnGuardar">Guardar</button>
+              <button type="button" class="button is-success" id="btnEditar">Editar</button>
+          </div>
+
+      </form>
   </div>
 
-  <br>
-
-  <!-- ====== Tabla de Roles ====== -->
+  <!-- =================== LISTADO =================== -->
   <div class="card">
-    <div class="column">
+
+      <!-- Buscador -->
       <form id="form-buscar" class="field has-addons mt-4">
-        <div class="control">
-          <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre de rol">
-        </div>
-        <div class="control">
-          <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
-        </div>
+          <div class="control">
+              <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
+          </div>
+          <div class="control">
+              <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
+          </div>
       </form>
 
+      <!-- Tabla -->
       <table class="table is-striped is-hoverable mt-4" id="tabla-roles">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Área</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for rol in roles %}
-          <tr class="clickable-row" data-id="{{ rol.id_rol }}">
-            <td>{{ rol.id_rol }}</td>
-            <td>{{ rol.nombre }}</td>
-            <td>{{ rol.descripcion }}</td>
-            <td>{{ rol.area.nombre if rol.area else '—' }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
+          <thead>
+              <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Estado</th>
+                  <th>Descripción</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for rol in roles %}
+              <tr class="clickable-row" data-id="{{ rol.id_rol }}">
+                  <td>{{ rol.id_rol }}</td>
+                  <td>{{ rol.nombre }}</td>
+                  <td>{{ 'Activo' if rol.estado == 'A' else 'Inactivo' }}</td>
+                  <td>{{ rol.descripcion }}</td>
+              </tr>
+              {% endfor %}
+          </tbody>
       </table>
-    </div>
+
   </div>
+
 </section>
 {% endblock %}
 
 {% block js %}
-    <script src="{{ url_for('static', filename='js/rol.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/query_row.js') }}"></script>
+<script src="{{ url_for('static', filename='js/roles.js') }}"></script>
 {% endblock %}

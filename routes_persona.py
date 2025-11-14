@@ -12,9 +12,12 @@ import requests
 @app.route('/perfil')
 @login_required
 def perfil():
-    dni_usuario = session.get('dni_usuario')
+    dni_usuario = session.get('dni')
     usuario = controlador_usuario.obtener_usuario_por_dni(dni_usuario)
+    print("DEBUG usuario:", usuario)
+    print("DEBUG comisaria:", usuario.comisaria if usuario else None)
     return render_template('perfil.html', usuario=usuario)
+
 
 
 

@@ -6,76 +6,93 @@
 
 {% block content %}
 <section>
-  <div class="card">
-    <div class="form-title"><h3 class="is-size-3">Áreas</h3></div>
 
-    <form id="form-area">
-      <div class="section">
-        <h4>Datos del Área</h4>
+    <!-- =================== FORMULARIO =================== -->
+    <div class="card">
 
-        <div class="field">
-          <label>ID</label>
-          <input id="input-id_area" class="input" type="text" name="id_area" readonly>
+        <!-- TÍTULO (mismo formato que Ciudadanía y Personal) -->
+        <div class="title-block">
+            <div class="icon-box">
+                <span class="nav-icon">🏢</span>
+            </div>
+            <div>
+                <div class="form-title">Áreas</div>
+                <div class="form-sub">Gestión de áreas y dependencias internas</div>
+            </div>
         </div>
 
-        <div class="field">
-          <label>Nombre *</label>
-          <input required id="input-nombre" class="input" type="text" name="nombre" placeholder="Ej: Recursos Humanos">
-        </div>
+        <form id="form-area">
 
-        <div class="field">
-          <label>Descripción</label>
-          <input id="input-descripcion" class="input" type="text" name="descripcion" placeholder="Ej: Área encargada de la gestión del personal">
-        </div>
+            <div class="section">
+                <h4>Datos del Área</h4>
+                <input type="hidden" name="id_area" id="input-id_area">
 
-        <div id="mensaje" class="notification is-hidden"></div>
-      </div>
+                <!-- Nombre -->
+                <div class="field">
+                    <label>Nombre *</label>
+                    <input required id="input-nombre" class="input" type="text" name="nombre"
+                           placeholder="Ej: Recursos Humanos">
+                </div>
 
-      <div style="margin-top:10px; display:flex; gap:12px;">
-        <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
-        <button type="button" class="button is-primary" id="btnAgregar">Agregar</button>
-        <button type="button" class="button is-success" id="btnEditar">Editar</button>
-      </div>
-    </form>
-  </div>
+                <!-- Descripción -->
+                <div class="field">
+                    <label>Descripción</label>
+                    <input id="input-descripcion" class="input" type="text" name="descripcion"
+                           placeholder="Ej: Área encargada de la gestión del personal">
+                </div>
 
-  <br>
+                <div id="mensaje" class="notification is-hidden"></div>
+            </div>
 
-  <div class="card">
-    <div class="column">
-      <form id="form-buscar" class="field has-addons mt-4">
-        <div class="control">
-          <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
-        </div>
-        <div class="control">
-          <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
-        </div>
-      </form>
+            <!-- BOTONES (idénticos) -->
+            <div class="form-actions">
+                <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
+                <button type="button" class="button is-primary" id="btnGuardar">Guardar</button>
+                <button type="button" class="button is-success" id="btnEditar">Editar</button>
+            </div>
 
-      <table class="table is-striped is-hoverable mt-4" id="tabla-areas">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Descripción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for area in areas %}
-          <tr class="clickable-row" data-id="{{ area.id_area }}">
-            <td>{{ area.id_area }}</td>
-            <td>{{ area.nombre }}</td>
-            <td>{{ area.descripcion }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+        </form>
     </div>
-  </div>
+
+    <!-- =================== LISTADO =================== -->
+    <div class="card">
+
+        <!-- Buscador -->
+        <form id="form-buscar" class="field has-addons mt-4">
+            <div class="control">
+                <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
+            </div>
+            <div class="control">
+                <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
+            </div>
+        </form>
+
+        <!-- Tabla -->
+        <table class="table is-striped is-hoverable mt-4" id="tabla-areas">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for area in areas %}
+                <tr class="clickable-row" data-id="{{ area.id_area }}">
+                    <td>{{ area.id_area }}</td>
+                    <td>{{ area.nombre }}</td>
+                    <td>{{ area.descripcion }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
 </section>
 {% endblock %}
 
 {% block js %}
-  <script src="{{ url_for('static', filename='js/area.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/query_row.js') }}"></script>
+<script src="{{ url_for('static', filename='js/area.js') }}"></script>
+<script src="{{ url_for('static', filename='js/query_row.js') }}"></script>
 {% endblock %}

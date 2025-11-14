@@ -31,7 +31,7 @@
             <div class="avatar-fallback">JG</div>
           </div>
           <div class="flex-1">
-            <h2 id="nombreCompleto">Juan Carlos García López</h2>
+            <h2 id="nombreCompleto">{{ usuario.nombres }} {{ usuario.ape_paterno }} {{ usuario.ape_materno }}</h2>
             <p class="mt-1 text-gray-600">Código: <span id="codigoUsuario">USR-001-2024</span></p>
 
           </div>
@@ -48,17 +48,17 @@
           <div class="column space-y-6">
             <div class="input-group">
               <label for="dni">DNI</label>
-              <input id="dni" type="text" disabled value="12345678" />
+              <input id="dni" type="text" disabled value="{{ usuario.dni }}" />
             </div>
 
             <div class="input-group">
               <label for="nombres">Nombres</label>
-              <input id="nombres" type="text" disabled value="Juan Carlos" />
+              <input id="nombres" type="text" disabled value="{{ usuario.nombres }}" />
             </div>
 
             <div class="input-group">
               <label for="ape_materno">Apellido Materno</label>
-              <input id="ape_materno" type="text" disabled value="López" />
+              <input id="ape_materno" type="text" disabled value="{{ usuario.ape_materno }}" />
             </div>
           </div>
 
@@ -70,7 +70,7 @@
 
             <div class="input-group">
               <label for="ape_paterno">Apellido Paterno</label>
-              <input id="ape_paterno" type="text" disabled value="García" />
+              <input id="ape_paterno" type="text" disabled value="{{ usuario.ape_paterno }}" />
             </div>
           </div>
         </div>
@@ -86,19 +86,19 @@
           <div class="column space-y-6">
             <div class="input-group">
               <label for="comisaria">Comisaría Asignada</label>
-              <input id="comisaria" type="text" disabled value="Comisaría Central Lima" />
+              <input id="comisaria" type="text" disabled value="{{ usuario.comisaria.nombre }}" />
             </div>
 
             <div class="input-group">
               <label for="rol">Rol en el Sistema</label>
-              <input id="rol" type="text" disabled value="Administrador del Sistema" />
+              <input id="rol" type="text" disabled value="{{ usuario.rol.nombre }}" />
             </div>
           </div>
 
           <div class="column space-y-6">
             <div class="input-group">
               <label for="rango">Rango</label>
-              <input id="rango" type="text" disabled value="Suboficial de Primera" />
+              <input id="rango" type="text" disabled value="{{ usuario.rango.nombre }}" />
             </div>
           </div>
 

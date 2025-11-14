@@ -4,23 +4,17 @@
     margin: 0 auto;
 }
 
-/* HEADER DEL FORMULARIO */
-.form-header {
-    border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 12px;
-    margin-bottom: 18px;
-}
-
+/* ---- TITULO PRINCIPAL ---- */
 .title-block {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: 14px;
+    margin-bottom: 18px;
 }
 
 .icon-box {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 999px;
     background: #e3edff;
     display: flex;
@@ -30,7 +24,7 @@
 
 .form-title {
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     color: #1f2937;
 }
 
@@ -39,128 +33,39 @@
     color: #6b7280;
 }
 
-/* PASOS */
-.steps {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 8px;
+/* ---- SECCION ---- */
+.section h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 14px;
+    border-left: 4px solid #2563eb;
+    padding-left: 10px;
 }
 
-.step-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.78rem;
-    color: #9ca3af;
-}
-
-.step-item.active .step-circle {
-    background: #2563eb;
-    color: #fff;
-}
-
-.step-item.active .step-label {
-    color: #111827;
-    font-weight: 600;
-}
-
-.step-circle {
-    width: 22px;
-    height: 22px;
-    border-radius: 999px;
-    border: 2px solid #cbd5f5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    background: #f9fafb;
-}
-
-.step-label {
-    white-space: nowrap;
-}
-
-.step-line {
-    flex: 1;
-    height: 2px;
-    background: #e5e7eb;
-}
-
-/* LAYOUT CAMPOS */
+/* ---- FILAS ---- */
 .row {
     display: flex;
-    flex-wrap: wrap;
     gap: 16px;
+    width: 100%;
     margin-bottom: 12px;
 }
 
 .row.two-cols .field {
-    flex: 1 1 calc(50% - 8px);
+    flex: 1;
 }
 
+/* ---- CAMPOS ---- */
 .field label {
     display: block;
     font-weight: 600;
     font-size: 0.85rem;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     color: #374151;
 }
 
-.input.textarea {
-    resize: vertical;
-    min-height: 90px;
-}
-
-.section-title {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #1f2937;
-    margin-bottom: 10px;
-}
-
-/* GRUPO DNI + BOTÓN */
-.dni-group {
-    display: flex;
-    gap: 8px;
-}
-
-.dni-group .input {
-    flex: 1;
-}
-
-/* MENSAJES Y ACCIONES */
-.hint {
-    font-size: 0.78rem;
-    color: #6b7280;
-}
-
-.step-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 8px;
-}
-
-/* BOTONCITOS */
-.button.is-primary {
-    background-color: #2563eb;
-    border-color: #2563eb;
-}
-
-.button.is-link {
-    background-color: #0ea5e9;
-    border-color: #0ea5e9;
-}
-
-.button.is- condary {
-    background-color: #6b7280;
-    border-color: #6b7280;
-}
-
-/* Ajustar selects para que sean iguales a los inputs */
-form select,
 form input,
+form select,
 form textarea {
     font-size: 15px;
     padding: 12px 14px;
@@ -171,27 +76,101 @@ form textarea {
     transition: border-color 0.2s, background-color 0.2s;
 }
 
-/* Hover y focus igual para todos */
-form select:focus,
 form input:focus,
+form select:focus,
 form textarea:focus {
     outline: none;
     border-color: #2563eb;
-    background-color: #fff;
+    background-color: #ffffff;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
-/* Para que el select no sobresalga verticalmente */
-form select {
+input[type="date"] {
     height: 48px;
-    line-height: 48px;
-    padding-right: 40px; /* espacio para el ícono del selector */
 }
 
-/* Label consistente */
-form label {
+/* ---- ACCIONES ---- */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.button {
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 0.9rem;
     font-weight: 600;
-    margin-bottom: 5px;
-    display: block;
+    border: none;
+    cursor: pointer;
 }
 
+/* Colores de botones */
+.button.is-secondary {
+    background-color: #6b7280;
+    color: #fff;
+}
+
+.button.is-primary {
+    background-color: #2563eb;
+    color: #fff;
+}
+
+.button.is-success {
+    background-color: #16a34a;
+    color: #fff;
+}
+
+/* Evitar que el mouse muestre "mano" en botones deshabilitados */
+button:disabled,
+button[disabled] {
+    cursor: not-allowed !important;
+    opacity: 0.6;     /* opcional, más visual */
+}
+
+/* ---- TABLA ---- */
+table.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+table.table thead {
+    background: #f3f4f6;
+    color: #374151;
+    font-weight: 600;
+}
+
+table.table th,
+table.table td {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+}
+
+.tabla-disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* ---- BUSCADOR ---- */
+#form-buscar .input {
+    border-radius: 8px 0 0 8px;
+}
+
+#form-buscar .button {
+    border-radius: 0 8px 8px 0;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+}

@@ -7,46 +7,43 @@
 {% block content %}
 <section>
 
-  <!-- ====== FORMULARIO ====== -->
+  <!-- =================== FORMULARIO =================== -->
   <div class="card">
 
       <!-- TÍTULO -->
       <div class="title-block">
           <div class="icon-box">
-              <i class="fas fa-building-shield"></i>
+              <span class="nav-icon">📝</span>
           </div>
           <div>
-              <div class="form-title">Comisarías</div>
-              <div class="form-sub">Gestión y registro de comisarías</div>
+              <div class="form-title">Entradas</div>
+              <div class="form-sub">Registro básico de personas</div>
           </div>
       </div>
 
-      <form id="form-comisaria">
-          <input type="hidden" name="id_comisaria" id="id_comisaria" value="{{ comisaria.id_comisaria if comisaria else '' }}">
+      <form id="form-entrada">
 
           <div class="section">
-              <h4>Datos de la Comisaría</h4>
-              <input type="hidden" name="id_comisaria" id="input-id_comisaria">
+              <h4>Datos de la Persona</h4>
 
+              <!-- Nombre + Apellido -->
               <div class="row two-cols">
                   <div class="field">
                       <label>Nombre *</label>
-                      <input required class="input" type="text" name="nombre" placeholder="Ej: Comisaría Central">
+                      <input required class="input" type="text" name="nombre" placeholder="Ej: Carlos">
                   </div>
+
                   <div class="field">
-                      <label>Teléfono</label>
-                      <input class="input" type="text" name="telefono" placeholder="Ej: 054-123456">
+                      <label>Apellido *</label>
+                      <input required class="input" type="text" name="apellido" placeholder="Ej: Torres">
                   </div>
               </div>
 
-              <div class="row two-cols">
+              <!-- DNI -->
+              <div class="row one-col">
                   <div class="field">
-                      <label>Dirección</label>
-                      <input class="input" type="text" name="direccion" placeholder="Ej: Av. Principal 123">
-                  </div>
-                  <div class="field">
-                      <label>Ubigeo</label>
-                      <input class="input" type="text" name="ubigeo" id="txt_ubigeo" placeholder="Ej: 150101">
+                      <label>DNI *</label>
+                      <input required class="input" type="text" name="dni" placeholder="Ej: 78945612">
                   </div>
               </div>
 
@@ -63,7 +60,7 @@
       </form>
   </div>
 
-  <!-- ====== TABLA ====== -->
+  <!-- =================== LISTADO =================== -->
   <div class="card">
 
       <!-- Buscador -->
@@ -72,7 +69,7 @@
               <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
           </div>
           <div class="control">
-              <input class="input" type="text" name="b_ubigeo" placeholder="Buscar por ubigeo">
+              <input class="input" type="text" name="b_dni" placeholder="Buscar por DNI">
           </div>
           <div class="control">
               <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
@@ -80,24 +77,22 @@
       </form>
 
       <!-- Tabla -->
-      <table class="table is-striped is-hoverable mt-4" id="tabla-comisarias">
+      <table class="table is-striped is-hoverable mt-4" id="tabla-entradas">
           <thead>
               <tr>
                   <th>ID</th>
                   <th>Nombre</th>
-                  <th>Dirección</th>
-                  <th>Teléfono</th>
-                  <th>Ubigeo</th>
+                  <th>Apellido</th>
+                  <th>DNI</th>
               </tr>
           </thead>
           <tbody>
-              {% for com in comisarias %}
-              <tr class="clickable-row" data-id="{{ com.id_comisaria }}">
-                  <td>{{ com.id_comisaria }}</td>
-                  <td>{{ com.nombre }}</td>
-                  <td>{{ com.direccion }}</td>
-                  <td>{{ com.telefono }}</td>
-                  <td>{{ com.ubigeo }}</td>
+              {% for e in entradas %}
+              <tr class="clickable-row" data-id="{{ e.id }}">
+                  <td>{{ e.id }}</td>
+                  <td>{{ e.nombre }}</td>
+                  <td>{{ e.apellido }}</td>
+                  <td>{{ e.dni }}</td>
               </tr>
               {% endfor %}
           </tbody>
@@ -109,5 +104,5 @@
 {% endblock %}
 
 {% block js %}
-<script type="module" src="{{ url_for('static', filename='js/formularios.js') }}"></script>
+<script src="{{ url_for('static', filename='js/entradas.js') }}"></script>
 {% endblock %}
