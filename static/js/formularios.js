@@ -3,11 +3,13 @@
 // ===========================
 
 // ---- Obtener elementos ----
-const inputs = document.querySelectorAll('#form-comisaria input');
+const inputs = document.querySelectorAll('form input');
+const selects = document.querySelectorAll('form select');
+const textsA = document.querySelectorAll('form textarea');
 const btnNuevo = document.getElementById('btnNuevo');
 const btnGuardar = document.getElementById('btnGuardar');
 const btnEditar = document.getElementById('btnEditar');
-const tabla = document.getElementById('tabla-comisarias');
+const tabla = document.getElementById('tabla-formulario');
 
 // Estado actual
 let modo = "ninguno"; // "nuevo", "editar", "ninguno"
@@ -20,14 +22,20 @@ let modo = "ninguno"; // "nuevo", "editar", "ninguno"
 
 function deshabilitarCampos() {
     inputs.forEach(i => i.disabled = true);
+    selects.forEach(i => i.disabled = true);
+    textsA.forEach(i => i.disabled = true);
 }
 
 function habilitarCampos() {
     inputs.forEach(i => i.disabled = false);
+    selects.forEach(i => i.disabled = false);
+    textsA.forEach(i => i.disabled = false);
 }
 
 function limpiarCampos() {
     inputs.forEach(i => i.value = "");
+    selects.forEach(i => i.selectedIndex = 0);
+    textsA.forEach(i => i.value = "");
 }
 
 function deshabilitarTabla() {
@@ -144,6 +152,7 @@ btnGuardar.addEventListener("click", () => {
     modo = "ninguno";
 
     deshabilitarCampos();
+    limpiarCampos();
     habilitarTabla();
 
     btnGuardar.disabled = true;

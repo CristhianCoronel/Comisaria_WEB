@@ -175,7 +175,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-
   // --- BOTÓN EDITAR ---
   btnEditar.addEventListener("click", () => {
     if (!personaSeleccionadaId) return;
