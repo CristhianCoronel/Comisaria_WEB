@@ -7,123 +7,141 @@
 {% block content %}
 <section>
 
-  <div class="card">
+    <div class="card">
 
-      <!-- TÍTULO -->
-      <div class="title-block">
-          <div class="icon-box">
-              <span class="nav-icon">👥</span>
-          </div>
-          <div>
-              <div class="form-title">Ciudadanos</div>
-              <div class="form-sub">Gestión de datos personales</div>
-          </div>
-      </div>
+        <!-- TÍTULO -->
+        <div class="title-block">
+            <div class="icon-box">
+                <span class="nav-icon">👥</span>
+            </div>
+            <div>
+                <div class="form-title">Ciudadanos</div>
+                <div class="form-sub">Gestión de datos personales</div>
+            </div>
+        </div>
 
-      <form id="form-persona">
+        <form id="form-persona">
 
-          <div class="section">
-              <h4>Datos Personales</h4>
+            <div class="section">
+                <h4>Datos Personales</h4>
 
-              <div class="field">
-                  <label>DNI *</label>
-                  <input required class="input" type="text" name="dni" placeholder="Ej: 12345678">
-              </div>
+                <input type="hidden" name="id_persona" id="id_persona">
 
-              <div class="field">
-                  <label>Nombres *</label>
-                  <input required class="input" type="text" name="nombres" placeholder="Ej: Juan">
-              </div>
+                <div class="field">
+                    <label>DNI *</label>
+                    <input required class="input" type="text" name="dni" maxlength="8" placeholder="Ej: 12345678">
+                </div>
 
-              <div class="row two-cols">
-                  <div class="field">
-                      <label>Apellido paterno *</label>
-                      <input required class="input" type="text" name="ape_paterno" placeholder="Ej: Tórrez">
-                  </div>
-                  <div class="field">
-                      <label>Apellido materno *</label>
-                      <input required class="input" type="text" name="ape_materno" placeholder="Ej: Mendoza">
-                  </div>
-              </div>
+                <div class="field">
+                    <label>Nombres *</label>
+                    <input required class="input" type="text" name="nombres" placeholder="Ej: Juan">
+                </div>
 
-              <div class="row two-cols">
-                  <div class="field">
-                      <label>Fecha de nacimiento</label>
-                      <input class="input" type="date" name="fecha_nacimiento">
-                  </div>
-                  <div class="field">
-                      <label>Teléfono</label>
-                      <input class="input" type="text" name="telefono" placeholder="Ej: 3001234567">
-                  </div>
-              </div>
+                <div class="row two-cols">
+                    <div class="field">
+                        <label>Apellido paterno *</label>
+                        <input required class="input" type="text" name="ape_paterno" placeholder="Ej: Tórrez">
+                    </div>
+                    <div class="field">
+                        <label>Apellido materno *</label>
+                        <input required class="input" type="text" name="ape_materno" placeholder="Ej: Mendoza">
+                    </div>
+                </div>
 
-              <div class="row two-cols">
-                  <div class="field">
-                      <label>Ubigeo</label>
-                      <input class="input" type="text" name="ubigeo" placeholder="Ej: 01002">
-                  </div>
-                  <div class="field">
-                      <label>Dirección</label>
-                      <input class="input" type="text" name="direccion" placeholder="Ej: Calle 123 #45-67">
-                  </div>
-              </div>
+                <div class="row two-cols">
+                    <div class="field">
+                        <label>Fecha de nacimiento</label>
+                        <input class="input" type="date" name="fecha_nacimiento">
+                    </div>
+                    <div class="field">
+                        <label>Teléfono</label>
+                        <input class="input" type="text" name="telefono" maxlength="9" placeholder="Ej: 3001234567">
+                    </div>
+                </div>
 
-              <div id="mensaje" class="notification is-hidden"></div>
-          </div>
+                <div class="row two-cols">
+                    <div class="field">
+                        <label>Ubigeo</label>
+                        <select class="input" name="estado_civil">
+                            <option value="SOLTERO(A)">SOLTERO(A)</option>
+                            <option value="CASADO(A)">CASADO(A)</option>
+                            <option value="VIUDO(A)">VIUDO(A)</option>
+                            <option value="DIVORCIADO(A)">DIVORCIADO(A)</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Ocupación</label>
+                        <input class="input" type="text" name="ocupacion" placeholder="Ej: ING. CIVIL">
+                    </div>
+                </div>
 
-          <!-- BOTONES -->
-          <div class="form-actions">
-              <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
-              <button type="button" class="button is-primary" id="btnGuardar">Guardar</button>
-              <button type="button" class="button is-success" id="btnEditar">Editar</button>
-          </div>
+                <div class="row two-cols">
+                    <div class="field">
+                        <label>Ubigeo</label>
+                        <input class="input" type="text" name="ubigeo" maxlength="5" placeholder="Ej: 01002">
+                    </div>
+                    <div class="field">
+                        <label>Dirección</label>
+                        <input class="input" type="text" name="direccion" placeholder="Ej: Calle 123 #45-67">
+                    </div>
+                </div>
 
-      </form>
-  </div>
+                <div id="mensaje" class="notification is-hidden"></div>
+            </div>
 
-  <!-- TABLA -->
-  <div class="card">
-      <form id="form-buscar" class="field has-addons mt-4">
-          <div class="control">
-              <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
-          </div>
-          <div class="control">
-              <input class="input" type="text" name="b_dni" placeholder="Buscar por DNI">
-          </div>
-          <div class="control">
-              <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
-          </div>
-      </form>
+            <!-- BOTONES -->
+            <div class="form-actions">
+                <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
+                <button type="button" class="button is-primary" id="btnGuardar">Guardar</button>
+                <button type="button" class="button is-success" id="btnEditar">Editar</button>
+            </div>
 
-      <table class="table is-striped is-hoverable mt-4" id="tabla-formulario">
-          <thead>
-              <tr>
-                  <th>ID</th>
-                  <th>DNI</th>
-                  <th>Nombres</th>
-                  <th>Apellido paterno</th>
-                  <th>Apellido materno</th>
-                  <th>Fecha de nacimiento</th>
-                  <th>Teléfono</th>
-                  <th>Dirección</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for persona in personas %}
-              <tr>
-                  <td>{{ persona.id_persona }}</td>
-                  <td>{{ persona.dni }}</td>
-                  <td>{{ persona.nombres }}</td>
-                  <td>{{ persona.ape_paterno }}</td>
-                  <td>{{ persona.ape_materno }}</td>
-                  <td>{{ persona.fecha_nacimiento }}</td>
-                  <td>{{ persona.telefono }}</td>
-                  <td>{{ persona.direccion }}</td>
-              </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-  </div>
+        </form>
+    </div>
+
+    <!-- TABLA -->
+    <div class="card">
+        <form id="form-buscar" class="field has-addons mt-4">
+            <div class="control">
+                <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
+            </div>
+            <div class="control">
+                <input class="input" type="text" name="b_dni" placeholder="Buscar por DNI">
+            </div>
+            <div class="control">
+                <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
+            </div>
+        </form>
+
+        <table class="table is-striped is-hoverable mt-4" id="tabla-formulario">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>DNI</th>
+                    <th>Nombres</th>
+                    <th>Apellido paterno</th>
+                    <th>Apellido materno</th>
+                    <th>Fecha de nacimiento</th>
+                    <th>Teléfono</th>
+                    <th>Dirección</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for persona in personas %}
+                <tr>
+                    <td>{{ persona.id_persona }}</td>
+                    <td>{{ persona.dni }}</td>
+                    <td>{{ persona.nombres }}</td>
+                    <td>{{ persona.ape_paterno }}</td>
+                    <td>{{ persona.ape_materno }}</td>
+                    <td>{{ persona.fecha_nacimiento or 'No registrada' }}</td>
+                    <td>{{ persona.telefono }}</td>
+                    <td>{{ persona.direccion }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 </section>
 {% endblock %}
