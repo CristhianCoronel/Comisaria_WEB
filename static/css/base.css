@@ -429,3 +429,66 @@ main {
         display: none;
     }
 }
+
+/****** NOTIFICACIONES ***********/
+
+/* Contenedor general de las notificaciones */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 9999;
+}
+
+/* Tarjeta de notificación */
+.toast {
+    min-width: 250px;
+    max-width: 320px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateX(50px);
+    animation: slideIn 0.4s ease forwards;
+}
+
+/* Colores según categoría */
+.toast.is-success { background: #48c774; }
+.toast.is-danger { background: #f14668; }
+.toast.is-warning { background: #ffdd57; color: #000; }
+.toast.is-info { background: #3298dc; }
+
+/* Animación de aparición */
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Oculta las notificaciones originales que genera el template */
+.notification {
+    display: none !important;
+}
+
+/* Desaparición */
+.toast.hide {
+    animation: fadeOut 0.4s ease forwards;
+}
+
+.error {
+    border: 2px solid red;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+}
+

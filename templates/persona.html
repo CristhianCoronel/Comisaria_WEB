@@ -29,22 +29,22 @@
 
                 <div class="field">
                     <label>DNI *</label>
-                    <input required class="input" type="text" name="dni" maxlength="8" placeholder="Ej: 12345678">
+                    <input required class="input validar" type="text" name="dni" maxlength="8" placeholder="Ej: 12345678" required>
                 </div>
 
                 <div class="field">
                     <label>Nombres *</label>
-                    <input required class="input" type="text" name="nombres" placeholder="Ej: Juan">
+                    <input required class="input validar" type="text" name="nombres" placeholder="Ej: Juan" required>
                 </div>
 
                 <div class="row two-cols">
                     <div class="field">
                         <label>Apellido paterno *</label>
-                        <input required class="input" type="text" name="ape_paterno" placeholder="Ej: Tórrez">
+                        <input required class="input validar" type="text" name="ape_paterno" placeholder="Ej: Tórrez" required>
                     </div>
                     <div class="field">
                         <label>Apellido materno *</label>
-                        <input required class="input" type="text" name="ape_materno" placeholder="Ej: Mendoza">
+                        <input required class="input validar" type="text" name="ape_materno" placeholder="Ej: Mendoza" required>
                     </div>
                 </div>
 
@@ -61,8 +61,8 @@
 
                 <div class="row two-cols">
                     <div class="field">
-                        <label>Ubigeo</label>
-                        <select class="input" name="estado_civil">
+                        <label>Estado Civil *</label>
+                        <select class="input validar" name="estado_civil" required>
                             <option value="SOLTERO(A)">SOLTERO(A)</option>
                             <option value="CASADO(A)">CASADO(A)</option>
                             <option value="VIUDO(A)">VIUDO(A)</option>
@@ -70,8 +70,8 @@
                         </select>
                     </div>
                     <div class="field">
-                        <label>Ocupación</label>
-                        <input class="input" type="text" name="ocupacion" placeholder="Ej: ING. CIVIL">
+                        <label>Ocupación *</label>
+                        <input class="input validar" type="text" name="ocupacion" placeholder="Ej: ING. CIVIL" required>
                     </div>
                 </div>
 

@@ -20,6 +20,8 @@ document.querySelectorAll("#tabla-formulario tbody tr").forEach(fila => {
                 form.ape_paterno.value = p.ape_paterno || "";
                 form.ape_materno.value = p.ape_materno || "";
                 form.telefono.value = p.telefono || "";
+                form.estado_civil.querySelected = p.estado_civil || "";
+                form.ocupacion.value = p.ocupacion || "";
                 form.direccion.value = p.direccion || "";
                 form.ubigeo.value = p.ubigeo || "";
 
@@ -47,22 +49,53 @@ document.getElementById("btnNuevo").addEventListener("click", () => {
     form.reset();
     form.id_persona.value = "";  // importante
 });
+// FUNCIÓN DE VALIDAR CAMPOS
+function validarCampos() {
+    const campos = document.querySelectorAll(".validar");
+    let valido = true;
+
+    campos.forEach(campo => {
+        if (campo.value.trim() === "") {
+            campo.classList.add("error");
+            valido = false;
+        } else {
+            campo.classList.remove("error");
+        }
+    });
+
+    return valido; // true = todo bien | false = falta algo
+}
 // REGISTRAR O ACTUALIZAR CIUDADANO
 document.getElementById("btnGuardar").addEventListener("click", () => {
     const form = document.getElementById("form-persona");
 
     const id = form.id_persona.value.trim();
+    if (validarCampos()) {
+        // Si tiene ID → actualizar
+        if (id !== "") {
+            form.action = "/ciudadano/actualizar";
+        } 
+        // Si NO tiene ID → registrar
+        else {
+            form.action = "/ciudadano/registrar";
+        }
 
-    // Si tiene ID → actualizar
-    if (id !== "") {
-        form.action = "/ciudadano/actualizar";
-    } 
-    // Si NO tiene ID → registrar
-    else {
-        form.action = "/ciudadano/registrar";
+        form.method = "POST";
+        form.submit();
+    } else {
+        alert("Completa todos los campos obligatorios.");
     }
-
-    form.method = "POST";
-    form.submit();
 });
+// BUSCAR PERSONA POR NOMBRE Y DNI
+document.getElementById("btnBuscar").addEventListener("click", () => {
+    const form = document.getElementById("form-buscar");
 
+    const nombre = form.b_nombre.value.trim();
+    const dni = form.b_dni.value.trim();
+
+    // Construir URL (si está vacío, enviar _ para evitar que falle la ruta)
+    const url = `/ciudadano/buscar/${dni || "_"}\/${nombre || "_"}`;
+
+    // Redirigir
+    window.location.href = url;
+});
