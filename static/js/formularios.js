@@ -3,7 +3,7 @@
 // ===========================
 
 // ---- Obtener elementos ----
-const inputs = document.querySelectorAll('form input');
+const inputs = document.querySelectorAll('form input.input');
 const selects = document.querySelectorAll('form select');
 const textsA = document.querySelectorAll('form textarea');
 const btnNuevo = document.getElementById('btnNuevo');
@@ -24,6 +24,11 @@ function deshabilitarCampos() {
     inputs.forEach(i => i.disabled = true);
     selects.forEach(i => i.disabled = true);
     textsA.forEach(i => i.disabled = true);
+    
+    const campos = document.querySelectorAll(".validar");
+    campos.forEach(campo => {
+        campo.classList.remove("error");
+    });
 }
 
 function habilitarCampos() {
@@ -89,6 +94,7 @@ btnNuevo.addEventListener("click", () => {
 
         btnGuardar.disabled = false;
         btnEditar.disabled = true;
+        btnEditar.textContent = "Editar";
 
         deshabilitarTabla();
     }
@@ -133,7 +139,7 @@ btnEditar.addEventListener("click", () => {
         deshabilitarCampos();
 
         btnGuardar.disabled = true;
-        btnEditar.disabled = true;
+        btnEditar.disabled = false;
 
         habilitarTabla();
     }
@@ -145,21 +151,19 @@ btnEditar.addEventListener("click", () => {
 //  BOTÓN GUARDAR
 // ===========================
 
-btnGuardar.addEventListener("click", () => {
-    // Aquí NO guardamos datos (eso va en persona.js o comisaria.js)
-    // Solo manejamos estado visual
+// btnGuardar.addEventListener("click", () => {
 
-    modo = "ninguno";
+//     modo = "ninguno";
 
-    deshabilitarCampos();
-    limpiarCampos();
-    habilitarTabla();
+//     deshabilitarCampos();
+//     limpiarCampos();
+//     habilitarTabla();
 
-    btnGuardar.disabled = true;
-    btnEditar.disabled = true;
+//     btnGuardar.disabled = true;
+//     btnEditar.disabled = true;
 
-    restaurarBotones();
-});
+//     restaurarBotones();
+// });
 
 
 

@@ -7,107 +7,107 @@
 {% block content %}
 <section>
 
-  <!-- ====== FORMULARIO ====== -->
-  <div class="card">
+    <!-- ====== FORMULARIO ====== -->
+    <div class="card">
 
-      <!-- TÍTULO -->
-      <div class="title-block">
-          <div class="icon-box">
-              <i class="fas fa-building-shield"></i>
-          </div>
-          <div>
-              <div class="form-title">Comisarías</div>
-              <div class="form-sub">Gestión y registro de comisarías</div>
-          </div>
-      </div>
+        <!-- TÍTULO -->
+        <div class="title-block">
+            <div class="icon-box">
+                <span class="nav-icon">🌟</span>
+            </div>
+            <div>
+                <div class="form-title">Comisarías</div>
+                <div class="form-sub">Gestión y registro de comisarías</div>
+            </div>
+        </div>
 
-      <form id="form-comisaria">
-          <input type="hidden" name="id_comisaria" id="id_comisaria" value="{{ comisaria.id_comisaria if comisaria else '' }}">
+        <form id="form-comisaria">
 
-          <div class="section">
-              <h4>Datos de la Comisaría</h4>
-              <input type="hidden" name="id_comisaria" id="input-id_comisaria">
+            <div class="section">
+                <h4>Datos de la Comisaría</h4>
+                <input type="hidden" name="id_comisaria" id="id_comisaria">
 
-              <div class="row two-cols">
-                  <div class="field">
-                      <label>Nombre *</label>
-                      <input required class="input" type="text" name="nombre" placeholder="Ej: Comisaría Central">
-                  </div>
-                  <div class="field">
-                      <label>Teléfono</label>
-                      <input class="input" type="text" name="telefono" placeholder="Ej: 054-123456">
-                  </div>
-              </div>
+                <div class="row two-cols">
+                    <div class="field">
+                        <label>Nombre *</label>
+                        <input required class="input validar" type="text" name="nombre" placeholder="Ej: Comisaría Central">
+                    </div>
+                    <div class="field">
+                        <label>Teléfono *</label>
+                        <input class="input validar" type="text" name="telefono" placeholder="Ej: 054-123456">
+                    </div>
+                </div>
 
-              <div class="row two-cols">
-                  <div class="field">
-                      <label>Dirección</label>
-                      <input class="input" type="text" name="direccion" placeholder="Ej: Av. Principal 123">
-                  </div>
-                  <div class="field">
-                      <label>Ubigeo</label>
-                      <input class="input" type="text" name="ubigeo" id="txt_ubigeo" placeholder="Ej: 150101">
-                  </div>
-              </div>
+                <div class="row two-cols">
+                    <div class="field">
+                        <label>Dirección *</label>
+                        <input class="input validar" type="text" name="direccion" placeholder="Ej: Av. Principal 123">
+                    </div>
+                    <div class="field">
+                        <label>Ubigeo *</label>
+                        <input class="input validar" type="text" name="ubigeo" placeholder="Ej: 150101">
+                    </div>
+                </div>
 
-              <div id="mensaje" class="notification is-hidden"></div>
-          </div>
+                <div id="mensaje" class="notification is-hidden"></div>
+            </div>
 
-          <!-- BOTONES -->
-          <div class="form-actions">
-              <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
-              <button type="button" class="button is-primary" id="btnGuardar">Guardar</button>
-              <button type="button" class="button is-success" id="btnEditar">Editar</button>
-          </div>
+            <!-- BOTONES -->
+            <div class="form-actions">
+                <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
+                <button type="button" class="button is-primary" id="btnGuardar">Guardar</button>
+                <button type="button" class="button is-success" id="btnEditar">Editar</button>
+            </div>
 
-      </form>
-  </div>
+        </form>
+    </div>
 
-  <!-- ====== TABLA ====== -->
-  <div class="card">
+    <!-- ====== TABLA ====== -->
+    <div class="card">
 
-      <!-- Buscador -->
-      <form id="form-buscar" class="field has-addons mt-4">
-          <div class="control">
-              <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
-          </div>
-          <div class="control">
-              <input class="input" type="text" name="b_ubigeo" placeholder="Buscar por ubigeo">
-          </div>
-          <div class="control">
-              <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
-          </div>
-      </form>
+        <!-- Buscador -->
+        <form id="form-buscar" class="field has-addons mt-4">
+            <div class="control">
+                <input class="input-busqueda" type="text" name="b_nombre" placeholder="Buscar por nombre">
+            </div>
+            <div class="control">
+                <input class="input-busqueda" type="number" name="b_ubigeo" pattern="[0-9]+" maxlength="5" placeholder="Buscar por ubigeo">
+            </div>
+            <div class="control">
+                <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
+            </div>
+        </form>
 
-      <!-- Tabla -->
-      <table class="table is-striped is-hoverable mt-4" id="tabla-formulario">
-          <thead>
-              <tr>
-                  <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Dirección</th>
-                  <th>Teléfono</th>
-                  <th>Ubigeo</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for com in comisarias %}
-              <tr class="clickable-row" data-id="{{ com.id_comisaria }}">
-                  <td>{{ com.id_comisaria }}</td>
-                  <td>{{ com.nombre }}</td>
-                  <td>{{ com.direccion }}</td>
-                  <td>{{ com.telefono }}</td>
-                  <td>{{ com.ubigeo }}</td>
-              </tr>
-              {% endfor %}
-          </tbody>
-      </table>
+        <!-- Tabla -->
+        <table class="table is-striped is-hoverable mt-4" id="tabla-formulario">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                    <th>Ubigeo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for com in comisarias %}
+                <tr class="clickable-row" data-id="{{ com.id_comisaria }}">
+                    <td>{{ com.id_comisaria }}</td>
+                    <td>{{ com.nombre }}</td>
+                    <td>{{ com.direccion }}</td>
+                    <td>{{ com.telefono }}</td>
+                    <td>{{ com.ubigeo }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-  </div>
+    </div>
 
 </section>
 {% endblock %}
 
 {% block js %}
-<script type="module" src="{{ url_for('static', filename='js/formularios.js') }}"></script>
+<script src="{{ url_for('static', filename='js/formularios.js') }}"></script>
+<script src="{{ url_for('static', filename='js/comisaria.js') }}"></script>
 {% endblock %}

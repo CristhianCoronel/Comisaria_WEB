@@ -103,10 +103,10 @@
     <div class="card">
         <form id="form-buscar" class="field has-addons mt-4">
             <div class="control">
-                <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
+                <input class="input-busqueda" type="text" name="b_nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" placeholder="Buscar por nombre">
             </div>
             <div class="control">
-                <input class="input" type="text" name="b_dni" placeholder="Buscar por DNI">
+                <input class="input-busqueda" type="number" name="b_dni" pattern="[0-9]+" placeholder="Buscar por DNI">
             </div>
             <div class="control">
                 <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
@@ -147,6 +147,7 @@
 {% endblock %}
 
 {% block js %}
-<script type="module" src="{{ url_for('static', filename='js/formularios.js') }}"></script>
+<!--type module--> 
+<script src="{{ url_for('static', filename='js/formularios.js') }}"></script>
 <script src="{{ url_for('static', filename='js/persona.js') }}"></script>
 {% endblock %}

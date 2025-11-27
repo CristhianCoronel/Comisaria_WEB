@@ -20,7 +20,7 @@ document.querySelectorAll("#tabla-formulario tbody tr").forEach(fila => {
                 form.ape_paterno.value = p.ape_paterno || "";
                 form.ape_materno.value = p.ape_materno || "";
                 form.telefono.value = p.telefono || "";
-                form.estado_civil.querySelected = p.estado_civil || "";
+                form.estado_civil.value = p.estado_civil || "";
                 form.ocupacion.value = p.ocupacion || "";
                 form.direccion.value = p.direccion || "";
                 form.ubigeo.value = p.ubigeo || "";
@@ -43,17 +43,19 @@ document.querySelectorAll("#tabla-formulario tbody tr").forEach(fila => {
 
     });
 });
+
 // ELIMINAR VALOR DEL ID PARA REGISTRAR
 document.getElementById("btnNuevo").addEventListener("click", () => {
     const form = document.getElementById("form-persona");
     form.reset();
     form.id_persona.value = "";  // importante
 });
+
 // FUNCIÓN DE VALIDAR CAMPOS
 function validarCampos() {
     const campos = document.querySelectorAll(".validar");
     let valido = true;
-
+    
     campos.forEach(campo => {
         if (campo.value.trim() === "") {
             campo.classList.add("error");
@@ -65,27 +67,41 @@ function validarCampos() {
 
     return valido; // true = todo bien | false = falta algo
 }
-// REGISTRAR O ACTUALIZAR CIUDADANO
-document.getElementById("btnGuardar").addEventListener("click", () => {
-    const form = document.getElementById("form-persona");
 
+// REGISTRAR O ACTUALIZAR CIUDADANO
+document.getElementById("btnGuardar").addEventListener("click", (e) => {
+    e.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+    const form = document.getElementById("form-persona");
     const id = form.id_persona.value.trim();
+
     if (validarCampos()) {
-        // Si tiene ID → actualizar
+        // Definir la acción según si es actualizar o registrar
         if (id !== "") {
             form.action = "/ciudadano/actualizar";
-        } 
-        // Si NO tiene ID → registrar
-        else {
+        } else {
             form.action = "/ciudadano/registrar";
         }
 
         form.method = "POST";
         form.submit();
+
+        modo = "ninguno";
+
+        deshabilitarCampos();
+        limpiarCampos();
+        habilitarTabla();
+
+        btnGuardar.disabled = true;
+        btnEditar.disabled = true;
+
+        restaurarBotones();
+
     } else {
         alert("Completa todos los campos obligatorios.");
     }
 });
+
 // BUSCAR PERSONA POR NOMBRE Y DNI
 document.getElementById("btnBuscar").addEventListener("click", () => {
     const form = document.getElementById("form-buscar");
@@ -94,7 +110,7 @@ document.getElementById("btnBuscar").addEventListener("click", () => {
     const dni = form.b_dni.value.trim();
 
     // Construir URL (si está vacío, enviar _ para evitar que falle la ruta)
-    const url = `/ciudadano/buscar/${dni || "_"}\/${nombre || "_"}`;
+    const url = `/ciudadano/buscar/${nombre || "_"}\/${dni || "_"}`;
 
     // Redirigir
     window.location.href = url;

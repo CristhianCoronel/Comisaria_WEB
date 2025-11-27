@@ -117,10 +117,10 @@ def guardar_persona():
             flash("Persona registrada correctamente.", "success")
             return redirect("/ciudadanos")
         flash("Error al registrar.", "danger")
-        return redirect("/ciudadanos")
+        return flash("Error al registrar.", "danger")
     except Exception as e:
         flash(f"Error al registrar persona: {str(e)}", "danger")
-        return redirect("/ciudadanos")
+        return flash(f"Error al registrar persona: {str(e)}", "danger")
     
 
 @app.route("/ciudadano/actualizar", methods=["POST"])
@@ -129,10 +129,6 @@ def actualizar_persona():
     try:
         id_persona = request.form["id_persona"]
         dni = request.form["dni"]
-        if controlador_persona.duplicado_dni(dni):
-            flash("DNI Duplicado. No es posible el registro", "success")
-            return redirect("/ciudadanos")
-        
         nombres = request.form["nombres"]
         ape_paterno = request.form["ape_paterno"]
         ape_materno = request.form["ape_materno"]
@@ -157,9 +153,10 @@ def actualizar_persona():
         flash(f"Error al actualizar persona: {str(e)}", "danger")
         return redirect("/ciudadanos")
 
-@app.route("/ciudadano/buscar/<string:dni>/<string:nombre>", methods=["GET"])
+
+@app.route("/ciudadano/buscar/<string:nombre>/<string:dni>", methods=["GET"])
 @login_required
-def buscar_persona(dni,nombre):
+def buscar_persona(nombre,dni):
     try:
         if (nombre == "_" and dni == "_"):
             return redirect('/ciudadanos')
@@ -174,7 +171,6 @@ def buscar_persona(dni,nombre):
 @app.route('/persona/<int:id_persona>/json', methods=['GET'])
 @login_required
 def persona_por_id_json(id_persona):
-    """Devuelve los datos de una persona en formato JSON dado su id."""
     try:
         persona = controlador_persona.obtener_persona_por_id(id_persona)
         if not persona:
@@ -198,7 +194,8 @@ def persona_por_id_json(id_persona):
                 "telefono": persona.telefono,
                 "direccion": persona.direccion,
                 "ubigeo": persona.ubigeo
-            }
+            },
+            "message": "Persona encontrada"
         })
         return Response(json.dumps(data, ensure_ascii=False), mimetype='application/json; charset=utf-8')
     except Exception as e:

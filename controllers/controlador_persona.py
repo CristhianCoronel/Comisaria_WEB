@@ -16,30 +16,40 @@ def obtener_persona_por_dni(dni_persona):
         return None
 
 def insertar_persona(dni, nombres, ape_paterno, ape_materno, estado_civil, ocupacion, fecha_nacimiento=None, telefono=None, direccion=None, ubigeo=None):
-    nueva = Persona(dni=dni, nombres=nombres, ape_paterno=ape_paterno, ape_materno=ape_materno, estado_civil=estado_civil, ocupacion=ocupacion,
-                    fecha_nacimiento=fecha_nacimiento, telefono=telefono, direccion=direccion, ubigeo=ubigeo)
-    if nueva:
-        bd.session.add(nueva)
-        bd.session.commit()
-        return True
-    return False
+    try:
+        nueva = Persona(dni=dni, nombres=nombres, ape_paterno=ape_paterno, ape_materno=ape_materno, estado_civil=estado_civil, ocupacion=ocupacion,
+                        fecha_nacimiento=fecha_nacimiento, telefono=telefono, direccion=direccion, ubigeo=ubigeo)
+        if nueva:
+            bd.session.add(nueva)
+            bd.session.commit()
+            return True
+        return False
+    except Exception as e:
+        bd.session.rollback()
+        print("Error:", e)
+        return False
 
 def actualizar_persona(id_persona, dni, nombres, ape_paterno, ape_materno, estado_civil, ocupacion, fecha_nacimiento=None, telefono=None, direccion=None, ubigeo=None):
-    persona = Persona.query.get(id_persona)
-    if persona:
-        persona.dni = dni
-        persona.nombres = nombres
-        persona.ape_paterno = ape_paterno
-        persona.ape_materno = ape_materno
-        persona.estado_civil = estado_civil
-        persona.ocupacion = ocupacion
-        persona.fecha_nacimiento = fecha_nacimiento
-        persona.telefono = telefono
-        persona.direccion = direccion
-        persona.ubigeo = ubigeo
-        bd.session.commit()
-        return True
-    return False
+    try:
+        persona = Persona.query.get(id_persona)
+        if persona:
+            persona.dni = dni
+            persona.nombres = nombres
+            persona.ape_paterno = ape_paterno
+            persona.ape_materno = ape_materno
+            persona.estado_civil = estado_civil
+            persona.ocupacion = ocupacion
+            persona.fecha_nacimiento = fecha_nacimiento
+            persona.telefono = telefono
+            persona.direccion = direccion
+            persona.ubigeo = ubigeo
+            bd.session.commit()
+            return True
+        return False
+    except Exception as e:
+        bd.session.rollback()
+        print("Error:", e)
+        return False
 
 def eliminar_persona(id_persona):
     persona = Persona.query.get(id_persona)
