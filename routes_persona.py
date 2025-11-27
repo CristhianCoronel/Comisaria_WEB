@@ -193,7 +193,9 @@ def persona_por_id_json(id_persona):
                 "fecha_nacimiento": fecha_nac,
                 "telefono": persona.telefono,
                 "direccion": persona.direccion,
-                "ubigeo": persona.ubigeo
+                "ubigeo": persona.ubigeo,
+                "ocupacion" : persona.ocupacion,
+                "estado_civil" :persona.estado_civil
             },
             "message": "Persona encontrada"
         })

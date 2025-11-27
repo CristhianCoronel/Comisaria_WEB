@@ -7,178 +7,176 @@
 {% block content %}
 <section>
 
-  <!-- =================== FORMULARIO (misma estructura que CIUDADANÍA) =================== -->
-  <div class="card">
+<!-- =================== FORMULARIO (misma estructura que CIUDADANÍA) =================== -->
+<div class="card">
 
-      <!-- TÍTULO (igual al de CIUDADANÍA) -->
-      <div class="title-block">
-          <div class="icon-box">
-              <span class="nav-icon">👮</span>
-          </div>
-          <div>
-              <div class="form-title">Personal</div>
-              <div class="form-sub">Gestión del personal policial y administrativo</div>
-          </div>
-      </div>
+    <!-- TÍTULO (igual al de CIUDADANÍA) -->
+    <div class="title-block">
+        <div class="icon-box">
+            <span class="nav-icon">👮</span>
+        </div>
+        <div>
+            <div class="form-title">Personal</div>
+            <div class="form-sub">Gestión del personal policial y administrativo</div>
+        </div>
+    </div>
 
-      <form id="form-usuario">
+    <form id="form-usuario">
 
-          <div class="section">
-              <h4>Datos del Personal</h4>
+        <div class="section">
+            <h4>Datos del Personal</h4>
 
-              <!-- DNI y Código Usuario -->
-              <div class="row two-cols">
-                  <div class="field">
-                      <label>DNI *</label>
-                      <input required class="input" type="text" name="dni" placeholder="Ej: 12345678">
-                  </div>
+            <!-- DNI y Código Usuario -->
+            <div class="row two-cols">
+                <div class="field">
+                    <label>DNI *</label>
+                    <input required class="input validar" type="text" name="dni" placeholder="Ej: 12345678">
+                </div>
 
-                  <div class="field">
-                      <label>Código Usuario</label>
-                      <input class="input" type="text" name="codigo_usuario" placeholder="Ej: U1234">
-                  </div>
-              </div>
+                <div class="field">
+                </div>
+            </div>
 
-              <!-- Nombres y Apellidos -->
-              <div class="row two-cols">
+            <!-- Nombres y Apellidos -->
+            <div class="row two-cols">
                 <div class="row two-cols">
-                  <div class="field">
-                      <label>Apellido paterno *</label>
-                      <input required class="input" type="text" name="ape_paterno" placeholder="Ej: Pérez">
-                  </div>
-                  <div class="field">
-                      <label>Apellido materno *</label>
-                      <input required class="input" type="text" name="ape_materno" placeholder="Ej: García">
-                  </div>
+                <div class="field">
+                    <label>Apellido paterno *</label>
+                    <input required class="input validar" type="text" name="ape_paterno" placeholder="Ej: Pérez">
+                </div>
+                <div class="field">
+                    <label>Apellido materno *</label>
+                    <input required class="input validar" type="text" name="ape_materno" placeholder="Ej: García">
+                </div>
                 </div>
                 <div class="row two-cols">
-                  <div class="field">
-                      <label>Nombres *</label>
-                      <input required class="input" type="text" name="nombres" placeholder="Ej: Juan">
-                  </div>
+                <div class="field">
+                    <label>Nombres *</label>
+                    <input required class="input validar" type="text" name="nombres" placeholder="Ej: Juan">
                 </div>
-              </div>
+                </div>
+            </div>
 
-              <!-- Selects -->
-              <div class="row two-cols">
+            <!-- Selects -->
+            <div class="row two-cols">
                 <div class="row two-cols">
-                  <div class="field">
-                      <label>Comisaría</label>
-                      <select class="input" name="id_comisaria">
-                          <option value="">Seleccione...</option>
-                          {% for c in comisarias %}
-                          <option value="{{ c.id_comisaria }}">{{ c.nombre }}</option>
-                          {% endfor %}
-                      </select>
-                  </div>
+                <div class="field">
+                    <label>Comisaría *</label>
+                    <select class="input validar" name="id_comisaria">
+                        <option value="">Seleccione...</option>
+                        {% for c in comisarias %}
+                        <option value="{{ c.id_comisaria }}">{{ c.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
                 </div>
                 <div class="row two-cols">
-                  <div class="field">
-                      <label>Tipo Usuario</label>
-                      <select class="input" name="tipo_usuario">
-                          <option value="">Seleccione...</option>
-                          <option value="A">Administrador</option>
-                          <option value="O">Operador</option>
-                      </select>
-                  </div>
-
-                  <div class="field">
-                      <label>Estado</label>
-                      <select class="input" name="estado">
-                          <option value="A">Activo</option>
-                          <option value="I">Inactivo</option>
-                      </select>
-                  </div>
+                <div class="field">
+                    <label>Tipo Usuario *</label>
+                    <select class="input validar" name="tipo_usuario">
+                        <option value="">Seleccione...</option>
+                        <option value="A">Administrador</option>
+                        <option value="O">Operador</option>
+                    </select>
                 </div>
-              </div>
 
-              <!-- Rol y Estado -->
-              <div class="row two-cols">
-                  <div class="field">
-                      <label>Rango</label>
-                      <select class="input" name="id_rango">
-                          <option value="">Seleccione...</option>
-                          {% for r in rangos %}
-                          <option value="{{ r.id_rango }}">{{ r.nombre }}</option>
-                          {% endfor %}
-                      </select>
-                  </div>
+                <div class="field">
+                    <label>Estado</label>
+                    <select class="input validar" name="estado">
+                        <option value="A">Activo</option>
+                        <option value="I">Inactivo</option>
+                    </select>
+                </div>
+                </div>
+            </div>
 
-                  <div class="field">
-                      <label>Rol</label>
-                      <select class="input" name="id_rol">
-                          <option value="">Seleccione...</option>
-                          {% for rol in roles %}
-                          <option value="{{ rol.id_rol }}">{{ rol.nombre }}</option>
-                          {% endfor %}
-                      </select>
-                  </div>
-              </div>
+            <!-- Rol y Estado -->
+            <div class="row two-cols">
+                <div class="field">
+                    <label>Rango *</label>
+                    <select class="input validar" name="id_rango">
+                        <option value="">Seleccione...</option>
+                        {% for r in rangos %}
+                        <option value="{{ r.id_rango }}">{{ r.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-              <div id="mensaje" class="notification is-hidden"></div>
-          </div>
+                <div class="field">
+                    <label>Rol *</label>
+                    <select class="input validar" name="id_rol">
+                        <option value="">Seleccione...</option>
+                        {% for rol in roles %}
+                        <option value="{{ rol.id_rol }}">{{ rol.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
 
-          <!-- BOTONES (idénticos a Ciudadanía) -->
-          <div class="form-actions">
-              <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
-              <button type="button" class="button is-primary" id="btnGuardar">Guardar</button>
-              <button type="button" class="button is-success" id="btnEditar">Editar</button>
-          </div>
+            <div id="mensaje" class="notification is-hidden"></div>
+        </div>
 
-      </form>
-  </div>
+        <!-- BOTONES (idénticos a Ciudadanía) -->
+        <div class="form-actions">
+            <button type="button" class="button is-secondary" id="btnNuevo">Nuevo</button>
+            <button type="button" class="button is-primary" id="btnGuardar">Guardar</button>
+            <button type="button" class="button is-success" id="btnEditar">Editar</button>
+        </div>
 
-  <!-- =================== LISTADO (idéntico formato a Ciudadanía) =================== -->
-  <div class="card">
+    </form>
+</div>
 
-      <!-- Buscador -->
-      <form id="form-buscar" class="field has-addons mt-4">
-          <div class="control">
-              <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
-          </div>
-          <div class="control">
-              <input class="input" type="text" name="b_dni" placeholder="Buscar por DNI">
-          </div>
-          <div class="control">
-              <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
-          </div>
-      </form>
+<!-- =================== LISTADO (idéntico formato a Ciudadanía) =================== -->
+<div class="card">
 
-      <!-- Tabla -->
-      <table class="table is-striped is-hoverable mt-4" id="tabla-formulario">
-          <thead>
-              <tr>
-                  <th>ID</th>
-                  <th>DNI</th>
-                  <th>Nombres</th>
-                  <th>Paterno</th>
-                  <th>Materno</th>
-                  <th>Tipo</th>
-                  <th>Comisaría</th>
-                  <th>Rango</th>
-                  <th>Rol</th>
-                  <th>Estado</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for usuario in usuarios %}
-              <tr class="clickable-row" data-id="{{ usuario.id_usuario }}">
-                  <td>{{ usuario.id_usuario }}</td>
-                  <td>{{ usuario.dni }}</td>
-                  <td>{{ usuario.nombres }}</td>
-                  <td>{{ usuario.ape_paterno }}</td>
-                  <td>{{ usuario.ape_materno }}</td>
-                  <td>{{ 'Administrador' if usuario.tipo_usuario == 'A' else 'Operador' }}</td>
-                  <td>{{ usuario.comisaria.nombre if usuario.comisaria }}</td>
-                  <td>{{ usuario.rango.nombre if usuario.rango }}</td>
-                  <td>{{ usuario.rol.nombre if usuario.rol }}</td>
-                  <td>{{ 'Activo' if usuario.estado == 'A' else 'Inactivo' }}</td>
-              </tr>
-              {% endfor %}
-          </tbody>
-      </table>
+    <!-- Buscador -->
+    <form id="form-buscar" class="field has-addons mt-4">
+        <div class="control">
+            <input class="input" type="text" name="b_nombre" placeholder="Buscar por nombre">
+        </div>
+        <div class="control">
+            <input class="input" type="text" name="b_dni" placeholder="Buscar por DNI">
+        </div>
+        <div class="control">
+            <button type="button" class="button is-link" id="btnBuscar">Buscar</button>
+        </div>
+    </form>
 
-  </div>
+    <!-- Tabla -->
+    <table class="table is-striped is-hoverable mt-4" id="tabla-formulario">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>DNI</th>
+                <th>Nombres</th>
+                <th>Paterno</th>
+                <th>Materno</th>
+                <th>Tipo</th>
+                <th>Comisaría</th>
+                <th>Rango</th>
+                <th>Rol</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr class="clickable-row" data-id="{{ usuario.id_usuario }}">
+                <td>{{ usuario.id_usuario }}</td>
+                <td>{{ usuario.dni }}</td>
+                <td>{{ usuario.nombres }}</td>
+                <td>{{ usuario.ape_paterno }}</td>
+                <td>{{ usuario.ape_materno }}</td>
+                <td>{{ 'Administrador' if usuario.tipo_usuario == 'A' else 'Operador' }}</td>
+                <td>{{ usuario.comisaria.nombre if usuario.comisaria }}</td>
+                <td>{{ usuario.rango.nombre if usuario.rango }}</td>
+                <td>{{ usuario.rol.nombre if usuario.rol }}</td>
+                <td>{{ 'Activo' if usuario.estado == 'A' else 'Inactivo' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
 
 </section>
 {% endblock %}
