@@ -9,6 +9,10 @@ from models.Usuario import Usuario
 from main import FACILIZA_TOKEN, FACILIZA_URL
 import requests
 
+from flask_bcrypt import Bcrypt
+
+bcrypt = Bcrypt()
+
 @app.route('/perfil')
 @login_required
 def perfil():
@@ -19,76 +23,11 @@ def perfil():
     return render_template('perfil.html', usuario=usuario)
 
 
-
-
 @app.route('/ciudadanos')
 @login_required
 def persona():
     personas = controlador_persona.obtener_personas()
     return render_template('persona.html', personas=personas)
-
-# @app.route('/api/personas', methods=['POST'])
-# @login_required
-# def api_guardar_persona():
-#     try:
-#         data = request.get_json()
-
-#         dni = data.get("dni")
-#         nombres = data.get("nombres")
-#         ape_paterno = data.get("ape_paterno")
-#         ape_materno = data.get("ape_materno")
-#         fecha_nacimiento = data.get("fecha_nacimiento")
-#         telefono = data.get("telefono")
-#         direccion = data.get("direccion")
-#         ubigeo = data.get("ubigeo")
-
-#         # --- Validaciones ---
-#         if not dni or not nombres or not ape_paterno:
-#             return jsonify({
-#                 "status": 0,
-#                 "data": None,
-#                 "message": "Faltan campos obligatorios."
-#             }), 400
-
-#         # --- Insertar la nueva persona ---
-#         controlador_persona.insertar_persona(
-#             dni, nombres, ape_paterno, ape_materno, fecha_nacimiento, telefono, direccion, ubigeo
-#         )
-
-#         persona = controlador_persona.obtener_ultima_persona()
-
-#         if not persona:
-#             return jsonify({
-#                 "status": 0,
-#                 "data": None,
-#                 "message": "No se pudo obtener la persona recién registrada."
-#             }), 404
-
-#         persona_json = {
-#             "id_persona": persona.id_persona,
-#             "dni": persona.dni,
-#             "nombres": persona.nombres,
-#             "ape_paterno": persona.ape_paterno,
-#             "ape_materno": persona.ape_materno,
-#             "fecha_nacimiento": persona.fecha_nacimiento.strftime("%Y-%m-%d") if persona.fecha_nacimiento else None,
-#             "telefono": persona.telefono,
-#             "direccion": persona.direccion,
-#             "ubigeo": persona.ubigeo
-#         }
-
-#         return jsonify({
-#             "status": 1,
-#             "data": persona_json,
-#             "message": "Persona registrada correctamente."
-#         }), 201
-
-#     except Exception as e:
-#         print("Error en /api/personas:", e)
-#         return jsonify({
-#             "status": 0,
-#             "data": None,
-#             "message": f"Error interno del servidor: {str(e)}"
-#         }), 500
 
 
 @app.route('/ciudadano/registrar', methods=["POST"])
@@ -117,10 +56,10 @@ def guardar_persona():
             flash("Persona registrada correctamente.", "success")
             return redirect("/ciudadanos")
         flash("Error al registrar.", "danger")
-        return flash("Error al registrar.", "danger")
+        return redirect("/ciudadanos")
     except Exception as e:
         flash(f"Error al registrar persona: {str(e)}", "danger")
-        return flash(f"Error al registrar persona: {str(e)}", "danger")
+        return redirect("/ciudadanos")
     
 
 @app.route("/ciudadano/actualizar", methods=["POST"])
@@ -302,39 +241,121 @@ def usuario():
     comisarias = controlador_comisaria.obtener_comisarias()    
     return render_template("personal.html", usuarios=usuarios, roles=roles, rangos=rangos, comisarias=comisarias)
 
-@app.route("/guardar_personal", methods=["POST"])
+@app.route("/personal/registrar", methods=["POST"])
 @login_required
 def guardar_usuario():
-    codigo_usuario = request.form["codigo_usuario"]
-    id_oficial = request.form["id_oficial"]
-    id_rol = request.form["id_rol"]
-    id_rango = request.form["id_rango"]
-    id_comisaria = request.form["id_comisaria"]
-    contraseña = request.form["contraseña"]
+    try:
+        dni = request.form["dni"]
+        if controlador_usuario.duplicado_dni(dni):
+            flash("DNI Duplicado. No es posible el registro", "success")
+            return redirect("/personal")
+        
+        codigo_usuario = request.form["codigo_usuario"]
+        dni = request.form["dni"]
+        nombres = request.form["nombres"]
+        ape_paterno = request.form["ape_paterno"]
+        ape_materno = request.form["ape_materno"]
+        estado = request.form["estado"]
+        id_rol = request.form["id_rol"]
+        id_rango = request.form["id_rango"]
+        id_comisaria = request.form["id_comisaria"]
+        tipo_usuario = request.form["tipo_usuario"]
 
-    controlador_usuario.insertar_usuario(codigo_usuario, id_oficial, id_rol, id_rango, id_comisaria, contraseña)
-    return redirect("/personal")
+        if controlador_usuario.insertar_usuario(
+            dni, nombres, ape_paterno, ape_materno, codigo_usuario, 
+            estado, id_comisaria, id_rango, id_rol, tipo_usuario):
+            flash("Personal registrado correctamente.", "success")
+            return redirect("/personal")
+        flash("Error al registrar.", "danger")
+        return redirect("/personal")
+    except Exception as e:
+        flash(f"Error al registrar personal: {str(e)}", "danger")
+        return redirect("/personal")
 
-@app.route("/editar_personal/<int:id>")
+@app.route("/personal/actualizar", methods=["POST"])
 @login_required
-def formulario_editar_usaurio(id):
-    persona = controlador_persona.obtener_persona_por_id(id)
-    return render_template("editar_persona.html", persona=persona)
+def actualizar_usuario():
+    try:
+        id_usuario = request.form["id_usuario"]
+        codigo_usuario = request.form["codigo_usuario"]
+        dni = request.form["dni"]
+        nombres = request.form["nombres"]
+        ape_paterno = request.form["ape_paterno"]
+        ape_materno = request.form["ape_materno"]
+        estado = request.form["estado"]
+        id_rol = request.form["id_rol"]
+        id_rango = request.form["id_rango"]
+        id_comisaria = request.form["id_comisaria"]
+        tipo_usuario = request.form["tipo_usuario"]
+        new_codigo = bcrypt.generate_password_hash(codigo_usuario).decode('utf-8')
+        
+        if controlador_usuario.modificar_usuario(id_usuario,
+            dni, nombres, ape_paterno, ape_materno, new_codigo, 
+            estado, id_comisaria, id_rango, id_rol, tipo_usuario):
+            flash("Personal actualizado correctamente.", "success")
+            return redirect("/personal")
+        flash("Error al actualizar.", "danger")
+        return redirect("/personal")
+    except Exception as e:
+        flash(f"Error al actualizar personal: {str(e)}", "danger")
+        return redirect("/personal")
 
-
-@app.route("/actualizar_personal", methods=["POST"])
+@app.route("/personal/buscar/<string:nombre>/<string:dni>", methods=["GET"])
 @login_required
-def actualizar_usaurio():
-    id_persona = request.form["id_persona"]
-    dni = request.form["dni"]
-    nombres = request.form["nombres"]
-    apellidos = request.form["apellidos"]
-    fecha_nacimiento = request.form.get("fecha_nacimiento") or None
-    telefono = request.form.get("telefono") or None
-    direccion = request.form.get("direccion") or None
+def buscar_usuario(nombre,dni):
+    try:
+        if (nombre == "_" and dni == "_"):
+            return redirect('/personal')
+        
+        lista = controlador_usuario.obtener_persona_nombre_dni(nombre, dni)
+        
+        roles = controlador_rol.obtener_roles()
+        rangos = controlador_rango.obtener_rangos()
+        comisarias = controlador_comisaria.obtener_comisarias() 
+        return render_template('personal.html', usuarios=lista, roles=roles, rangos=rangos, comisarias=comisarias)
+        
+    except Exception as e:
+        flash(f"Error al filtrar las personas: {str(e)}", "danger")
+        return redirect("/personal")
 
-    controlador_persona.actualizar_persona(dni, nombres, apellidos, fecha_nacimiento, telefono, direccion, id_persona)
-    return redirect("/personas")
+
+@app.route('/personal/<int:id_usuario>/json', methods=['GET'])
+@login_required
+def usuario_por_id_json(id_usuario):
+    try:
+        persona = controlador_usuario.obtener_usuario_por_id(id_usuario)
+        if not persona:
+            return jsonify({"status": 0, "data": None, "message": "Persona no encontrada"}), 404
+        
+        # if persona.fecha_nacimiento: 
+        #     fecha_nac = persona.fecha_nacimiento.strftime("%Y-%m-%d")
+        # else:
+        #     fecha_nac = None
+        #     print(fecha_nac)
+        
+        data = ({
+            "status": 1,
+            "data": {
+                "codio_usuario": persona.codigo_usuario,
+                "dni": persona.dni,
+                "nombres": persona.nombres,
+                "ape_paterno": persona.ape_paterno,
+                "ape_materno": persona.ape_materno,
+                "telefono": persona.telefono,
+                "direccion": persona.direccion,
+                "ubigeo": persona.ubigeo,
+                "ocupacion" : persona.ocupacion,
+                "estado_civil" :persona.estado_civil
+            },
+            "message": "Persona encontrada"
+        })
+        return Response(json.dumps(data, ensure_ascii=False), mimetype='application/json; charset=utf-8')
+    except Exception as e:
+        return jsonify({"status": -1, "data": None, "message": str(e)}), 500
+
+
+
+
 
 @app.route("/historial")
 @login_required

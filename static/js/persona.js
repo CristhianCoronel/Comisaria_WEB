@@ -6,7 +6,7 @@ document.querySelectorAll("#tabla-formulario tbody tr").forEach(fila => {
         console.log("Persona seleccionada:", id);
 
         try {
-            const resp = await fetch(`/persona/${id}/json`);
+            const resp = await fetch(`/ciudadano/${id}/json`);
             const result = await resp.json();
 
             if (resp.ok && result.status === 1) {
