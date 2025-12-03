@@ -1,5 +1,7 @@
 # models/Evidencia.py
 from bd import bd
+from sqlalchemy import Column, Integer, String, CHAR, Date, Time, Numeric, ForeignKey, Text
+
 
 class Evidencia(bd.Model):
     __tablename__ = 'evidencia'

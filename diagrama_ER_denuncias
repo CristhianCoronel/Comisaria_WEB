@@ -1,0 +1,105 @@
+// Diagrama ER Sistema de Denuncias
+digraph {
+	Persona [label="Persona
+id_persona PK
+nombre_completo
+fecha_nacimiento
+nacionalidad
+estado_civil
+domicilio
+telefono
+correo_electronico
+tipo_documento
+numero_documento" shape=box]
+	Denuncia [label="Denuncia
+id_denuncia PK
+id_persona FK
+id_tipo_denuncia FK
+id_estado_denuncia FK
+fecha_denuncia
+hora_denuncia
+lugar
+descripcion_general" shape=box]
+	Tipo_Denuncia [label="Tipo_Denuncia
+id_tipo_denuncia PK
+nombre_tipo_denuncia" shape=box]
+	Estado_Denuncia [label="Estado_Denuncia
+id_estado_denuncia PK
+nombre_estado" shape=box]
+	Detalle_Denuncia [label="Detalle_Denuncia
+id_detalle PK
+id_denuncia FK
+subtipo
+descripcion_detalle
+campos_especificos" shape=box]
+	Bienes [label="Bienes
+id_bien PK
+id_denuncia FK
+id_tipo_bien FK
+nombre_bien
+valor_estimado" shape=box]
+	Detalle_Bienes [label="Detalle_Bienes
+id_detalle_bien PK
+id_bien FK
+marca
+modelo
+color
+numero_serie_IMEI_placa
+anio
+caracteristicas_especiales" shape=box]
+	Vehiculo [label="Vehiculo
+id_vehiculo PK
+id_bien FK
+VIN
+placas
+anio
+marca
+modelo" shape=box]
+	Sospechoso [label="Sospechoso
+id_sospechoso PK
+nombre
+descripcion
+contacto" shape=box]
+	Denuncia_Sospechoso [label="Denuncia_Sospechoso
+id_denuncia FK
+id_sospechoso FK" shape=box]
+	Testigo [label="Testigo
+id_testigo PK
+nombre
+contacto" shape=box]
+	Denuncia_Testigo [label="Denuncia_Testigo
+id_denuncia FK
+id_testigo FK" shape=box]
+	Evidencia [label="Evidencia
+id_evidencia PK
+id_denuncia FK
+tipo_evidencia
+descripcion
+ruta_archivo_URL" shape=box]
+	Seguimiento_Denuncia [label="Seguimiento_Denuncia
+id_seguimiento PK
+id_denuncia FK
+fecha
+descripcion_accion
+responsable" shape=box]
+	Medidas_Proteccion [label="Medidas_Proteccion
+id_medida PK
+id_denuncia FK
+tipo_medida
+descripcion
+fecha_emision" shape=box]
+	Persona -> Denuncia
+	Tipo_Denuncia -> Denuncia
+	Estado_Denuncia -> Denuncia
+	Denuncia -> Detalle_Denuncia
+	Denuncia -> Bienes
+	Bienes -> Detalle_Bienes
+	Bienes -> Vehiculo
+	Denuncia -> Denuncia_Sospechoso
+	Sospechoso -> Denuncia_Sospechoso
+	Denuncia -> Denuncia_Testigo
+	Testigo -> Denuncia_Testigo
+	Denuncia -> Evidencia
+	Denuncia -> Seguimiento_Denuncia
+	Denuncia -> Medidas_Proteccion
+}

@@ -10,12 +10,24 @@ def obtener_usuario_por_id(id_usuario):
     """Devuelve un usuario específico por su ID."""
     return Usuario.query.get(id_usuario)
 
+def obtener_siguiente_id_usuario():
+    ultima_persona = Usuario.query.order_by(Usuario.id_usuario.desc()).first()
+    
+    if ultima_persona:
+        return ultima_persona.id_usuario + 1
+    else:
+        # Si no hay registros, empezamos desde 1
+        return 1
+
 def obtener_usuario_por_dni(dni_usuario):
     return Usuario.query.filter_by(dni=dni_usuario).first()
 
 def insertar_usuario(dni, nombres, ape_paterno, ape_materno, codigo_usuario, estado, id_comisaria, id_rango, id_rol, tipo_usuario):
     try:
+        id_usuario = obtener_siguiente_id_usuario()
+        print("Nuevo id:", id_usuario)
         nuevo = Usuario(
+            id_usuario=id_usuario,
             dni=dni,
             nombres=nombres,
             ape_paterno=ape_paterno,
@@ -38,7 +50,7 @@ def insertar_usuario(dni, nombres, ape_paterno, ape_materno, codigo_usuario, est
         return False
 
 
-def modificar_usuario(id_usuario, dni, nombres, ape_paterno, ape_materno, codigo_usuario, estado, id_comisaria, id_rango, id_rol, tipo_usuario):
+def modificar_usuario(id_usuario, dni, nombres, ape_paterno, ape_materno, estado, id_comisaria, id_rango, id_rol, tipo_usuario):
     try:
         usuario = Usuario.query.get(id_usuario)
         if usuario:
@@ -46,7 +58,6 @@ def modificar_usuario(id_usuario, dni, nombres, ape_paterno, ape_materno, codigo
             usuario.nombres = nombres
             usuario.ape_paterno = ape_paterno
             usuario.ape_materno = ape_materno
-            usuario.codigo_usuario = codigo_usuario
             usuario.estado = estado
             usuario.id_comisaria = id_comisaria
             usuario.id_rango = id_rango
@@ -113,6 +124,19 @@ def obtener_persona_nombre_dni(nombre=None, dni=None):
         )
 
     return final_query.order_by(Usuario.id_usuario).all()
+
+def cambiar_codigo_usuario(id_usuario, codigo_usuario):
+    try:
+        usuario = Usuario.query.get(id_usuario)
+        if usuario:
+            usuario.codigo_usuario = codigo_usuario
+            bd.session.commit()
+            return True
+        return False
+    except Exception as e:
+        bd.session.rollback()
+        print("Error:", e)
+        return False
 
 def duplicado_dni(dni):
     usuario = Usuario.query.filter_by(dni=dni).first()

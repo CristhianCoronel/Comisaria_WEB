@@ -260,12 +260,14 @@ def guardar_usuario():
         id_rango = request.form["id_rango"]
         id_comisaria = request.form["id_comisaria"]
         tipo_usuario = request.form["tipo_usuario"]
-
+        
+        hash_codigo = bcrypt.generate_password_hash(codigo_usuario).decode('utf-8')
         if controlador_usuario.insertar_usuario(
-            dni, nombres, ape_paterno, ape_materno, codigo_usuario, 
+            dni, nombres, ape_paterno, ape_materno, hash_codigo, 
             estado, id_comisaria, id_rango, id_rol, tipo_usuario):
             flash("Personal registrado correctamente.", "success")
             return redirect("/personal")
+        print("Retorno falso")
         flash("Error al registrar.", "danger")
         return redirect("/personal")
     except Exception as e:
@@ -277,7 +279,6 @@ def guardar_usuario():
 def actualizar_usuario():
     try:
         id_usuario = request.form["id_usuario"]
-        codigo_usuario = request.form["codigo_usuario"]
         dni = request.form["dni"]
         nombres = request.form["nombres"]
         ape_paterno = request.form["ape_paterno"]
@@ -287,10 +288,10 @@ def actualizar_usuario():
         id_rango = request.form["id_rango"]
         id_comisaria = request.form["id_comisaria"]
         tipo_usuario = request.form["tipo_usuario"]
-        new_codigo = bcrypt.generate_password_hash(codigo_usuario).decode('utf-8')
+        # new_codigo = bcrypt.generate_password_hash(codigo_usuario).decode('utf-8')
         
         if controlador_usuario.modificar_usuario(id_usuario,
-            dni, nombres, ape_paterno, ape_materno, new_codigo, 
+            dni, nombres, ape_paterno, ape_materno,
             estado, id_comisaria, id_rango, id_rol, tipo_usuario):
             flash("Personal actualizado correctamente.", "success")
             return redirect("/personal")
@@ -325,35 +326,54 @@ def usuario_por_id_json(id_usuario):
     try:
         persona = controlador_usuario.obtener_usuario_por_id(id_usuario)
         if not persona:
-            return jsonify({"status": 0, "data": None, "message": "Persona no encontrada"}), 404
-        
-        # if persona.fecha_nacimiento: 
-        #     fecha_nac = persona.fecha_nacimiento.strftime("%Y-%m-%d")
-        # else:
-        #     fecha_nac = None
-        #     print(fecha_nac)
+            return jsonify({"status": 0, "data": None, "message": "Personal no encontrado"}), 404
         
         data = ({
             "status": 1,
             "data": {
-                "codio_usuario": persona.codigo_usuario,
+                "id_usuario": persona.id_usuario,
                 "dni": persona.dni,
-                "nombres": persona.nombres,
+                "codio_usuario": persona.codigo_usuario,
                 "ape_paterno": persona.ape_paterno,
                 "ape_materno": persona.ape_materno,
-                "telefono": persona.telefono,
-                "direccion": persona.direccion,
-                "ubigeo": persona.ubigeo,
-                "ocupacion" : persona.ocupacion,
-                "estado_civil" :persona.estado_civil
+                "nombres": persona.nombres,
+                "id_comisaria": persona.id_comisaria,
+                "tipo_usuario": persona.tipo_usuario,
+                "estado": persona.estado,
+                "id_rango" : persona.id_rango,
+                "id_rol" :persona.id_rol
             },
-            "message": "Persona encontrada"
+            "message": "Personal encontrado"
         })
         return Response(json.dumps(data, ensure_ascii=False), mimetype='application/json; charset=utf-8')
     except Exception as e:
         return jsonify({"status": -1, "data": None, "message": str(e)}), 500
 
 
+@app.route("/usuario/codigo/<int:id_usuario>", methods=["POST"])
+@login_required
+def actualizar_codigo_usuario(id_usuario):
+    try:
+        codigo_usuario = request.form.get("code")
+        
+        if not codigo_usuario or codigo_usuario.strip() == "":
+            flash(f"Campo vacío. No se pudo cambiar el codigo", "danger")
+            return redirect("/personal")
+        
+        new_codigo = bcrypt.generate_password_hash(codigo_usuario).decode('utf-8')
+        estado = controlador_usuario.cambiar_codigo_usuario(id_usuario, new_codigo)
+
+
+        if not estado:
+            flash(f"Error al cambiar el código", "danger")
+            return redirect("/personal")
+
+        flash(f"Codigo cambiado correctamente", "success")
+        return redirect("/personal")
+
+    except Exception as e:
+        flash(f"Error al cambiar el código {str(e)}", "danger")
+        return redirect("/personal")
 
 
 

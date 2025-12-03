@@ -30,9 +30,9 @@
                 <span class="nav-icon">🏠</span>
                 <span class="nav-text">Inicio</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="{{ url_for('perfil') }}" class="nav-item">
                 <span class="nav-icon">📥</span>
-                <span class="nav-text">Entradas</span>
+                <span class="nav-text">Perfil de usuario</span>
             </a>
             <a href="{{ url_for('persona') }}" class="nav-item {% if request.endpoint == 'persona' %}active{% endif %}">
                 <span class="nav-icon">👥</span>

@@ -1,57 +1,61 @@
-# controllers/controlador_comisaria.py
 from models.Comisaria import Comisaria
+from models.Distrito import Distrito
 from bd import bd
 
 def obtener_comisarias():
+    """Devuelve todas las comisarías registradas."""
     return Comisaria.query.all()
 
 def obtener_comisaria_por_id(id_comisaria):
     return Comisaria.query.get(id_comisaria)
 
-def insertar_comisaria(nombre, direccion, ubigeo, telefono):
+def insertar_comisaria(nombre, direccion, id_distrito):
+    """Inserta una nueva comisaría asociada a un distrito."""
     try:
         nueva = Comisaria(
             nombre=nombre,
             direccion=direccion,
-            ubigeo=ubigeo,
-            telefono=telefono
+            id_distrito=id_distrito
         )
-        if nueva:
-            bd.session.add(nueva)
-            bd.session.commit()
-            return True
-        print("Error pues")
-        return False
+        bd.session.add(nueva)
+        bd.session.commit()
+        return True
     except Exception as e:
         bd.session.rollback()
         print("Error:", e)
         return False
 
-def modificar_comisaria(id_comisaria, nombre, direccion, ubigeo, telefono):
+def modificar_comisaria(id_comisaria, nombre, direccion, id_distrito):
+    """Modifica una comisaría existente."""
     try:
         comisaria = Comisaria.query.get(id_comisaria)
         if comisaria:
             comisaria.nombre = nombre
             comisaria.direccion = direccion
-            comisaria.ubigeo = ubigeo
-            comisaria.telefono = telefono
+            comisaria.id_distrito = id_distrito
             bd.session.commit()
             return True
-        print("Error pues")
+        print("Comisaría no encontrada")
         return False
     except Exception as e:
         bd.session.rollback()
         print("Error:", e)
         return False
 
+# Eliminar comisaría
 # def eliminar_comisaria(id_comisaria):
-#     """Elimina una comisaría de la base de datos."""
-#     comisaria = Comisaria.query.get(id_comisaria)
-#     if comisaria:
-#         bd.session.delete(comisaria)
-#         bd.session.commit()
-#         return True
-#     return False
+#     try:
+#         comisaria = Comisaria.query.get(id_comisaria)
+#         if comisaria:
+#             bd.session.delete(comisaria)
+#             bd.session.commit()
+#             return True
+#         return False
+#     except Exception as e:
+#         bd.session.rollback()
+#         print("Error:", e)
+#         return False
+
 
 def obtener_comisaria_nombre_ubigeo(nombre=None, ubigeo=None):
     base_query = Comisaria.query
