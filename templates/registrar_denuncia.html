@@ -62,44 +62,77 @@
                     </div>
                     <small class="hint">Presione Enter o el botón para buscar en el sistema / RENIEC.</small>
                 </div>
-                
             </div>
 
             <div class="row two-cols">
                 <div class="field">
-                    <label for="nombres">Nombre completo *</label>
+                    <label for="nombres">Nombres *</label>
                     <input class="input" name="nombres" id="nombres" type="text"
                         placeholder="Se completará automáticamente" required>
                 </div>
+                <div class="field">
+                    <label for="ape_paterno">Apellido Paterno *</label>
+                    <input class="input" name="ape_paterno" id="ape_paterno" type="text"
+                        placeholder="Se completará automáticamente" required>
+                </div>
+            </div>
+            
+            <div class="row two-cols">
+                 <div class="field">
+                    <label for="ape_materno">Apellido Materno *</label>
+                    <input class="input" name="ape_materno" id="ape_materno" type="text"
+                        placeholder="Se completará automáticamente" required>
+                </div>
+                <div class="field">
+                    <label for="fecha_nacimiento">Fecha de Nacimiento *</label>
+                    <input class="input" name="fecha_nacimiento" id="fecha_nacimiento" type="date" required>
+                </div>
+            </div>
+
+            <div class="row two-cols">
+                <div class="field">
+                    <label for="ocupacion">Ocupación</label>
+                    <input class="input" name="ocupacion" id="ocupacion" type="text" placeholder="Ej: Estudiante, Ingeniero">
+                </div>
+                <div class="field">
+                    <label for="estado_civil">Estado Civil *</label>
+                    <select class="input" name="estado_civil" id="estado_civil" required>
+                        <option value="Soltero(a)">Soltero(a)</option>
+                        <option value="Casado(a)">Casado(a)</option>
+                        <option value="Divorciado(a)">Divorciado(a)</option>
+                        <option value="Viudo(a)">Viudo(a)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row two-cols">
                 <div class="field">
                     <label for="telefono">Teléfono</label>
                     <input class="input" name="telefono" id="telefono" type="text" placeholder="Ej: 987654321">
                 </div>
                 <div class="field">
-                    <label for="estado_civil">Estado Civil *</label>
-                    <select class="input" name="estado_civil" id="estado_civil" required>
-                        <option value="SOLTERO">Soltero(a)</option>
-                        <option value="CASADO">Casado(a)</option>
-                        <option value="DIVORCIADO">Divorciado(a)</option>
-                        <option value="CONVIVIENTE">Conviviente</option>
-                        <option value="VIUDO">Viudo(a)</option>
-                    </select>
-                </div>
-            </div>
-            
-            <input type="hidden" name="ape_paterno" id="ape_paterno">
-            <input type="hidden" name="ape_materno" id="ape_materno">
-
-            <div class="row two-cols">
-                <div class="field">
-                    <label for="direccion_denunciante">Dirección del denunciante</label>
-                    <input class="input" name="direccion_denunciante" id="direccion_denunciante" type="text"
-                        placeholder="Ej: Jr. Los Olivos 123, Urb. Central">
-                </div>
-                <div class="field">
                     <label for="correo">Correo (opcional)</label>
                     <input class="input" name="correo" id="correo" type="email" placeholder="Ej: ciudadano@correo.com">
                 </div>
+            </div>
+
+            <div class="row two-cols">
+                <div class="field">
+                    <label for="direccion_denunciante">Dirección del denunciante *</label>
+                    <input class="input" name="direccion_denunciante" id="direccion_denunciante" type="text"
+                        placeholder="Ej: Jr. Los Olivos 123, Urb. Central" required>
+                </div>
+            </div>
+            <div class="row two-cols">
+                <div class="field">
+                    <label for="id_tipo_denuncia">Tipo de Denuncia *</label>
+                    <select class="input" name="id_tipo_denuncia" id="id_tipo_denuncia" required>
+                        {% for t in tipos_denuncias %}
+                        <option value="{{ t.id_tipo_denuncia }}">{{ t.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="field"></div>
             </div>
 
             <div class="step-actions">
@@ -116,26 +149,6 @@
 
             <div class="row two-cols">
                 <div class="field">
-                    <label for="id_tipo_denuncia">Tipo de Denuncia *</label>
-                    <select class="input" name="id_tipo_denuncia" id="id_tipo_denuncia" required>
-                        <option value="">Seleccione tipo</option>
-                        {% for t in tipos_denuncias %}
-                        <option value="{{ t.id_tipo }}">{{ t.tipo_denuncia }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="field">
-                    <label for="modalidad">Modalidad *</label>
-                    <select class="input" name="modalidad" id="modalidad" required>
-                        <option value="">Seleccione</option>
-                        <option value="VERBAL">Verbal</option>
-                        <option value="ESCRITA">Escrita</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="row two-cols">
-                <div class="field">
                     <label for="fecha_hechos">Fecha de los hechos *</label>
                     <input class="input" type="date" name="fecha_hechos" id="fecha_hechos" required>
                 </div>
@@ -145,88 +158,193 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="field">
-                    <label for="direccion_hechos">Lugar / Dirección de los hechos *</label>
-                    <input class="input" name="direccion_hechos" id="direccion_hechos" type="text"
-                        placeholder="Ej: Av. Principal 123, frente al banco" required>
-                </div>
+            <div class="field">
+                <label for="direccion_hechos">Lugar / Dirección de los hechos *</label>
+                <input class="input" name="direccion_hechos" id="direccion_hechos" type="text"
+                    placeholder="Ej: Av. Principal 123, frente al banco" required>
             </div>
 
             <div class="row two-cols">
-                <div class="field">
-                    <label for="descripcion_hechos">Descripción de los hechos *</label>
-                    <textarea class="input textarea" name="descripcion_hechos" id="descripcion_hechos" rows="6"
-                        placeholder="Describa brevemente lo ocurrido" required></textarea>
-                </div>
-            </div>
-
-            {# ------ Datos del acusado ------ #}
-            <div class="field">
-                <label for="tipo_acusado"> Tipo de acusado</label>
-                Denunciado
-                <input class="radio" type="radio" id="tipo_denunciado" name="tipo_acusado" value="Denunciado" checked>
-                Sospechosos
-                <input class="radio" type="radio" id="tipo_sospechoso" name="tipo_acusado" value="Sospechoso">
-                <br>
-            </div>
-
-            <div class="tipo_acusado">
-                <label for="direccion_hechos">Datos del acusado o los acusados </label>
-                <div class="denunciado" id="denunciado">
-                    <div class="row two-cols">
-                        <div class="field">
-                            <label for="dni_denunciado">DNI</label>
-                            <input class="input" name="dni_denunciado" id="dni_denunciado" type="text"
-                                placeholder="Ej: Av. Principal 123, frente al banco" required>
-                        </div>
-                        <div class="field">
-                            <label for="nombre_denunciado">Nombre Completo</label>
-                            <input class="input" name="nombre_denunciado" id="nombre_denunciado" type="text"
-                                placeholder="Ej: Av. Principal 123, frente al banco" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="field">
-                            <label for="ocupacion_sospechoso">Ocupacion</label>
-                            <input class="input" name="ocupacion_sospechoso" id="ocupacion_sospechoso" type="text"
-                                placeholder="Ej: Av. Principal 123, frente al banco" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="sospechosos" id="sospechosos">
-                    <div class="field">
-                        <button class="btnAgregar" id="btnAgregar">
-                            Agregar
-                        </button>
-                        <button class="btnQuitar" id="btnQuitar">
-                            Quitar
-                        </button>
-                    </div>
-                    <div class="row two-cols sospechoso-item">
-                        <div class="field">
-                            <label for="nombre_sospechoso">Nombre</label>
-                            <input class="input" name="nombre_sospechoso" type="text"
-                                placeholder="Ej: Av. Principal 123, frente al banco">
-                        </div>
-                        <div class="field">
-                            <label for="descripcion_sospechoso">Descripción</label>
-                            <textarea class="input" name="descripcion_sospechoso" type="text"
-                                placeholder="Ej: Av. Principal 123, frente al banco" required></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="field">
-                    <label for="condicion">Condición de la denuncia</label>
-                    <select class="input" name="condicion" id="condicion">
-                        <option value="">Seleccione (opcional)</option>
-                        <option value="DIRECTA">Denuncia directa</option>
-                        <option value="DEINPOL">DEINPOL / derivada</option>
+                <div class="field" style="display:none;">
+                    <label for="modalidad">Modalidad *</label>
+                    <select class="input" name="modalidad" id="modalidad" required>
+                        <option value="">Seleccione</option>
+                        <option value="VERBAL">Verbal</option>
+                        <option value="ESCRITA">Escrita</option>
                     </select>
                 </div>
+                <div class="field">
+                </div>
+            </div>
+
+            <hr class="mt-4">
+
+            <h4 class="section-title mt-4">Datos del Acusado</h4>
+
+            <div class="denunciado" id="denunciado_container">
+                <br>
+                <div class="row two-cols">
+                    <div class="field">
+                        <label for="dni_denunciado">DNI/Documento</label>
+                        <input class="input" name="dni_denunciado" id="dni_denunciado" type="text"
+                            placeholder="Documento de identidad">
+                    </div>
+                    <div class="field">
+                        <label for="nombre_denunciado">Nombre Completo</label>
+                        <input class="input" name="nombre_denunciado" id="nombre_denunciado" type="text"
+                            placeholder="Nombre y apellidos del denunciado">
+                    </div>
+                </div>
+                <div class="row two-cols">
+                    <div class="field">
+                        <label for="dni_denunciado">Participación</label>
+                        <select class="input" name="rol_participacion">
+                            <option value="Autor">Autor</option>
+                            <option value="Coautor">Coautor</option>
+                            <option value="Autor mediato">Autor mediato</option>
+                            <option value="Cómplice">Cómplice</option>
+                            <option value="Instigador">Instigador</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="ocupacion_denunciado">Descripción</label>
+                    <textarea class="input" name="ocupacion_denunciado" id="ocupacion_denunciado" type="text"
+                        placeholder="Ocupación o profesión del denunciado"></textarea>
+                </div>
+            </div>
+            <button type="button" class="button is-link is-small" id="btnAgregarSospechoso">
+                Agregar Sospechoso
+            </button>
+
+            <br>
+            <table class="table mt-2" id="tabla-sospechosos">
+                <thead>
+                    <tr>
+                        <th>DNI/Doc.</th>
+                        <th>Nombre</th>
+                        <th>Rol</th>
+                        <th>Descripción</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="sospechosos-table-body">
+                    </tbody>
+            </table>
+
+            <hr class="mt-4">
+
+            <div id="denuncia-details-specific">
+                <div id="patrimonio-fields" class="denuncia-specific-fields">
+                    <h5 class="section-subtitle mt-4">Detalles de Delito Patrimonial</h5>
+                    <div class="row two-cols">
+                        <div class="field">
+                            <label for="tipo_delito">Tipo de Delito Patrimonial *</label>
+                            <input class="input" name="tipo_delito" id="tipo_delito" type="text"
+                                placeholder="Ej: Robo Agravado, Hurto Simple">
+                        </div>
+                        <div class="field">
+                            <label for="monto_estimado">Monto estimado de la pérdida (S/)</label>
+                            <input class="input" name="monto_estimado" id="monto_estimado" type="number" step="0.01"
+                                placeholder="Ej: 500.00">
+                        </div>
+                    </div>
+
+                    <h5 class="section-subtitle mt-4">Bienes Involucrados</h5>
+                    <button type="button" class="button is-link is-small" id="btn-agregar-bien">
+                        Agregar Bien
+                    </button>
+                    <table class="table mt-2" id="tabla-bienes">
+                        <thead>
+                            <tr>
+                                <th>Bien</th>
+                                <th>Marca/Modelo</th>
+                                <th>Unidades</th>
+                                <th>Valor (S/)</th>
+                                <th>Descripción</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="bienes-table-body">
+                            </tbody>
+                    </table>
+
+                    <select id="select-bienes-template" style="display:none;">
+                        {% for b in bienes_catalogo %}
+                        <option value="{{ b.id_bien }}">{{ b.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div id="violencia-fields" class="denuncia-specific-fields">
+                    <h5 class="section-subtitle mt-4">Detalles de Violencia Doméstica</h5>
+                    <div class="row two-cols">
+                        <div class="field">
+                            <label for="tipo_violencia">Tipo de Violencia *</label>
+                            <select class="input" name="tipo_violencia" id="tipo_violencia">
+                                <option value="">Seleccione</option>
+                                <option value="FISICA">Física</option>
+                                <option value="PSICOLOGICA">Psicológica</option>
+                                <option value="SEXUAL">Sexual</option>
+                                <option value="ECONOMICA">Económica</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="parentesco">Relación con el Denunciado *</label>
+                            <input class="input" name="parentesco" id="parentesco" type="text"
+                                placeholder="Ej: Cónyuge, Conviviente, Hijo, Hermano">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="extorsion-fields" class="denuncia-specific-fields" style="display:none;">
+                    <h5 class="section-subtitle mt-4">Detalles de Extorsión</h5>
+                    <div class="row two-cols">
+                        <div class="field">
+                            <label for="alias_extorsion">Alias del Extorsionador (si aplica)</label>
+                            <input class="input" name="alias_extorsion" id="alias_extorsion" type="text"
+                                placeholder="Ej: 'El Negro', 'La Jefa'">
+                        </div>
+                        <div class="field">
+                            <label for="cantidad">Cantidad de Extorsionadores *</label>
+                            <input class="input" name="cantidad" id="cantidad" type="number" min="1" placeholder="Ej: 1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="section-title mt-4">Armas Involucradas</h4>
+            <div id="armas-container" style="display:none;">
+                <button type="button" class="button is-link is-small" id="btn-agregar-arma">
+                    Agregar Arma
+                </button>
+                <table class="table mt-2" id="tabla-armas">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Arma</th>
+                            <th>Cantidad</th>
+                            <th>Descripción</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="armas-table-body">
+                        </tbody>
+                </table>
+
+                <select id="select-armas-template" style="display:none;">
+                    {% for a in tipos_armas_catalogo %}
+                    <option value="{{ a.id_tipo_arma }}">{{ a.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <hr class="mt-4">
+
+            <div class="field">
+                <label for="descripcion_hechos">Descripción de los hechos *</label>
+                <textarea class="input textarea" name="descripcion_hechos" id="descripcion_hechos" rows="8"
+                    placeholder="Describa brevemente lo ocurrido" required></textarea>
             </div>
 
             <div class="step-actions">

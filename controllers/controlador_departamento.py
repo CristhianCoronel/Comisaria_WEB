@@ -1,5 +1,5 @@
 # controllers/controlador_departamento.py
-from models.Ubigeo import Departamento
+from models.Models import Departamento
 from bd import bd
 
 def obtener_departamentos():

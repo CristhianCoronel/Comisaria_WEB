@@ -41,6 +41,7 @@ class Comisaria(bd.Model):
     id_comisaria = bd.Column(bd.Integer, primary_key=True)
     id_distrito = bd.Column(bd.Integer, bd.ForeignKey('distrito.id_distrito'), nullable=False)
     nombre = bd.Column(bd.String(30), nullable=False)
+    telefono = bd.Column(bd.String(30), nullable=False)
     direccion = bd.Column(bd.String(50), nullable=False)
 
     distrito = bd.relationship('Distrito', backref='comisarias')
@@ -106,7 +107,7 @@ class Denuncia(bd.Model):
     hora_incidente = bd.Column(bd.Time)
     lugar_hechos = bd.Column(bd.String(50), nullable=False)
     direccion = bd.Column(bd.String(50), nullable=False)
-    descripcion = bd.Column(bd.String(200), nullable=False)
+    descripcion = bd.Column(bd.Text, nullable=False)
     id_denunciante = bd.Column(bd.Integer, bd.ForeignKey('persona.id_persona'), nullable=False)
     id_denunciado = bd.Column(bd.Integer, bd.ForeignKey('persona.id_persona'))
     id_tipo_denuncia = bd.Column(bd.Integer, bd.ForeignKey('tipo_denuncia.id_tipo_denuncia'), nullable=False)
@@ -158,6 +159,11 @@ class Detalle_Bienes(bd.Model):
     __tablename__ = 'detalle_bienes'
     id_detalle_bien = bd.Column(bd.Integer, primary_key=True)
     id_bien = bd.Column(bd.Integer, bd.ForeignKey('bienes.id_bien'), nullable=False)
+    marca = bd.Column(bd.String(30))
+    modelo = bd.Column(bd.String(30))
+    unidades = bd.Column(bd.Integer, nullable=False)
+    valor_estimado = bd.Column(bd.Numeric(9,2))
+    descripcion = bd.Column(bd.String(100))
     id_denuncia = bd.Column(bd.Integer, bd.ForeignKey('denuncia.id_denuncia', ondelete='CASCADE'), nullable=False)
 
     bien = bd.relationship('Bienes', backref='detalle_bienes')
@@ -219,9 +225,11 @@ class Evidencia(bd.Model):
 class Seguimiento_Denuncia(bd.Model):
     __tablename__ = 'seguimiento_denuncia'
     id_seguimiento = bd.Column(bd.Integer, primary_key=True)
+    id_usuario = bd.Column(bd.Integer, bd.ForeignKey('usuario.id_usuario', ondelete='CASCADE'), nullable=False)
     id_denuncia = bd.Column(bd.Integer, bd.ForeignKey('denuncia.id_denuncia', ondelete='CASCADE'), nullable=False)
     fecha = bd.Column(bd.Date, nullable=False)
     accion = bd.Column(bd.String(50), nullable=False)
 
+    usuario = bd.relationship('Usuario', backref='seguimiento_denuncia')
     denuncia = bd.relationship('Denuncia', backref='seguimiento_denuncia')
     

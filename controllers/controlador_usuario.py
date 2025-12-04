@@ -1,145 +1,108 @@
 # controllers/controlador_usuario.py
-from models.Usuario import Usuario
+from models.Models import Usuario
 from bd import bd
 
+
 def obtener_usuarios():
-    """Devuelve todos los usuarios registrados."""
     return Usuario.query.all()
 
 def obtener_usuario_por_id(id_usuario):
-    """Devuelve un usuario específico por su ID."""
     return Usuario.query.get(id_usuario)
-
-def obtener_siguiente_id_usuario():
-    ultima_persona = Usuario.query.order_by(Usuario.id_usuario.desc()).first()
-    
-    if ultima_persona:
-        return ultima_persona.id_usuario + 1
-    else:
-        # Si no hay registros, empezamos desde 1
-        return 1
 
 def obtener_usuario_por_dni(dni_usuario):
     return Usuario.query.filter_by(dni=dni_usuario).first()
 
-def insertar_usuario(dni, nombres, ape_paterno, ape_materno, codigo_usuario, estado, id_comisaria, id_rango, id_rol, tipo_usuario):
+def insertar_usuario(dni, nombres, ape_paterno, ape_materno, codigo_usuario, clave,
+                     id_comisaria, id_rango, id_rol, estado='A'):
     try:
-        id_usuario = obtener_siguiente_id_usuario()
-        print("Nuevo id:", id_usuario)
         nuevo = Usuario(
-            id_usuario=id_usuario,
             dni=dni,
             nombres=nombres,
             ape_paterno=ape_paterno,
             ape_materno=ape_materno,
             codigo_usuario=codigo_usuario,
-            estado=estado,
+            clave=clave,
             id_comisaria=id_comisaria,
             id_rango=id_rango,
             id_rol=id_rol,
-            tipo_usuario=tipo_usuario
+            estado=estado
         )
-        if nuevo:
-            bd.session.add(nuevo)
-            bd.session.commit()
-            return True
-        return False
-    except Exception as e:
-        bd.session.rollback()
-        print("Error:", e)
-        return False
-
-
-def modificar_usuario(id_usuario, dni, nombres, ape_paterno, ape_materno, estado, id_comisaria, id_rango, id_rol, tipo_usuario):
-    try:
-        usuario = Usuario.query.get(id_usuario)
-        if usuario:
-            usuario.dni = dni
-            usuario.nombres = nombres
-            usuario.ape_paterno = ape_paterno
-            usuario.ape_materno = ape_materno
-            usuario.estado = estado
-            usuario.id_comisaria = id_comisaria
-            usuario.id_rango = id_rango
-            usuario.id_rol = id_rol
-            usuario.tipo_usuario = tipo_usuario
-            bd.session.commit()
-            return True
-        return False
-    except Exception as e:
-        bd.session.rollback()
-        print("Error:", e)
-        return False
-
-def eliminar_usuario(id_usuario):
-    """Elimina un usuario de la base de datos."""
-    usuario = Usuario.query.get(id_usuario)
-    if usuario:
-        bd.session.delete(usuario)
+        bd.session.add(nuevo)
         bd.session.commit()
         return True
-    return False
-
-def validar_usuario_activo(dni_usuario):
-    return Usuario.query.filter_by(dni=dni_usuario, estado='A').first()
-
-def obtener_persona_nombre_dni(nombre=None, dni=None):
-    base_query = Usuario.query
-
-    if not nombre and not dni:
-        return base_query.order_by(Usuario.id_usuario).all()
-
-    query_nombre = base_query
-    if nombre:
-        query_nombre = query_nombre.filter(Usuario.nombres.ilike(f"%{nombre}%"))
-    res_nombre = query_nombre.all()
-
-    query_dni = base_query
-    if dni:
-        query_dni = query_dni.filter(Usuario.dni.ilike(f"%{dni}%"))
-    res_dni = query_dni.all()
-
-    # --- Decidir qué filtro tiene más resultados ---
-    len_nombre = len(res_nombre)
-    len_dni = len(res_dni)
-
-    if nombre and not dni:
-        return res_nombre
-
-    if dni and not nombre:
-        return res_dni
-
-    # Caso: ambos existen → comparar tamaños
-    if len_nombre >= len_dni:
-        final_query = Usuario.query.filter(
-            Usuario.nombres.ilike(f"%{nombre}%")
-        ).filter(
-            Usuario.dni.ilike(f"%{dni}%")
-        )
-    else:
-        final_query = Usuario.query.filter(
-            Usuario.dni.ilike(f"%{dni}%")
-        ).filter(
-            Usuario.nombres.ilike(f"%{nombre}%")
-        )
-
-    return final_query.order_by(Usuario.id_usuario).all()
-
-def cambiar_codigo_usuario(id_usuario, codigo_usuario):
-    try:
-        usuario = Usuario.query.get(id_usuario)
-        if usuario:
-            usuario.codigo_usuario = codigo_usuario
-            bd.session.commit()
-            return True
-        return False
     except Exception as e:
         bd.session.rollback()
-        print("Error:", e)
+        print("Error al insertar usuario:", e)
         return False
 
-def duplicado_dni(dni):
-    usuario = Usuario.query.filter_by(dni=dni).first()
-    if usuario:
+def modificar_usuario(id_usuario, dni=None, nombres=None, ape_paterno=None, ape_materno=None,
+                      codigo_usuario=None, clave=None, id_comisaria=None, id_rango=None, id_rol=None):
+    try:
+        usuario = Usuario.query.get(id_usuario)
+        if not usuario:
+            print("Usuario no encontrado")
+            return False
+
+        if dni: usuario.dni = dni
+        if nombres: usuario.nombres = nombres
+        if ape_paterno: usuario.ape_paterno = ape_paterno
+        if ape_materno: usuario.ape_materno = ape_materno
+        if codigo_usuario: usuario.codigo_usuario = codigo_usuario
+        if clave: usuario.clave = clave
+        if id_comisaria: usuario.id_comisaria = id_comisaria
+        if id_rango: usuario.id_rango = id_rango
+        if id_rol: usuario.id_rol = id_rol
+
+        bd.session.commit()
         return True
-    return False
+    except Exception as e:
+        bd.session.rollback()
+        print("Error al modificar usuario:", e)
+        return False
+
+def cambiar_estado(id_usuario, nuevo_estado):
+    """
+    Cambia el estado del usuario ('A' = Activo, 'I' = Inactivo, 'R' = Retirado)
+    """
+    try:
+        usuario = Usuario.query.get(id_usuario)
+        if not usuario:
+            print("Usuario no encontrado")
+            return False
+
+        usuario.estado = nuevo_estado
+        bd.session.commit()
+        return True
+    except Exception as e:
+        bd.session.rollback()
+        print("Error al cambiar estado:", e)
+        return False
+
+def obtener_usuarios_nombre_dni(nombre=None, dni=None):
+    query_base = Usuario.query
+
+    if not nombre and not dni:
+        return query_base.order_by(Usuario.id_usuario).all()
+
+    query_nombre = query_base
+    if nombre:
+        query_nombre = query_nombre.filter(Usuario.nombres.ilike(f"%{nombre}%"))
+
+    query_dni = query_base
+    if dni:
+        query_dni = query_dni.filter(Usuario.dni.ilike(f"%{dni}%"))
+
+    count_nombre = query_nombre.count() if nombre else 0
+    count_dni = query_dni.count() if dni else 0
+
+    if count_nombre >= count_dni:
+        query_final = query_nombre
+        if dni:
+            query_final = query_final.filter(Usuario.dni.ilike(f"%{dni}%"))
+    else:
+        query_final = query_dni
+        if nombre:
+            query_final = query_final.filter(Usuario.nombres.ilike(f"%{nombre}%"))
+
+    return query_final.order_by(Usuario.id_usuario).all()
+

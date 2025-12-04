@@ -1,5 +1,5 @@
 # controllers/controlador_denuncia.py
-from models.Denuncia import Denuncia
+from models.Models import Denuncia
 from bd import bd
 
 def obtener_denuncias():

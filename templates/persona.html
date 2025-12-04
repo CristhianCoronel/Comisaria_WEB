@@ -27,14 +27,24 @@
 
                 <input type="hidden" name="id_persona" id="id_persona">
 
-                <div class="field">
-                    <label>DNI *</label>
-                    <input required class="input validar" type="text" name="dni" maxlength="8" placeholder="Ej: 12345678" required>
+                <div class="row two-cols">
+                    <div class="field">
+                        <label>Tipo Documento *</label>
+                        <select required class="input validar" name="id_tipo_documento">
+                            {% for tipo in tipos_documentos %}
+                            <option value="{{ tipo.id_tipo_documento }}">{{ tipo.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>N° Documento *</label>
+                        <input class="input validar" type="text" name="dni" maxlength="8" placeholder="Ej: 12345678" required>
+                    </div>
                 </div>
 
                 <div class="field">
                     <label>Nombres *</label>
-                    <input required class="input validar" type="text" name="nombres" placeholder="Ej: Juan" required>
+                    <input class="input validar" type="text" name="nombres" placeholder="Ej: Juan" required>
                 </div>
 
                 <div class="row two-cols">
@@ -63,10 +73,10 @@
                     <div class="field">
                         <label>Estado Civil *</label>
                         <select class="input validar" name="estado_civil" required>
-                            <option value="SOLTERO(A)">SOLTERO(A)</option>
-                            <option value="CASADO(A)">CASADO(A)</option>
-                            <option value="VIUDO(A)">VIUDO(A)</option>
-                            <option value="DIVORCIADO(A)">DIVORCIADO(A)</option>
+                            <option value="Soltero(a)">Soltero(a)</option>
+                            <option value="Casado(a)">Casado(a)</option>
+                            <option value="Viudo(a)">Viudo(a)</option>
+                            <option value="Divorciado(a)">Divorciado(a)</option>
                         </select>
                     </div>
                     <div class="field">
@@ -117,12 +127,12 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>DNI</th>
+                    <th>Tipo Documento</th>
+                    <th>N° Documento</th>
                     <th>Nombres</th>
                     <th>Apellido paterno</th>
                     <th>Apellido materno</th>
                     <th>Fecha de nacimiento</th>
-                    <th>Teléfono</th>
                     <th>Dirección</th>
                 </tr>
             </thead>
@@ -130,12 +140,12 @@
                 {% for persona in personas %}
                 <tr>
                     <td>{{ persona.id_persona }}</td>
-                    <td>{{ persona.dni }}</td>
-                    <td>{{ persona.nombres }}</td>
+                    <td>{{ persona.tipo_documento.nombre }}</td>
+                    <td>{{ persona.documento }}</td>
+                    <td>{{ persona.nombre }}</td>
                     <td>{{ persona.ape_paterno }}</td>
                     <td>{{ persona.ape_materno }}</td>
                     <td>{{ persona.fecha_nacimiento or 'No registrada' }}</td>
-                    <td>{{ persona.telefono }}</td>
                     <td>{{ persona.direccion }}</td>
                 </tr>
                 {% endfor %}

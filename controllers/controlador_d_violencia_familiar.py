@@ -1,5 +1,5 @@
 # controllers/controlador_d_violencia_familiar.py
-from models.Tipo_Denuncia import D_Violencia_Familiar
+from models.Models import D_Violencia_Familiar
 from bd import bd
 
 def obtener_violencias_familiar():

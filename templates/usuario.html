@@ -76,11 +76,12 @@
                 </div>
                 <div class="row two-cols">
                 <div class="field">
-                    <label>Tipo Usuario *</label>
-                    <select class="input validar" name="tipo_usuario">
+                    <label>Rol *</label>
+                    <select class="input validar" name="id_rol">
                         <option value="">Seleccione...</option>
-                        <option value="A">Administrador</option>
-                        <option value="B">Operador</option>
+                        {% for rol in roles %}
+                        <option value="{{ rol.id_rol }}">{{ rol.nombre }}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -107,17 +108,9 @@
                 </div>
 
                 <div class="field">
-                    <label>Rol *</label>
-                    <select class="input validar" name="id_rol">
-                        <option value="">Seleccione...</option>
-                        {% for rol in roles %}
-                        <option value="{{ rol.id_rol }}">{{ rol.nombre }}</option>
-                        {% endfor %}
-                    </select>
                 </div>
             </div>
 
-            <div id="mensaje" class="notification is-hidden"></div>
         </div>
 
         <!-- BOTONES (idénticos a Ciudadanía) -->

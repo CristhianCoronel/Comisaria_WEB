@@ -1,12 +1,10 @@
 from main import app, login_required
 from flask import render_template, request, jsonify, redirect, url_for, flash, session, current_app
-from controllers import controlador_denuncia, controlador_persona
-from models.Tipo_Denuncia import Tipo_Denuncia
-from models.Denuncia import Denuncia
-from models.Persona import Persona
-from models.Usuario import Usuario
-from models.Evidencia import Evidencia
-from models.Comisaria import Comisaria
+from controllers import controlador_denuncia, controlador_persona, controlador_tipo_denuncia
+from models.Models import (
+    Tipo_Denuncia, Denuncia, Persona, Usuario,
+    Evidencia, Comisaria
+)
 from bd import bd
 from datetime import datetime
 from main import app, login_required
@@ -19,13 +17,13 @@ import os
 @login_required
 def denuncia():
     denuncias = Denuncia.query.order_by(Denuncia.fecha_registro.desc()).all()
-    tipos_denuncias = Tipo_Denuncia.query.all()
+    tipos_denuncias = controlador_tipo_denuncia.obtener_tipos_denuncia()        ## Tipo_Denuncia.query.all()
     return render_template("denuncia.html", denuncias=denuncias, tipos_denuncias=tipos_denuncias)
 
 @app.route('/registrar_denuncia', methods=['GET'])
 @login_required
 def registrar_denuncia():
-    tipos_denuncias = Tipo_Denuncia.query.order_by(Tipo_Denuncia.tipo_denuncia).all()
+    tipos_denuncias = controlador_tipo_denuncia.obtener_tipos_denuncia()
     return render_template('registrar_denuncia.html', tipos_denuncias=tipos_denuncias)
 
 
@@ -41,7 +39,7 @@ def guardar_denuncia():
 
         # Usamos nuestro 'monitor de transacciones'
         with transaccion("registrar_denuncia"):
-            denuncia = registrar_denuncia_mediada(request.form, request.files, usuario_actual)
+            denuncia = registrar_denuncia_mediada(request.form, request.files, usuario_actual.id_usuario)
 
         flash("Denuncia registrada correctamente.", "success")
         return redirect(url_for("denuncia"))

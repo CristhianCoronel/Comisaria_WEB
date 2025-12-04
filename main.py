@@ -5,41 +5,11 @@ from bd import bd
 from functools import wraps
 from dotenv import load_dotenv
 
-from controllers import controlador_departamento
-from controllers import controlador_provincia
-from controllers import controlador_distrito
-from controllers import controlador_ubigeo
-from controllers import controlador_comisaria
-from controllers import controlador_area
-from controllers import controlador_rango
-from controllers import controlador_rol
-from controllers import controlador_persona
-from controllers import controlador_usuario
-from controllers import controlador_categoria_bienes
-from controllers import controlador_tipo_denuncia
-from controllers import controlador_denuncia
-from controllers import controlador_d_hurto
-from controllers import controlador_d_asalto
-from controllers import controlador_d_violencia_familiar
-from controllers import controlador_detalles_bienes
-from controllers import controlador_evidencia
+from controllers import controlador_usuario 
 
-from models.Ubigeo import Departamento, Provincia, Distrito, Ubigeo
-from models.Comisaria import Comisaria
-from models.Area import Area
-from models.Rango import Rango
-from models.Rol import Rol
-from models.Persona import Persona
-from models.Usuario import Usuario
-from models.Bienes import Categoria_Bienes
-from models.Tipo_Denuncia import Tipo_Denuncia
-from models.Denuncia import Denuncia
-from models.Tipo_Denuncia import D_Hurto
-from models.Tipo_Denuncia import D_Asalto
-from models.Tipo_Denuncia import D_Violencia_Familiar
-from models.Bienes import Detalle_Bienes
-from models.Evidencia import Evidencia
-
+from models.Models import (
+    Persona, Usuario, Tipo_Denuncia, Denuncia
+)
 import os, json
 
 app = Flask(__name__)
@@ -47,7 +17,9 @@ app = Flask(__name__)
 ##  postgresql, usuario, contraseña, host, puerto, nombre_db
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://bd_comisaria_user:HmGlVBo5J21P0ojPxCrO24tMZ2gxxc68@dpg-d3tu8n6uk2gs73df7b50-a.oregon-postgres.render.com:5432/bd_comisaria'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:WgtzsruCmjT7dmlB8Hjxim4xqv8uXpnG@dpg-d3v50s3e5dus73a4ogu0-a.oregon-postgres.render.com/bd_comisaria_008i'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:WgtzsruCmjT7dmlB8Hjxim4xqv8uXpnG@dpg-d3v50s3e5dus73a4ogu0-a.oregon-postgres.render.com/bd_comisaria_008i'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:UvVNiNQUzaJKnLmrlaOQ0GUeWv225gAn@dpg-d4facsp5pdvs73abo7m0-a.oregon-postgres.render.com/bd_hera'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # app.secret_key = os.environ.get('FLASK_SECRET_KEY')
@@ -83,17 +55,12 @@ def login_required(f):
 
 # --- RUTAS FIJAS --- #
 
-@app.route('/base')
-def base():
-    return render_template('base.html')
+# @app.route('/login')
+# def home():
+#     return redirect(url_for('login'))
 
 
 @app.route('/')
-def home():
-    return redirect(url_for('login'))
-
-
-@app.route('/index')
 @login_required
 def index():
     # 1) Total de ciudadanos (todas las personas registradas)
@@ -101,7 +68,7 @@ def index():
 
     # 2) Denuncias activas (por ejemplo estados P = pendiente, A = activa)
     denuncias_activas = Denuncia.query.filter(
-        Denuncia.estado.in_(["P", "A"])
+        Denuncia.id_estado_denuncia.in_([1, 2])
     ).count()
 
     # 3) Personal activo (usuarios con estado 'A')
@@ -121,8 +88,8 @@ def index():
     # 6) Denuncias pendientes (estado 'P') + nombre del tipo de denuncia
     pendientes_raw = (
         bd.session.query(Denuncia, Tipo_Denuncia)
-        .join(Tipo_Denuncia, Denuncia.id_tipo_denuncia == Tipo_Denuncia.id_tipo)
-        .filter(Denuncia.estado == "P")
+        .join(Tipo_Denuncia, Denuncia.id_tipo_denuncia == Tipo_Denuncia.id_tipo_denuncia)
+        .filter(Denuncia.id_estado_denuncia == 2)
         .order_by(Denuncia.fecha_registro.desc())
         .limit(5)
         .all()
@@ -156,23 +123,20 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    departamentos = controlador_departamento.obtener_departamentos()
     if request.method == 'POST':
-        dni = request.form['usuario']
+        codigo_usuario = request.form['usuario']
         contrasena = request.form['contrasena']
-        usuario = Usuario.query.filter_by(dni=dni, estado='A').first()
+        usuario = Usuario.query.filter_by(codigo_usuario=codigo_usuario, estado='A').first()
         
-        if usuario and bcrypt.check_password_hash(usuario.codigo_usuario, contrasena):
+        if usuario and bcrypt.check_password_hash(usuario.clave, contrasena):
             token = create_access_token(identity=usuario.dni)
             
             session['token'] = token
             session['dni'] = usuario.dni
             session['usuario'] = f"{usuario.ape_paterno} {usuario.ape_materno[0]}. {usuario.nombres}"
-            session['tipo'] = usuario.tipo_usuario
-            comisaria = Comisaria.query.filter_by(id_comisaria=usuario.id_comisaria).first()
-            rango = Rango.query.filter_by(id_rango=usuario.id_rango).first()
-            session['comisaria'] = comisaria.nombre
-            session['rango'] = rango.nombre
+            session['rol'] = usuario.rol.nombre
+            session['comisaria'] = usuario.comisaria.nombre
+            session['rango'] = usuario.rango.nombre
             
             flash("Inicio de sesión exitoso", "success")
             return redirect(url_for('index')) 
@@ -180,10 +144,11 @@ def login():
             flash("Credenciales incorrectas o usuario inactivo.", "danger")
             return redirect(url_for('login'))
 
-    return render_template('login.html', departamentos=departamentos)
+    return render_template('login.html',)
 
 
 @app.route('/logout')
+@login_required
 def logout():
     for key in list(session.keys()):
         session.pop(key)

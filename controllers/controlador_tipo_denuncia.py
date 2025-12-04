@@ -1,10 +1,10 @@
 # controllers/controlador_tipo_denuncia.py
-from models.Tipo_Denuncia import Tipo_Denuncia
+from models.Models import Tipo_Denuncia
 from bd import bd
 
 def obtener_tipos_denuncia():
     """Devuelve todos los tipos de denuncia registrados."""
-    return Tipo_Denuncia.query.all()
+    return Tipo_Denuncia.query.order_by(Tipo_Denuncia.id_tipo_denuncia).all()
 
 def obtener_tipo_denuncia_por_id(id_tipo):
     """Devuelve un tipo de denuncia específico por su ID."""

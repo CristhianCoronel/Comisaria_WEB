@@ -1,16 +1,13 @@
-from models.Comisaria import Comisaria
-from models.Distrito import Distrito
+from models.Models import Comisaria, Distrito
 from bd import bd
 
 def obtener_comisarias():
-    """Devuelve todas las comisarías registradas."""
     return Comisaria.query.all()
 
 def obtener_comisaria_por_id(id_comisaria):
     return Comisaria.query.get(id_comisaria)
 
 def insertar_comisaria(nombre, direccion, id_distrito):
-    """Inserta una nueva comisaría asociada a un distrito."""
     try:
         nueva = Comisaria(
             nombre=nombre,
@@ -26,7 +23,6 @@ def insertar_comisaria(nombre, direccion, id_distrito):
         return False
 
 def modificar_comisaria(id_comisaria, nombre, direccion, id_distrito):
-    """Modifica una comisaría existente."""
     try:
         comisaria = Comisaria.query.get(id_comisaria)
         if comisaria:
@@ -58,44 +54,33 @@ def modificar_comisaria(id_comisaria, nombre, direccion, id_distrito):
 
 
 def obtener_comisaria_nombre_ubigeo(nombre=None, ubigeo=None):
-    base_query = Comisaria.query
+    base_query = Comisaria.query.join(Distrito)
 
+    # Si no se aplica ningún filtro
     if not nombre and not ubigeo:
         return base_query.order_by(Comisaria.id_comisaria).all()
-
-    # --- Filtro por nombre ---
-    query_nombre = base_query
+    
     if nombre:
-        query_nombre = query_nombre.filter(Comisaria.nombre.ilike(f"%{nombre}%"))
-    res_nombre = query_nombre.all()
-
-    # --- Filtro por ubigeo ---
-    query_ubigeo = base_query
-    if ubigeo:
-        query_ubigeo = query_ubigeo.filter(Comisaria.ubigeo.ilike(f"%{ubigeo}%"))
-    res_ubigeo = query_ubigeo.all()
-
-    # Si solo hubo filtro nombre
-    if nombre and not ubigeo:
-        return res_nombre
-
-    # Si solo hubo filtro ubigeo
-    if ubigeo and not nombre:
-        return res_ubigeo
-
-    # --- Caso: ambos filtros → comparar tamaños ---
-    if len(res_nombre) >= len(res_ubigeo):
-        final_query = Comisaria.query.filter(
-            Comisaria.nombre.ilike(f"%{nombre}%")
-        ).filter(
-            Comisaria.ubigeo.ilike(f"%{ubigeo}%")
-        )
+        res_nombre = base_query.filter(Comisaria.nombre.ilike(f"%{nombre}%")).all()
     else:
-        final_query = Comisaria.query.filter(
-            Comisaria.ubigeo.ilike(f"%{ubigeo}%")
-        ).filter(
-            Comisaria.nombre.ilike(f"%{nombre}%")
-        )
+        res_nombre = []
 
-    return final_query.order_by(Comisaria.id_comisaria).all()
+    if ubigeo:
+        res_ubigeo = base_query.filter(Distrito.ubigeo.ilike(f"%{ubigeo}%")).all()
+    else:
+        res_ubigeo = []
 
+    if len(res_nombre) >= len(res_ubigeo):
+        query_final = base_query
+        if nombre:
+            query_final = query_final.filter(Comisaria.nombre.ilike(f"%{nombre}%"))
+        if ubigeo:
+            query_final = query_final.filter(Distrito.ubigeo.ilike(f"%{ubigeo}%"))
+    else:
+        query_final = base_query
+        if ubigeo:
+            query_final = query_final.filter(Distrito.ubigeo.ilike(f"%{ubigeo}%"))
+        if nombre:
+            query_final = query_final.filter(Comisaria.nombre.ilike(f"%{nombre}%"))
+
+    return query_final.order_by(Comisaria.id_comisaria).all()

@@ -1,7 +1,7 @@
 from main import app, login_required
 from flask import render_template, request, jsonify, redirect, url_for, flash, Response
-from controllers import controlador_comisaria, controlador_ubigeo
-from models.Comisaria import Comisaria
+from controllers import controlador_comisaria
+from models.Models import Comisaria
 import json
 
 # Listar comisarías
@@ -9,7 +9,7 @@ import json
 @login_required
 def comisaria():
     comisarias = controlador_comisaria.obtener_comisarias()
-    return render_template('comisaria.html', comisarias=comisarias, ubigeos=controlador_ubigeo.obtener_ubigeos())
+    return render_template('comisaria.html', comisarias=comisarias)
 
 @app.route('/comisaria/registrar', methods=['POST'])
 @login_required
@@ -56,10 +56,9 @@ def buscar_comisaria(nombre, ubigeo):
         if nombre == "_" and ubigeo == "_":
             return redirect('/comisarias')
         
-        lista = controlador_comisaria.obtener_comisaria_nombre_ubigeo(nombre, ubigeo)
-        ubigeos=controlador_ubigeo.obtener_ubigeos()
+        lista = controlador_comisaria.obtener_comisaria_nombre_ubigeo(nombre)
         
-        return render_template('comisaria.html', comisarias=lista, ubigeos=ubigeos)
+        return render_template('comisaria.html', comisarias=lista)
     
     except Exception as e:
         flash(f"Error al filtrar las comisarías: {str(e)}", "danger")

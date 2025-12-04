@@ -4,8 +4,7 @@ from main import app, login_required  # usamos el mismo app y el mismo decorador
 import json
 from controllers import controlador_persona, controlador_usuario, controlador_comisaria, controlador_rol, controlador_rango
 from services.reniec_service import consultar_dni_faciliza
-from models.Persona import Persona
-from models.Usuario import Usuario
+from models.Models import Persona, Usuario
 from main import FACILIZA_TOKEN, FACILIZA_URL
 import requests
 
@@ -27,7 +26,8 @@ def perfil():
 @login_required
 def persona():
     personas = controlador_persona.obtener_personas()
-    return render_template('persona.html', personas=personas)
+    tipos_documentos = controlador_persona.obtener_tipos_documentos()
+    return render_template('persona.html', personas=personas, tipos_documentos=tipos_documentos)
 
 
 @app.route('/ciudadano/registrar', methods=["POST"])
@@ -147,34 +147,44 @@ def persona_por_id_json(id_persona):
 def persona_por_dni_json(dni):
     try:
         # 1) Buscar primero en tu BD local
-        persona = Persona.query.filter_by(dni=dni).first()
-
+        persona = controlador_persona.obtener_persona_por_documento(1,dni)
+    
         if persona:
+            
             return jsonify({
                 "status": 1,
                 "data": {
-                    "dni": persona.dni,
-                    "nombres": persona.nombres,
+                    # Datos básicos (DNI se mapea a 'documento' y Nombre a 'nombre' de la tabla)
+                    "dni": persona.documento,
+                    "nombres": persona.nombre,
                     "ape_paterno": persona.ape_paterno,
                     "ape_materno": persona.ape_materno,
+                    
+                    # Nuevos campos requeridos
                     "fecha_nacimiento": (
                         str(persona.fecha_nacimiento)
                         if persona.fecha_nacimiento else None
                     ),
+                    "estado_civil": persona.estado_civil,
+                    "ocupacion": persona.ocupacion,
+                    
+                    # Campos de Contacto y Dirección
                     "telefono": persona.telefono,
+                    "correo": persona.correo,
                     "direccion": persona.direccion,
                 },
                 "source": "db",
             })
-
+        
         # 2) Si no existe en la BD, consultamos FACILIZA
         if not FACILIZA_TOKEN or not FACILIZA_URL:
+            print("API del estado no configurado")
             return jsonify({
                 "status": 0,
                 "data": None,
                 "message": "FACILIZA_TOKEN o FACILIZA_URL no configurados",
             }), 500
-
+        print("Ok, si está configurado")
         # Asegurarnos de que no se dupliquen las barras
         url = f"{FACILIZA_URL.rstrip('/')}/{dni}"
         
@@ -186,14 +196,14 @@ def persona_por_dni_json(dni):
             headers={"Authorization": f"Bearer {FACILIZA_TOKEN}"},
             timeout=5,
         )
-
+        print("Llegamos hasta aquí")
         if resp.status_code != 200:
             return jsonify({
                 "status": 0,
                 "data": None,
                 "message": f"Error al consultar FACILIZA (HTTP {resp.status_code})",
             }), 400
-
+        print("Pasamos el otro error")
         body = resp.json()
 
         if not body.get("success"):
@@ -202,7 +212,7 @@ def persona_por_dni_json(dni):
                 "data": None,
                 "message": body.get("message", "DNI no encontrado en FACILIZA"),
             }), 404
-
+        print("Encontramos el dni")
         info = body.get("data", {})
 
         # Normalizamos lo que devuelve FACILIZA para tu front
@@ -213,7 +223,7 @@ def persona_por_dni_json(dni):
             "ape_materno": info.get("apellido_materno", ""),
             "direccion": info.get("direccion_completa", ""),
         }
-
+        print("Data registrada")
         return jsonify({
             "status": 1,
             "data": data,
@@ -239,7 +249,7 @@ def usuario():
     roles = controlador_rol.obtener_roles()
     rangos = controlador_rango.obtener_rangos()
     comisarias = controlador_comisaria.obtener_comisarias()    
-    return render_template("personal.html", usuarios=usuarios, roles=roles, rangos=rangos, comisarias=comisarias)
+    return render_template("usuario.html", usuarios=usuarios, roles=roles, rangos=rangos, comisarias=comisarias)
 
 @app.route("/personal/registrar", methods=["POST"])
 @login_required
@@ -313,7 +323,7 @@ def buscar_usuario(nombre,dni):
         roles = controlador_rol.obtener_roles()
         rangos = controlador_rango.obtener_rangos()
         comisarias = controlador_comisaria.obtener_comisarias() 
-        return render_template('personal.html', usuarios=lista, roles=roles, rangos=rangos, comisarias=comisarias)
+        return render_template('usuario.html', usuarios=lista, roles=roles, rangos=rangos, comisarias=comisarias)
         
     except Exception as e:
         flash(f"Error al filtrar las personas: {str(e)}", "danger")

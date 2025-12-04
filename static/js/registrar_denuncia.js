@@ -74,25 +74,34 @@ async function buscarPersonaPorDNI(dni) {
         if (result.status === 1 && result.data) {
             const persona = result.data;
 
-            // Nombre completo para mostrar
-            const nombresInput = document.getElementById("nombres");
-            if (nombresInput) {
-                const completo = `${persona.nombres || ""} ${persona.ape_paterno || ""} ${persona.ape_materno || ""}`.trim();
-                nombresInput.value = completo;
+            // 1. Asignar Nombres y Apellidos por separado (según la tabla Persona)
+            // NOTA: Usamos 'nombre' del objeto persona para el input 'nombres'
+            document.getElementById("nombres").value = persona.nombres || "";
+            document.getElementById("ape_paterno").value = persona.ape_paterno || "";
+            document.getElementById("ape_materno").value = persona.ape_materno || "";
+
+            // 2. Asignar nuevos campos personales
+            if (document.getElementById("fecha_nacimiento")) {
+                // Se asume formato 'YYYY-MM-DD' de la API para el input type="date"
+                document.getElementById("fecha_nacimiento").value = persona.fecha_nacimiento || "";
+            }
+            if (document.getElementById("estado_civil")) {
+                document.getElementById("estado_civil").value = persona.estado_civil || "";
+            }
+            if (document.getElementById("ocupacion")) {
+                document.getElementById("ocupacion").value = persona.ocupacion || "";
             }
 
-            // 🔹 Guardar apellidos en campos ocultos
-            const apePatInput = document.getElementById("ape_paterno");
-            const apeMatInput = document.getElementById("ape_materno");
-            if (apePatInput) apePatInput.value = persona.ape_paterno || "";
-            if (apeMatInput) apeMatInput.value = persona.ape_materno || "";
-
-            // Teléfono / dirección si quieres
+            // 3. Teléfono / Dirección / Correo
             const telInput = document.getElementById("telefono");
-            if (telInput && persona.telefono) telInput.value = persona.telefono;
+            if (telInput) telInput.value = persona.telefono || "";
 
             const dirInput = document.getElementById("direccion_denunciante");
-            if (dirInput && persona.direccion) dirInput.value = persona.direccion;
+            // La dirección es obligatoria en la tabla, se debe rellenar si existe.
+            if (dirInput) dirInput.value = persona.direccion || ""; 
+
+            const emailInput = document.getElementById("correo");
+            if (emailInput) emailInput.value = persona.correo || "";
 
         } else {
             showAlert(result.message || 'Persona no encontrada. Ingrese los datos manualmente.');

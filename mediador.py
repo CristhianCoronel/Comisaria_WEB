@@ -1,5 +1,5 @@
 from monitor_transacciones import monitor_transaccion
-from models.Denuncia import insertar_denuncia  # ajusta si tu modelo tiene otro nombre
+from models.Models import insertar_denuncia  # ajusta si tu modelo tiene otro nombre
 
 def procesar_denuncia(datos):
     """

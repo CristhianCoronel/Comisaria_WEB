@@ -1,5 +1,5 @@
 # controllers/controlador_provincia.py
-from models.Ubigeo import Provincia
+from models.Models import Provincia
 from bd import bd
 
 def obtener_provincias():
